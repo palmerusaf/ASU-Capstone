@@ -1,8 +1,8 @@
 import {
-  ResponsiveContainer,
+  Area,
   AreaChart,
   CartesianGrid,
-  Area,
+  ResponsiveContainer,
   XAxis,
   YAxis,
 } from 'recharts';

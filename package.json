@@ -4,6 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "main": "dist-electron/main.js",
+  "prettier": {
+    "singleQuote": true
+  },
   "scripts": {
     "dev": "npm-run-all --parallel dev:react dev:electron",
     "dev:react": "vite",

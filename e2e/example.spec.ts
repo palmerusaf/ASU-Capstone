@@ -1,4 +1,4 @@
-import { test, expect, _electron } from '@playwright/test';
+import { _electron, expect, test } from '@playwright/test';
 
 let electronApp: Awaited<ReturnType<typeof _electron.launch>>;
 let mainPage: Awaited<ReturnType<typeof electronApp.firstWindow>>;

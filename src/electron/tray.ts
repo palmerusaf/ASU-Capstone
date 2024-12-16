@@ -1,4 +1,4 @@
-import { BrowserWindow, Menu, Tray, app } from 'electron';
+import { app, BrowserWindow, Menu, Tray } from 'electron';
 import { getAssetPath } from './pathResolver.js';
 import path from 'path';
 
@@ -6,8 +6,8 @@ export function createTray(mainWindow: BrowserWindow) {
   const tray = new Tray(
     path.join(
       getAssetPath(),
-      process.platform === 'darwin' ? 'trayIconTemplate.png' : 'trayIcon.png'
-    )
+      process.platform === 'darwin' ? 'trayIconTemplate.png' : 'trayIcon.png',
+    ),
   );
 
   tray.setContextMenu(
@@ -25,6 +25,6 @@ export function createTray(mainWindow: BrowserWindow) {
         label: 'Quit',
         click: () => app.quit(),
       },
-    ])
+    ]),
   );
 }

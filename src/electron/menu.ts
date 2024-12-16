@@ -1,4 +1,4 @@
-import { BrowserWindow, Menu, app } from 'electron';
+import { app, BrowserWindow, Menu } from 'electron';
 import { ipcWebContentsSend, isDev } from './util.js';
 
 export function createMenu(mainWindow: BrowserWindow) {
@@ -39,11 +39,11 @@ export function createMenu(mainWindow: BrowserWindow) {
               ipcWebContentsSend(
                 'changeView',
                 mainWindow.webContents,
-                'STORAGE'
+                'STORAGE',
               ),
           },
         ],
       },
-    ])
+    ]),
   );
 }

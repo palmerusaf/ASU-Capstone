@@ -13,7 +13,7 @@ export function useStatistics(dataPointCount: number): Statistics[] {
         }
 
         return newData;
-      })
+      }),
     );
     return unsub;
   }, []);

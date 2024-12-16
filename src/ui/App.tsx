@@ -10,15 +10,15 @@ function App() {
   const [activeView, setActiveView] = useState<View>('CPU');
   const cpuUsages = useMemo(
     () => statistics.map((stat) => stat.cpuUsage),
-    [statistics]
+    [statistics],
   );
   const ramUsages = useMemo(
     () => statistics.map((stat) => stat.ramUsage),
-    [statistics]
+    [statistics],
   );
   const storageUsages = useMemo(
     () => statistics.map((stat) => stat.storageUsage),
-    [statistics]
+    [statistics],
   );
   const activeUsages = useMemo(() => {
     switch (activeView) {
