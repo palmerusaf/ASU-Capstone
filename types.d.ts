@@ -35,6 +35,7 @@ interface Window {
     sendFrameAction: (payload: FrameWindowAction) => void;
   };
 }
+
 const HandShakeJobPostResSample = {
   results: [
     {
