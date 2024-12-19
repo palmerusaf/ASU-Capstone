@@ -12,7 +12,7 @@ Simplify the job/internship application process by automating search, applicatio
 - [ ] Search/Add functionality
 - [ ] Job Tracker
 - [ ] Auto apply bot
-- [ ] Link and integrate with 1-2 more jobs sites
+- [ ] Link and integrate with 1-2 more job sites
 
 ### Phase 2 - Semester 2 - Central Server
 
