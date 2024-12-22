@@ -42,33 +42,60 @@ export default function App() {
 
 function LinkView() {
   type ViewType = 'linkedin' | 'handshake';
+  type LinkStatType = { linkedIn: boolean; handshake: boolean };
+  const [linkStat, setLinkStat] = useState<LinkStatType>(() => {
+    const storedLinkStat = localStorage.getItem('linkStat');
+    if (!storedLinkStat) {
+      return {
+        handshake: false,
+        linkedIn: false,
+      };
+    }
+    return JSON.parse(storedLinkStat);
+  });
+  useEffect(() => {
+    localStorage.setItem('linkStat', JSON.stringify(linkStat));
+  }, [linkStat]);
+
   const [activeView, setActiveView] = useState<ViewType>('handshake');
   return (
     <div className="flex flex-col h-full">
       <div className="grid grid-cols-2 gap-2">
-        <Button title={'Handshake'} view={'handshake'} />
-        <Button title={'LinkedIn'} view={'linkedin'} />
+        <Button
+          title={'Handshake'}
+          view={'handshake'}
+          isLinked={linkStat.handshake}
+        />
+        <Button
+          title={'LinkedIn'}
+          view={'linkedin'}
+          isLinked={linkStat.linkedIn}
+        />
       </div>
       <View />
     </div>
   );
 
   function View() {
-    switch (activeView) {
-      case 'handshake':
-        return 'handshake';
-      case 'linkedin':
-        return 'linkedin';
-    }
+    return '';
   }
 
-  function Button({ title, view }: { title: string; view: ViewType }) {
+  function Button({
+    title,
+    view,
+    isLinked,
+  }: {
+    title: string;
+    view: ViewType;
+    isLinked: boolean;
+  }) {
     return (
       <button
-        className={`py-2 px-3 bg-gray-400 text-xl rounded-full duration-100 outline-gray-500 hover:outline ${activeView == view && 'font-bold outline'}`}
+        className={`py-2 px-3 bg-gray-400 text-xl rounded-full duration-100 outline-gray-500 hover:outline ${activeView == view && 'font-bold'}`}
         onClick={() => setActiveView(view)}
       >
         {title}
+        {(isLinked && '✅') || '❌'}
       </button>
     );
   }
