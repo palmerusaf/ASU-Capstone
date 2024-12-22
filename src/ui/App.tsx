@@ -94,6 +94,7 @@ function LinkView() {
   }
 
   function HandshakeView() {
+    const [isLoading, setIsLoading] = useState(false);
     return (
       <div className="flex flex-col gap-2 items-center py-6">
         <div className="text-xl">
@@ -107,9 +108,11 @@ function LinkView() {
           </a>{' '}
           to login. Then return to this page and click the test button below.
         </div>
-        <button className="py-2 px-6 text-2xl bg-gray-400 rounded-full duration-100 outline-gray-500 hover:outline">
+        <button
+          className={`py-2 px-6 text-2xl bg-gray-400 rounded-full duration-100 outline-gray-500 hover:outline ${isLoading && 'animate-pulse'}`}
+        >
           {(linkStat.linkedIn && '✅ ') || '❌ '}
-          Test
+          {isLoading ? 'Testing...' : 'Test'}
         </button>
       </div>
     );
