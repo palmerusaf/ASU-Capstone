@@ -77,7 +77,42 @@ function LinkView() {
   );
 
   function View() {
-    return '';
+    switch (activeView) {
+      case 'linkedin':
+        return <LinkedinView />;
+      case 'handshake':
+        return <HandshakeView />;
+    }
+  }
+
+  function LinkedinView() {
+    return (
+      <div className="flex flex-col gap-2 items-center py-6">
+        <div className="text-xl">Not Implemented</div>
+      </div>
+    );
+  }
+
+  function HandshakeView() {
+    return (
+      <div className="flex flex-col gap-2 items-center py-6">
+        <div className="text-xl">
+          Click{' '}
+          <a
+            className="font-bold underline"
+            href="https://app.joinhandshake.com/login"
+            target="_blank"
+          >
+            here
+          </a>{' '}
+          to login. Then return to this page and click the test button below.
+        </div>
+        <button className="py-2 px-6 text-2xl bg-gray-400 rounded-full duration-100 outline-gray-500 hover:outline">
+          {(linkStat.linkedIn && '✅ ') || '❌ '}
+          Test
+        </button>
+      </div>
+    );
   }
 
   function Button({
