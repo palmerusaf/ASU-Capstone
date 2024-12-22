@@ -768,6 +768,4 @@ const HandShakeJobPostResSample = {
   },
   search_id: 'c86815d9-008f-4d36-bfd5-c4bfd6a3ea3d',
 };
-type HandShakeJobPostRes =
-  | typeof HandShakeJobPostResSample
-  | typeof HandShakeJobPostResSampleError;
+type HandShakeJobPostRes = typeof HandShakeJobPostResSample;
