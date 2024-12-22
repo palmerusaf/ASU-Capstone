@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
-import './App.css';
 
-function App() { }
+function App() {
+  return <div className=""></div>;
+}
 
 export default App;
