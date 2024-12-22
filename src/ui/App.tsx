@@ -94,8 +94,8 @@ function LinkView() {
         className={`py-2 px-3 bg-gray-400 text-xl rounded-full duration-100 outline-gray-500 hover:outline ${activeView == view && 'font-bold'}`}
         onClick={() => setActiveView(view)}
       >
+        {(isLinked && '✅ ') || '❌ '}
         {title}
-        {(isLinked && '✅') || '❌'}
       </button>
     );
   }
