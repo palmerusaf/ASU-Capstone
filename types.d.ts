@@ -21,6 +21,7 @@ type EventPayloadMapping = {
   getStaticData: StaticData;
   changeView: MainViews;
   sendFrameAction: FrameWindowAction;
+  testHandshakeLink: boolean;
 };
 
 type UnsubscribeFunction = () => void;
@@ -31,6 +32,7 @@ interface Window {
       callback: (statistics: Statistics) => void,
     ) => UnsubscribeFunction;
     getStaticData: () => Promise<StaticData>;
+    testHandshakeLink: () => Promise<boolean>;
     subscribeChangeView: (
       callback: (view: MainViews) => void,
     ) => UnsubscribeFunction;

@@ -1,7 +1,7 @@
 import rookie from '@rookie-rs/api';
 
-const HandShakeJobPostResSampleError = { errors: { not_logged_in: true } };
-const HandShakeJobPostResSample = {
+const ErrorExample = { errors: { not_logged_in: true } };
+const SuccessExample = {
   results: [
     {
       type: 'Posting',
@@ -732,24 +732,24 @@ const HandShakeJobPostResSample = {
   },
   search_id: 'c86815d9-008f-4d36-bfd5-c4bfd6a3ea3d',
 };
-type HandShakeJobPostRes = typeof HandShakeJobPostResSample;
+type ResponseType = typeof SuccessExample | typeof ErrorExample;
 
-const res = await fetch(
-  'https://app.joinhandshake.com/stu/postings?category=Posting&ajax=true&including_all_facets_in_searches=true&page=1&per_page=25&sort_direction=desc&sort_column=default&_=1734355282760',
-  {
-    credentials: 'include',
-    headers: {
-      Accept: 'application/json, text/javascript, */*; q=0.01',
-      'X-Requested-With': 'XMLHttpRequest',
-      cookie: rookie
-        .load(['joinhandshake.com'])
-        .map(({ name, value }) => `${name}=${value}`)
-        .join('; '),
+export async function testHandshakeLink(): Promise<boolean> {
+  const res = await fetch(
+    'https://app.joinhandshake.com/stu/postings?category=Posting&ajax=true&including_all_facets_in_searches=true&page=1&per_page=25&sort_direction=desc&sort_column=default&_=1734355282760',
+    {
+      credentials: 'include',
+      headers: {
+        Accept: 'application/json, text/javascript, */*; q=0.01',
+        'X-Requested-With': 'XMLHttpRequest',
+        cookie: rookie
+          .load(['joinhandshake.com'])
+          .map(({ name, value }) => `${name}=${value}`)
+          .join('; '),
+      },
     },
-  },
-);
-const data = (await res.json()) as any as HandShakeJobPostRes;
-data.results.forEach((el) => {
-  console.log(el);
-  console.log(el.job);
-});
+  );
+  const data = (await res.json()) as ResponseType;
+  const linkStat = typeof data !== typeof ErrorExample;
+  return linkStat;
+}
