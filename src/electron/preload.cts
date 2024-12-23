@@ -6,6 +6,7 @@ electron.contextBridge.exposeInMainWorld('electron', {
       callback(view);
     }),
   testHandshakeLink: async () => await ipcInvoke('testHandshakeLink'),
+  openUrl: (url) => ipcSend('openUrl', url),
 } satisfies Window['electron']);
 
 function ipcInvoke<Key extends keyof EventPayloadMapping>(

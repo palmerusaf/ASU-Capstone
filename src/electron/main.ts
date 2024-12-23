@@ -1,5 +1,5 @@
-import { app, BrowserWindow } from 'electron';
-import { ipcMainHandle, isDev } from './util.js';
+import { app, BrowserWindow, shell } from 'electron';
+import { ipcMainHandle, ipcMainOn, isDev } from './util.js';
 import { getPreloadPath, getUIPath } from './pathResolver.js';
 import { createTray } from './tray.js';
 import { createMenu } from './menu.js';
@@ -18,6 +18,7 @@ app.on('ready', () => {
   }
   ipcMainHandle('testHandshakeLink', testHandshakeLink);
   handleCloseEvents(mainWindow);
+  ipcMainOn('openUrl', shell.openExternal);
   createTray(mainWindow);
   createMenu(mainWindow);
 });

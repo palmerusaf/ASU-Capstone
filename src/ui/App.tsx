@@ -99,9 +99,11 @@ function LinkView() {
         <div className="text-xl">
           Click{' '}
           <a
-            className="font-bold underline"
-            href="https://app.joinhandshake.com/login"
-            target="_blank"
+            className="font-bold underline cursor-pointer"
+            onClick={(e) => {
+              e.preventDefault();
+              window.electron.openUrl('https://app.joinhandshake.com/login');
+            }}
           >
             here
           </a>{' '}
