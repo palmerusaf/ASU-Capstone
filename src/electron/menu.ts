@@ -34,7 +34,7 @@ export function createMenu(mainWindow: BrowserWindow) {
               ipcWebContentsSend(
                 'changeView',
                 mainWindow.webContents,
-                'tracker',
+                'search',
               ),
           },
           {
@@ -43,7 +43,7 @@ export function createMenu(mainWindow: BrowserWindow) {
               ipcWebContentsSend(
                 'changeView',
                 mainWindow.webContents,
-                'search',
+                'tracker',
               ),
           },
         ],

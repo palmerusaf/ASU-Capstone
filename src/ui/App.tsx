@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 
 export default function App() {
   const [activeView, setActiveView] = useState<MainView>('link');
+  useEffect(() => {
+    return window.electron.subscribeChangeView((view) => setActiveView(view));
+  }, []);
   return (
     <div className="flex gap-2 p-2 h-svh">
       <div className="flex flex-col gap-2 p-4 text-center bg-gray-300 rounded-lg text-nowrap w-fit">
