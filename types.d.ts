@@ -12,6 +12,8 @@ type StaticData = {
 
 type View = 'CPU' | 'RAM' | 'STORAGE';
 
+type JobSites = 'linkedin' | 'handshake';
+
 type FrameWindowAction = 'CLOSE' | 'MAXIMIZE' | 'MINIMIZE';
 
 type EventPayloadMapping = {

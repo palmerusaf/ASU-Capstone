@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function App() {
   type ViewType = 'link' | 'tracker' | 'search';
@@ -41,7 +41,6 @@ export default function App() {
 }
 
 function LinkView() {
-  type ViewType = 'linkedin' | 'handshake';
   type LinkStatType = { linkedIn: boolean; handshake: boolean };
   const [linkStat, setLinkStat] = useState<LinkStatType>(() => {
     const storedLinkStat = localStorage.getItem('linkStat');
@@ -57,7 +56,7 @@ function LinkView() {
     localStorage.setItem('linkStat', JSON.stringify(linkStat));
   }, [linkStat]);
 
-  const [activeView, setActiveView] = useState<ViewType>('handshake');
+  const [activeView, setActiveView] = useState<JobSites>('handshake');
   return (
     <div className="flex flex-col h-full">
       <div className="grid grid-cols-2 gap-2">
@@ -95,6 +94,9 @@ function LinkView() {
 
   function HandshakeView() {
     const [isLoading, setIsLoading] = useState(false);
+    function handleClick() {
+      setIsLoading(true);
+    }
     return (
       <div className="flex flex-col gap-2 items-center py-6">
         <div className="text-xl">
@@ -110,6 +112,7 @@ function LinkView() {
         </div>
         <button
           className={`py-2 px-6 text-2xl bg-gray-400 rounded-full duration-100 outline-gray-500 hover:outline ${isLoading && 'animate-pulse'}`}
+          onClick={handleClick}
         >
           {(linkStat.linkedIn && '✅ ') || '❌ '}
           {isLoading ? 'Testing...' : 'Test'}
@@ -124,7 +127,7 @@ function LinkView() {
     isLinked,
   }: {
     title: string;
-    view: ViewType;
+    view: JobSites;
     isLinked: boolean;
   }) {
     return (
