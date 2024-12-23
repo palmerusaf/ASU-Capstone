@@ -6,6 +6,9 @@ export function isDev(): boolean {
   return process.env.NODE_ENV === 'development';
 }
 
+/**
+ * Used in conjunction with ipcInvoke preload script for two way comms from frontend to backend then getting response from backend
+ */
 export function ipcMainHandle<Key extends keyof EventPayloadMapping>(
   key: Key,
   handler: () => EventPayloadMapping[Key],
@@ -16,6 +19,9 @@ export function ipcMainHandle<Key extends keyof EventPayloadMapping>(
   });
 }
 
+/**
+ * Used in conjunction with ipcSend preload script for one way comms from frontend to backend
+ */
 export function ipcMainOn<Key extends keyof EventPayloadMapping>(
   key: Key,
   handler: (payload: EventPayloadMapping[Key]) => void,
