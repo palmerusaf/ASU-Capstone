@@ -113,7 +113,7 @@ function LinkView() {
           className={`py-2 px-6 text-2xl bg-gray-400 rounded-full duration-100 outline-gray-500 hover:outline ${isLoading && 'animate-pulse'}`}
           onClick={handleClick}
         >
-          {(linkStat.linkedIn && '✅ ') || '❌ '}
+          {(linkStat.handshake && '✅ ') || '❌ '}
           {isLoading ? 'Testing...' : 'Test'}
         </button>
       </div>

@@ -756,7 +756,5 @@ export async function testHandshakeLink(): Promise<boolean> {
     },
   );
   const data = (await res.json()) as ResponseType;
-  // __AUTO_GENERATED_PRINT_VAR_START__
-  console.log('testHandshakeLink data: %s', data); // __AUTO_GENERATED_PRINT_VAR_END__
   return data.errors === undefined;
 }
