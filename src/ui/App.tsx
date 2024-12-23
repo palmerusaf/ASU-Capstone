@@ -88,8 +88,11 @@ function LinkView() {
 
   function HandshakeView() {
     const [isLoading, setIsLoading] = useState(false);
-    function handleClick() {
+    async function handleClick() {
       setIsLoading(true);
+      const linkStat = await window.electron.testHandshakeLink();
+      setIsLoading(false);
+      setLinkStat((prev) => ({ ...prev, handshake: linkStat }));
     }
     return (
       <div className="flex flex-col gap-2 items-center py-6">

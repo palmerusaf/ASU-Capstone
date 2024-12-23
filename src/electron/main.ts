@@ -1,8 +1,9 @@
 import { app, BrowserWindow } from 'electron';
-import { isDev } from './util.js';
+import { ipcMainHandle, isDev } from './util.js';
 import { getPreloadPath, getUIPath } from './pathResolver.js';
 import { createTray } from './tray.js';
 import { createMenu } from './menu.js';
+import { testHandshakeLink } from './handshake.js';
 
 app.on('ready', () => {
   const mainWindow = new BrowserWindow({
@@ -15,7 +16,7 @@ app.on('ready', () => {
   } else {
     mainWindow.loadFile(getUIPath());
   }
-
+  ipcMainHandle('testHandshakeLink', testHandshakeLink);
   handleCloseEvents(mainWindow);
   createTray(mainWindow);
   createMenu(mainWindow);

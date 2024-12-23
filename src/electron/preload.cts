@@ -5,7 +5,7 @@ electron.contextBridge.exposeInMainWorld('electron', {
     ipcOn('changeView', (view) => {
       callback(view);
     }),
-  testHandshakeLink: () => ipcInvoke('testHandshakeLink'),
+  testHandshakeLink: async () => await ipcInvoke('testHandshakeLink'),
 } satisfies Window['electron']);
 
 function ipcInvoke<Key extends keyof EventPayloadMapping>(

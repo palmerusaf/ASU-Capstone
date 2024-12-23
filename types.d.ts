@@ -4,7 +4,7 @@ type JobSites = 'LinkedIn' | 'Handshake';
 
 type EventPayloadMapping = {
   changeView: MainViews;
-  testHandshakeLink: boolean;
+  testHandshakeLink: Promise<boolean>;
 };
 
 type UnsubscribeFunction = () => void;
