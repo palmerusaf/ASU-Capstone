@@ -1,20 +1,12 @@
-const electron = require("electron");
+const electron = require('electron');
 
-electron.contextBridge.exposeInMainWorld(
-  "electron",
-  {
-    subscribeStatistics: (callback) =>
-      ipcOn("statistics", (stats) => {
-        callback(stats);
-      }),
-    subscribeChangeView: (callback) =>
-      ipcOn("changeView", (view) => {
-        callback(view);
-      }),
-    getStaticData: () => ipcInvoke("getStaticData"),
-    sendFrameAction: (payload) => ipcSend("sendFrameAction", payload),
-  } satisfies Window["electron"],
-);
+electron.contextBridge.exposeInMainWorld('electron', {
+  subscribeChangeView: (callback) =>
+    ipcOn('changeView', (view) => {
+      callback(view);
+    }),
+  testHandshakeLink: () => ipcInvoke('testHandshakeLink'),
+} satisfies Window['electron']);
 
 function ipcInvoke<Key extends keyof EventPayloadMapping>(
   key: Key,

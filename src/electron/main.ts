@@ -1,6 +1,5 @@
-import { app, BrowserWindow, Menu } from 'electron';
-import { ipcMainHandle, ipcMainOn, isDev } from './util.js';
-import { getStaticData, pollResources } from './resourceManager.js';
+import { app, BrowserWindow } from 'electron';
+import { isDev } from './util.js';
 import { getPreloadPath, getUIPath } from './pathResolver.js';
 import { createTray } from './tray.js';
 import { createMenu } from './menu.js';
@@ -10,8 +9,6 @@ app.on('ready', () => {
     webPreferences: {
       preload: getPreloadPath(),
     },
-    // disables default system frame (dont do this if you want a proper working menu bar)
-    // frame: false,
   });
   if (isDev()) {
     mainWindow.loadURL('http://localhost:5123');
@@ -19,28 +16,8 @@ app.on('ready', () => {
     mainWindow.loadFile(getUIPath());
   }
 
-  pollResources(mainWindow);
-
-  ipcMainHandle('getStaticData', () => {
-    return getStaticData();
-  });
-
-  ipcMainOn('sendFrameAction', (payload) => {
-    switch (payload) {
-      case 'CLOSE':
-        mainWindow.close();
-        break;
-      case 'MAXIMIZE':
-        mainWindow.maximize();
-        break;
-      case 'MINIMIZE':
-        mainWindow.minimize();
-        break;
-    }
-  });
-
-  createTray(mainWindow);
   handleCloseEvents(mainWindow);
+  createTray(mainWindow);
   createMenu(mainWindow);
 });
 
