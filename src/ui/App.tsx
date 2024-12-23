@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 export default function App() {
-  const [activeView, setActiveView] = useState<MainView>('Link Accounts');
+  const [activeView, setActiveView] = useState<MainViews>('Link Accounts');
   useEffect(() => {
     return window.electron.subscribeChangeView((view) => setActiveView(view));
   }, []);
@@ -30,7 +30,7 @@ export default function App() {
     }
   }
 
-  function Button({ view }: { view: MainView }) {
+  function Button({ view }: { view: MainViews }) {
     return (
       <button
         className={`py-2 px-3 bg-gray-400 rounded-full duration-150 hover:scale-105 ${activeView == view && 'font-bold'}`}
@@ -58,20 +58,12 @@ function LinkView() {
     localStorage.setItem('linkStat', JSON.stringify(linkStat));
   }, [linkStat]);
 
-  const [activeView, setActiveView] = useState<JobSites>('handshake');
+  const [activeView, setActiveView] = useState<JobSites>('Handshake');
   return (
     <div className="flex flex-col h-full">
       <div className="grid grid-cols-2 gap-2">
-        <Button
-          title={'Handshake'}
-          view={'handshake'}
-          isLinked={linkStat.handshake}
-        />
-        <Button
-          title={'LinkedIn'}
-          view={'linkedin'}
-          isLinked={linkStat.linkedIn}
-        />
+        <Button view={'Handshake'} isLinked={linkStat.handshake} />
+        <Button view={'LinkedIn'} isLinked={linkStat.linkedIn} />
       </div>
       <View />
     </div>
@@ -79,9 +71,9 @@ function LinkView() {
 
   function View() {
     switch (activeView) {
-      case 'linkedin':
+      case 'LinkedIn':
         return <LinkedinView />;
-      case 'handshake':
+      case 'Handshake':
         return <HandshakeView />;
     }
   }
@@ -123,22 +115,14 @@ function LinkView() {
     );
   }
 
-  function Button({
-    title,
-    view,
-    isLinked,
-  }: {
-    title: string;
-    view: JobSites;
-    isLinked: boolean;
-  }) {
+  function Button({ view, isLinked }: { view: JobSites; isLinked: boolean }) {
     return (
       <button
         className={`py-2 px-3 bg-gray-400 text-xl rounded-full duration-100 outline-gray-500 hover:outline ${activeView == view && 'font-bold'}`}
         onClick={() => setActiveView(view)}
       >
         {(isLinked && '✅ ') || '❌ '}
-        {title}
+        {view}
       </button>
     );
   }

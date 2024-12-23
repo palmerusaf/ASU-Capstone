@@ -10,16 +10,16 @@ type StaticData = {
   totalMemoryGB: number;
 };
 
-type MainView = 'Link Accounts' | 'Job Tracker' | 'Find Jobs';
+type MainViews = 'Link Accounts' | 'Job Tracker' | 'Find Jobs';
 
-type JobSites = 'linkedin' | 'handshake';
+type JobSites = 'LinkedIn' | 'Handshake';
 
 type FrameWindowAction = 'CLOSE' | 'MAXIMIZE' | 'MINIMIZE';
 
 type EventPayloadMapping = {
   statistics: Statistics;
   getStaticData: StaticData;
-  changeView: MainView;
+  changeView: MainViews;
   sendFrameAction: FrameWindowAction;
 };
 
@@ -32,7 +32,7 @@ interface Window {
     ) => UnsubscribeFunction;
     getStaticData: () => Promise<StaticData>;
     subscribeChangeView: (
-      callback: (view: MainView) => void,
+      callback: (view: MainViews) => void,
     ) => UnsubscribeFunction;
     sendFrameAction: (payload: FrameWindowAction) => void;
   };

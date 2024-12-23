@@ -66,4 +66,3 @@ function handleCloseEvents(mainWindow: BrowserWindow) {
     willClose = false;
   });
 }
-
