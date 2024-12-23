@@ -26,7 +26,11 @@ export function createMenu(mainWindow: BrowserWindow) {
           {
             label: 'Link Accounts',
             click: () =>
-              ipcWebContentsSend('changeView', mainWindow.webContents, 'link'),
+              ipcWebContentsSend(
+                'changeView',
+                mainWindow.webContents,
+                'Link Accounts',
+              ),
           },
           {
             label: 'Find Jobs',
@@ -34,7 +38,7 @@ export function createMenu(mainWindow: BrowserWindow) {
               ipcWebContentsSend(
                 'changeView',
                 mainWindow.webContents,
-                'search',
+                'Find Jobs',
               ),
           },
           {
@@ -43,7 +47,7 @@ export function createMenu(mainWindow: BrowserWindow) {
               ipcWebContentsSend(
                 'changeView',
                 mainWindow.webContents,
-                'tracker',
+                'Job Tracker',
               ),
           },
         ],

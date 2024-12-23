@@ -10,7 +10,7 @@ type StaticData = {
   totalMemoryGB: number;
 };
 
-type MainView = 'link' | 'tracker' | 'search';
+type MainView = 'Link Accounts' | 'Job Tracker' | 'Find Jobs';
 
 type JobSites = 'linkedin' | 'handshake';
 
