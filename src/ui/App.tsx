@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 
 export default function App() {
-  type ViewType = 'link' | 'tracker' | 'search';
-  const [activeView, setActiveView] = useState<ViewType>('link');
+  const [activeView, setActiveView] = useState<MainView>('link');
   return (
     <div className="flex gap-2 p-2 h-svh">
       <div className="flex flex-col gap-2 p-4 text-center bg-gray-300 rounded-lg text-nowrap w-fit">
@@ -28,7 +27,7 @@ export default function App() {
     }
   }
 
-  function Button({ title, view }: { title: string; view: ViewType }) {
+  function Button({ title, view }: { title: string; view: MainView }) {
     return (
       <button
         className={`py-2 px-3 bg-gray-400 rounded-full duration-150 hover:scale-105 ${activeView == view && 'font-bold'}`}

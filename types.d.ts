@@ -10,7 +10,7 @@ type StaticData = {
   totalMemoryGB: number;
 };
 
-type View = 'CPU' | 'RAM' | 'STORAGE';
+type MainView = 'link' | 'tracker' | 'search';
 
 type JobSites = 'linkedin' | 'handshake';
 
@@ -19,7 +19,7 @@ type FrameWindowAction = 'CLOSE' | 'MAXIMIZE' | 'MINIMIZE';
 type EventPayloadMapping = {
   statistics: Statistics;
   getStaticData: StaticData;
-  changeView: View;
+  changeView: MainView;
   sendFrameAction: FrameWindowAction;
 };
 
@@ -32,7 +32,7 @@ interface Window {
     ) => UnsubscribeFunction;
     getStaticData: () => Promise<StaticData>;
     subscribeChangeView: (
-      callback: (view: View) => void,
+      callback: (view: MainView) => void,
     ) => UnsubscribeFunction;
     sendFrameAction: (payload: FrameWindowAction) => void;
   };

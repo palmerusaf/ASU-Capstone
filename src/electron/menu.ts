@@ -19,31 +19,35 @@ export function createMenu(mainWindow: BrowserWindow) {
           },
         ],
       },
-      // {
-      //   label: 'View',
-      //   type: 'submenu',
-      //   submenu: [
-      //     {
-      //       label: 'CPU',
-      //       click: () =>
-      //         ipcWebContentsSend('changeView', mainWindow.webContents, 'CPU'),
-      //     },
-      //     {
-      //       label: 'RAM',
-      //       click: () =>
-      //         ipcWebContentsSend('changeView', mainWindow.webContents, 'RAM'),
-      //     },
-      //     {
-      //       label: 'STORAGE',
-      //       click: () =>
-      //         ipcWebContentsSend(
-      //           'changeView',
-      //           mainWindow.webContents,
-      //           'STORAGE',
-      //         ),
-      //     },
-      //   ],
-      // },
+      {
+        label: 'View',
+        type: 'submenu',
+        submenu: [
+          {
+            label: 'Link Accounts',
+            click: () =>
+              ipcWebContentsSend('changeView', mainWindow.webContents, 'link'),
+          },
+          {
+            label: 'Find Jobs',
+            click: () =>
+              ipcWebContentsSend(
+                'changeView',
+                mainWindow.webContents,
+                'tracker',
+              ),
+          },
+          {
+            label: 'Job Tracker',
+            click: () =>
+              ipcWebContentsSend(
+                'changeView',
+                mainWindow.webContents,
+                'search',
+              ),
+          },
+        ],
+      },
     ]),
   );
 }
