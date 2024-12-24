@@ -42,3 +42,4 @@ jobs:
           # Skip buiding the application
           # (Optional)
           skip_build: false
+          build_script_name: build
