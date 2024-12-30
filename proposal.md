@@ -6,32 +6,29 @@ Simplify the job/internship application process by automating search, applicatio
 
 ## Roadmaps
 
-### Phase 1 - Semester 1 - Desktop App
+### Phase 1 - Semester 1 - Job Management
 
-- [ ] Link with one job site
+- [x] Link with one job site
+- [ ] Upload/Extract Resume keywords
 - [ ] Search/Add functionality
 - [ ] Job Tracker
 - [ ] Auto apply bot
 - [ ] Link and integrate with 1-2 more job sites
 
-### Phase 2 - Semester 2 - Central Server
+### Phase 2 - Semester 2 - Resume Management
 
-- [ ] Setup account management
-- [ ] Sync job tracker
-- [ ] Provide analytics from other users on jobs/companies
-- [ ] Create mobile app
+- [ ] Resume builder
+- [ ] Resume download
+- [ ] Resume storage/management
+- [ ] Resume to job matcher
+- [ ] One click resume upload to job sites
 
 ## Tech Stack
 
-### Phase 1 - Semester 1 - Desktop App
-
-- Git/GitHub
-- GitHub Actions
-- React.js
 - Electron.js
+- Express.js
+- GitHub Actions for CD/CI
 - Node.js
+- React.js
+- TailwindCSS
 - Typescript
-
-### Phase 2 - Semester 2 - Central Server
-
-- To be determined, potentially Firebase
