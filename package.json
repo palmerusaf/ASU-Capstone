@@ -8,10 +8,9 @@
     "singleQuote": true
   },
   "scripts": {
-    "dev": "npm-run-all --parallel dev:react dev:electron:watch",
+    "dev": "npm-run-all --parallel dev:react dev:electron",
     "dev:react": "vite",
     "dev:electron": "npm run transpile:electron && cross-env NODE_ENV=development electron .",
-    "dev:electron:watch": "nodemon --watch './src/electron/*' --exec npm run dev:electron",
     "build": "npm run transpile:electron && npm run build:vite",
     "build:vite": "tsc && vite build",
     "preview": "vite preview",
