@@ -1,9 +1,5 @@
 import rookie from '@rookie-rs/api';
 
-type SetFieldsToUndefined<T> = {
-  [K in keyof T]: undefined;
-};
-
 const ErrorExample = { errors: { not_logged_in: true } };
 const SuccessExample = {
   results: [
@@ -736,9 +732,8 @@ const SuccessExample = {
   },
   search_id: 'c86815d9-008f-4d36-bfd5-c4bfd6a3ea3d',
 };
-type ResponseType =
-  | (typeof SuccessExample & SetFieldsToUndefined<typeof ErrorExample>)
-  | (typeof ErrorExample & SetFieldsToUndefined<typeof SuccessExample>);
+type SuccessResponse = typeof SuccessExample;
+type ErrorResponse = typeof ErrorExample;
 
 export async function testHandshakeLink(): Promise<boolean> {
   const res = await fetch(
@@ -755,6 +750,6 @@ export async function testHandshakeLink(): Promise<boolean> {
       },
     },
   );
-  const data = (await res.json()) as ResponseType;
-  return data.errors === undefined;
+  const data = (await res.json()) as SuccessResponse | ErrorResponse;
+  return !('errors' in data);
 }
