@@ -4,7 +4,7 @@ import { getPreloadPath, getUIPath } from './pathResolver.js';
 import { createTray } from './tray.js';
 import { createMenu } from './menu.js';
 import { testHandshakeLink } from './handshake.js';
-import { startServer } from './api-server.js';
+import { getApiUrl } from './api-server.js';
 
 app.on('ready', () => {
   const mainWindow = new BrowserWindow({
@@ -20,9 +20,9 @@ app.on('ready', () => {
   ipcMainHandle('testHandshakeLink', testHandshakeLink);
   handleCloseEvents(mainWindow);
   ipcMainOn('openUrl', shell.openExternal);
+  ipcMainHandle('getApiUrl', getApiUrl);
   createTray(mainWindow);
   createMenu(mainWindow);
-  startServer();
 });
 
 function handleCloseEvents(mainWindow: BrowserWindow) {

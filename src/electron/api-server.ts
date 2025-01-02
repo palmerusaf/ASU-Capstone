@@ -1,22 +1,24 @@
 import express from 'express';
-let _port: number;
 
-export function getPort() {
-  return _port;
+export function getApiUrl(): string {
+  return _apiUrl;
 }
 
-export function startServer() {
-  const app = express();
+let _apiUrl: string;
 
-  app.get('/', (_, res) => {
-    res.send('hello');
-  });
+const app = express();
 
-  // dynamically assign port
-  const server = app.listen(0, () => {
-    const servInfo = server.address();
-    if (servInfo && typeof servInfo === 'object') _port = servInfo.port;
-    else throw 'Error: Port not assigned';
-    console.log('Express API server listening on port' + _port);
-  });
-}
+app.get('/', (_, res) => {
+  res.send('hello');
+});
+
+// dynamically assign port
+const server = app.listen(0, () => {
+  const servInfo = server.address();
+  if (!servInfo || typeof servInfo === 'string') {
+    console.error('Error port not assigned');
+    throw 'Error port not assigned';
+  }
+  _apiUrl = 'http://localhost:' + servInfo.port;
+  console.log('Express API server listening on server ' + getApiUrl());
+});
