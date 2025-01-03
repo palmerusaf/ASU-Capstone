@@ -10,6 +10,10 @@ This will be a desktop application that will retrieve job postings from multiple
 
 This application will also include resume management. It will include an ATS compliant resume builder, downloader, and version management. The overall goal here is to help the applicant organize tailor made resumes with their respective jobs. This will be done partly through automation with keyword extraction and matching. Finally, we will include a tagging system to allow the user to further organize their jobs/resumes when automation is lacking.
 
+## Contributing
+
+Visit [CONTRIBUTING.md](./CONTRIBUTING.md) for guidance.
+
 ## Roadmaps
 
 ### Phase 1 - Semester 1 - Job Management
