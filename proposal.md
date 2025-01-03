@@ -19,6 +19,7 @@ This application will also include resume management. It will include an ATS com
 - [ ] Search/Add functionality
 - [ ] Add job tagging system
 - [ ] Job Tracker
+- [ ] Schedule interviews/Integrate with ICal
 - [ ] Auto apply bot
 - [ ] Link and integrate with 1-2 more job sites
 
