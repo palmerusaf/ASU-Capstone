@@ -14,7 +14,7 @@
 
 ### Step 2: Install NPM
 
-The recommended way to install NPM via NVM. Click [here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm#using-a-node-version-manager-to-install-nodejs-and-npm) for install instructions.
+The recommended way to install NPM is via NVM. Click [here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm#using-a-node-version-manager-to-install-nodejs-and-npm) for install instructions.
 
 ### Step 3: Install PNPM
 
@@ -36,7 +36,7 @@ pnpm i
 
 ## Making Changes
 
-### Running dev mode
+### Running Dev Mode
 
 To start the project in dev mode run the following command in the project root folder.
 
@@ -44,7 +44,7 @@ To start the project in dev mode run the following command in the project root f
 pnpm dev
 ```
 
-Changes made to the front-end (files in the src/ui folder) will be reloaded automatically on save. Changes to the back-end (files outside the src/ui folder) will require stopping and rerunning dev mode by pressing Ctrl-C in the terminal you first ran dev mode.
+Changes made to the front-end (files in the src/ui folder) will be reloaded automatically on save. Changes to the back-end (files outside the src/ui folder) will require stopping and re-running dev mode by pressing Ctrl-C in the terminal you first ran dev mode to stop dev mode.
 
 ### Building Locally
 
