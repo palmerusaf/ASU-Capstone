@@ -34,7 +34,7 @@ cd path/to/project-root/
 pnpm i
 ```
 
-## Making Changes
+## Running the Project
 
 ### Running Dev Mode
 
@@ -82,11 +82,14 @@ A list of all available project scripts is available in the package.json file in
 pnpm <script-name>
 ```
 
-## Making Pull Requests
+## Making Changes
 
 - [Add Changes to the Staging Area](https://www.freecodecamp.org/news/git-and-github-workflow-for-open-source/#heading-how-to-add-changes-to-the-staging-area)
 - [Commit Changes](https://www.freecodecamp.org/news/git-and-github-workflow-for-open-source/#heading-how-to-commit-changes)
 - [Synchronize Changes](https://www.freecodecamp.org/news/git-and-github-workflow-for-open-source/#heading-how-to-synchronize-changes)
+
+## Making Pull Requests
+
 - [Resolve Merge Conflicts](https://www.freecodecamp.org/news/git-and-github-workflow-for-open-source/#heading-how-to-resolve-merge-conflicts)
 - [Push Changes](https://www.freecodecamp.org/news/git-and-github-workflow-for-open-source/#heading-how-to-push-changes)
 - [Create a Pull Request](https://www.freecodecamp.org/news/git-and-github-workflow-for-open-source/#heading-how-to-create-a-pull-request)
