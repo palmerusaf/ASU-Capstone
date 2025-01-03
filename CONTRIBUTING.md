@@ -10,7 +10,6 @@
 - [Prerequisites](https://www.freecodecamp.org/news/git-and-github-workflow-for-open-source/#heading-prerequisites)
 - [Fork the Repository](https://www.freecodecamp.org/news/git-and-github-workflow-for-open-source/#heading-how-to-fork-a-repository)
 - [Clone the Repository](https://www.freecodecamp.org/news/git-and-github-workflow-for-open-source/#heading-how-to-clone-a-repository)
-- [Create a New Branch](https://www.freecodecamp.org/news/git-and-github-workflow-for-open-source/#heading-how-to-create-a-new-branch)
 
 ### Step 2: Install NPM
 
@@ -84,6 +83,7 @@ pnpm <script-name>
 
 ## Making Changes
 
+- [Create a New Branch](https://www.freecodecamp.org/news/git-and-github-workflow-for-open-source/#heading-how-to-create-a-new-branch)
 - [Add Changes to the Staging Area](https://www.freecodecamp.org/news/git-and-github-workflow-for-open-source/#heading-how-to-add-changes-to-the-staging-area)
 - [Commit Changes](https://www.freecodecamp.org/news/git-and-github-workflow-for-open-source/#heading-how-to-commit-changes)
 - [Synchronize Changes](https://www.freecodecamp.org/news/git-and-github-workflow-for-open-source/#heading-how-to-synchronize-changes)
