@@ -39,10 +39,8 @@ Visit [CONTRIBUTING.md](./CONTRIBUTING.md) for guidance.
 
 ## Tech Stack
 
-- Electron.js
-- Express.js
+- electron-vite
 - GitHub Actions for CD/CI
-- Node.js
 - React.js
 - TailwindCSS
 - Typescript
