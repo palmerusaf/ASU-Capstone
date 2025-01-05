@@ -1,34 +1,45 @@
-# centralized-job-app-platfrom
+# Centralize Job App Platform
 
-An Electron application with React and TypeScript
+## Objective
 
-## Recommended IDE Setup
+Simplify the job/internship application process by automating search, application, and tracking of jobs. We seek to accomplish this by creating a desktop app that integrates with various jobs sites such as Handshake, LinkedIn, and Indeed.
 
-- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+## Description
 
-## Project Setup
+This will be a desktop application that will retrieve job postings from multiple sites and consolidate them in one list. Here the user can filter and update the status of the jobs. This list will include metadata such as date added, date applied, as well as a score indicating how closely it matches the user's selected resume. If the job has an easy apply button then the user will be able to select and apply to multiple jobs at once.
 
-### Install
+This application will also include resume management. It will include an ATS compliant resume builder, downloader, and version management. The overall goal here is to help the applicant organize tailor made resumes with their respective jobs. This will be done partly through automation with keyword extraction and matching. Finally, we will include a tagging system to allow the user to further organize their jobs/resumes when automation is lacking.
 
-```bash
-$ npm install
-```
+## Contributing
 
-### Development
+Visit [CONTRIBUTING.md](./CONTRIBUTING.md) for guidance.
 
-```bash
-$ npm run dev
-```
+## Roadmaps
 
-### Build
+### Phase 1 - Semester 1 - Job Management
 
-```bash
-# For windows
-$ npm run build:win
+- [x] Link with one job site
+- [ ] Upload/Extract Resume keywords
+- [ ] Search/Add functionality
+- [ ] Add job tagging system
+- [ ] Job Tracker
+- [ ] Schedule interviews/Integrate with ICal
+- [ ] Auto apply bot
+- [ ] Link and integrate with 1-2 more job sites
 
-# For macOS
-$ npm run build:mac
+### Phase 2 - Semester 2 - Resume Management
 
-# For Linux
-$ npm run build:linux
-```
+- [ ] Resume builder
+- [ ] Resume download
+- [ ] Add resume tagging system
+- [ ] Resume storage/management
+- [ ] Resume to job matcher
+- [ ] One click resume upload to job sites
+- [ ] Fully integrate with job management
+
+## Tech Stack
+
+- electron-vite [docs](https://electron-vite.org/guide/dev)
+- electron-trpc [docs](https://electron-trpc.dev/)
+- React.js [docs](https://react.dev/learn)
+- TypeScript [docs](https://www.typescriptlang.org/docs/)
