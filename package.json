@@ -21,9 +21,15 @@
     "build:linux": "electron-vite build && electron-builder --linux"
   },
   "dependencies": {
+    "@tanstack/react-query": "^4.29.14",
+    "@trpc/client": "10.33.1",
+    "@trpc/react-query": "10.33.1",
+    "@trpc/server": "10.33.1",
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^3.0.0",
-    "electron-updater": "^6.1.7"
+    "electron-trpc": "^0.7.1",
+    "electron-updater": "^6.1.7",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^2.0.0",

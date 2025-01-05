@@ -1,9 +1,13 @@
 import Versions from './components/Versions'
 import electronLogo from './assets/electron.svg'
+import { api } from './main'
 
 function App(): JSX.Element {
   const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
-
+  const q = api.greeting.useQuery({ name: 'World' })
+  if (q.isError) return <div>{q.error.message}</div>
+  if (q.isLoading) return <div>{'loading'}</div>
+  if (q.data) return <div>{q.data.text}</div>
   return (
     <>
       <img alt="logo" className="logo" src={electronLogo} />
