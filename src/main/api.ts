@@ -1,19 +1,19 @@
 import 'dotenv/config'
 import z from 'zod'
-import { drizzle } from 'drizzle-orm/libsql'
-import { usersTable } from '../db/schema'
+import { posts } from '../db/schema'
 import { initTRPC } from '@trpc/server'
-import dbPath from '../../resources/local.db?asset&asarUnpack'
+import { db } from './db'
 
-const db = drizzle('file:' + dbPath)
 
 const t = initTRPC.create({ isServer: true })
 
 export const router = t.router({
-  greeting: t.procedure.query(async () => {
-    // await db.insert(usersTable).values({ name: 'foo' }).onConflictDoNothing()
-    const res = await db.select().from(usersTable)
+  getPosts: t.procedure.query(async () => {
+    const res = await db.select().from(posts)
     return res
+  }),
+  setPosts: t.procedure.input(z.string()).mutation(async ({ input }) => {
+    await db.insert(posts).values({ title: input })
   })
 })
 
