@@ -8,7 +8,14 @@ import { observable } from '@trpc/server/observable'
 import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
 
-const db = drizzle('file:' + join(__dirname, is.dev ? '.' : '..', '/../resources/data.db'))
+const db = drizzle(
+  'file:' +
+    join(
+      __dirname,
+      is.dev ? '../../resources/' : '../../../app.asar.unpacked/resources/',
+      './data.db'
+    )
+)
 const ee = new EventEmitter()
 
 const t = initTRPC.create({ isServer: true })
