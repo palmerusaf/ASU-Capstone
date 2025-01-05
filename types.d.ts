@@ -6,7 +6,6 @@ type EventPayloadMapping = {
   changeView: MainViews;
   testHandshakeLink: Promise<boolean>;
   openUrl: string;
-  getApiUrl: string;
 };
 
 type UnsubscribeFunction = () => void;
@@ -14,7 +13,6 @@ type UnsubscribeFunction = () => void;
 interface Window {
   electron: {
     testHandshakeLink: () => Promise<boolean>;
-    getApiUrl: () => Promise<string>;
     openUrl: (url: string) => void;
     subscribeChangeView: (
       callback: (view: MainViews) => void,

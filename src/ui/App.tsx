@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
-window.electron.getApiUrl().then(function(val) {
-  console.log(val);
-});
+
 export default function App() {
   const [activeView, setActiveView] = useState<MainViews>('Link Accounts');
   useEffect(() => {
