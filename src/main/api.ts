@@ -5,8 +5,10 @@ import { drizzle } from 'drizzle-orm/libsql'
 import { usersTable } from '../db/schema'
 import { initTRPC } from '@trpc/server'
 import { observable } from '@trpc/server/observable'
+import { join } from 'path'
+import { is } from '@electron-toolkit/utils'
 
-const db = drizzle(process.env.DB_FILE_NAME!)
+const db = drizzle('file:' + join(__dirname, is.dev ? '.' : '..', '/../resources/data.db'))
 const ee = new EventEmitter()
 
 const t = initTRPC.create({ isServer: true })
