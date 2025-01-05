@@ -4,7 +4,6 @@ import { getPreloadPath, getUIPath } from './pathResolver.js';
 import { createTray } from './tray.js';
 import { createMenu } from './menu.js';
 import { testHandshakeLink } from './handshake.js';
-import { startServer } from './api-server.js';
 
 app.on('ready', () => {
   const mainWindow = new BrowserWindow({
@@ -22,7 +21,6 @@ app.on('ready', () => {
   ipcMainOn('openUrl', shell.openExternal);
   createTray(mainWindow);
   createMenu(mainWindow);
-  startServer();
 });
 
 function handleCloseEvents(mainWindow: BrowserWindow) {
