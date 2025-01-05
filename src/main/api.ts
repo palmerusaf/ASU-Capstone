@@ -1,20 +1,24 @@
+import 'dotenv/config'
 import z from 'zod'
+import { EventEmitter } from 'events'
+import { drizzle } from 'drizzle-orm/libsql'
+import { usersTable } from '../db/schema'
 import { initTRPC } from '@trpc/server'
 import { observable } from '@trpc/server/observable'
-import { EventEmitter } from 'events'
 
+const db = drizzle(process.env.DB_FILE_NAME!)
 const ee = new EventEmitter()
 
 const t = initTRPC.create({ isServer: true })
 
 export const router = t.router({
-  greeting: t.procedure.input(z.object({ name: z.string() })).query((req) => {
+  greeting: t.procedure.input(z.object({ name: z.string() })).query(async (req) => {
     const { input } = req
 
     ee.emit('greeting', `Greeted ${input.name}`)
-    return {
-      text: `Hello ${input.name}` as const
-    }
+    await db.insert(usersTable).values({ name: 'foo' }).onConflictDoNothing()
+    const res = await db.select().from(usersTable)
+    return res
   }),
   subscription: t.procedure.subscription(() => {
     return observable((emit) => {
