@@ -1,3 +1,4 @@
+import { Button } from '@renderer/components/ui/button'
 import { api } from './main'
 
 function App(): JSX.Element {
@@ -20,7 +21,7 @@ function App(): JSX.Element {
           }}
         >
           <input name="title" type="text" placeholder="title" />
-          <button>add</button>
+          <Button variant={'default'}>foo</Button>
         </form>
       </div>
       {get.isLoading
