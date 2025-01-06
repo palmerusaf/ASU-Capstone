@@ -1,46 +1,66 @@
-import { AppSidebar } from '@renderer/components/app-sidebar'
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator
-} from '@renderer/components/ui/breadcrumb'
-import { Separator } from '@renderer/components/ui/separator'
-import { SidebarInset, SidebarProvider, SidebarTrigger } from '@renderer/components/ui/sidebar'
+import { Layout } from '@renderer/components/layout'
+import * as icon from 'lucide-react'
+import { useState } from 'react'
+
+const data = [
+  {
+    title: 'Connect Providers',
+    icon: icon.Link,
+    items: [
+      {
+        title: 'Handshake'
+      }
+    ]
+  },
+  {
+    title: 'Manage Applications',
+    icon: icon.Briefcase,
+    items: [
+      {
+        title: 'Find New Jobs'
+      }
+    ]
+  },
+  {
+    title: 'Manage Resumes',
+    icon: icon.Pencil,
+    items: [
+      {
+        title: 'Upload Resume'
+      }
+    ]
+  },
+  {
+    title: 'Settings',
+    icon: icon.Settings2,
+    items: [
+      {
+        title: 'Display'
+      }
+    ]
+  }
+] as const
+
+export type DataType = typeof data
+export type MenuType = DataType[number]['title']
+export type SubMenuType = DataType[number]['items'][number]['title']
+type PageRouterType = { [key in SubMenuType]: JSX.Element }
+
+const pageRouter: PageRouterType = {
+  Handshake: <div>HandShake Page</div>,
+  'Find New Jobs': <div>New jobs Page</div>,
+  'Upload Resume': <div>upload Page</div>,
+  Display: <div>Display Page</div>
+}
 
 export default function App() {
+  const [active, setActive] = useState<{ menu: MenuType; submenu: SubMenuType }>({
+    menu: 'Connect Providers',
+    submenu: 'Handshake'
+  })
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
-          <div className="flex gap-2 items-center px-4">
-            <SidebarTrigger className="-ml-1" />
-            <Separator orientation="vertical" className="mr-2 h-4" />
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">Building Your Application</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
-          </div>
-        </header>
-        <div className="flex flex-col flex-1 gap-4 p-4 pt-0">
-          <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-            <div className="rounded-xl aspect-video bg-muted/50" />
-            <div className="rounded-xl aspect-video bg-muted/50" />
-            <div className="rounded-xl aspect-video bg-muted/50" />
-          </div>
-          <div className="flex-1 rounded-xl min-h-[100vh] bg-muted/50 md:min-h-min" />
-        </div>
-      </SidebarInset>
-    </SidebarProvider>
+    <Layout setActive={setActive} data={data} menu={active.menu} submenu={active.submenu}>
+      {pageRouter[active.submenu]}
+    </Layout>
   )
 }
