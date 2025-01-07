@@ -11,7 +11,7 @@ import { Group } from '@chakra-ui/react'
 import { Button } from '@renderer/components/ui/button'
 import * as Card from '@renderer/components/ui/card'
 import { Loader2 } from 'lucide-react'
-import { api } from './main'
+import { api } from './WithProviders'
 
 export function ConnectHandshakePage(): JSX.Element {
   const open = api.providers.handshake.openLogin.useMutation()

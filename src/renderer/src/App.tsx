@@ -4,6 +4,7 @@ import { Switch } from '@renderer/components/ui/switch'
 import * as icon from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { ConnectHandshakePage } from './ConnectPages'
+import { WithProviders } from './WithProviders'
 
 const data = [
   {
@@ -62,9 +63,11 @@ export default function App() {
     submenu: 'Handshake'
   })
   return (
-    <Layout setActive={setActive} data={data} menu={active.menu} submenu={active.submenu}>
-      {pageRouter[active.submenu] || <NotImplemented />}
-    </Layout>
+    <WithProviders>
+      <Layout setActive={setActive} data={data} menu={active.menu} submenu={active.submenu}>
+        {pageRouter[active.submenu] || <NotImplemented />}
+      </Layout>
+    </WithProviders>
   )
 }
 
@@ -75,7 +78,7 @@ function NotImplemented() {
 function DisplaySettings(): JSX.Element {
   const [active, setActive] = useState(
     localStorage.theme === 'dark' ||
-      (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+    (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
   )
   useEffect(() => {
     if (!('theme' in localStorage)) {
