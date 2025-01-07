@@ -7,8 +7,18 @@ import { createTRPCReact } from '@trpc/react-query'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { AppRouter } from '../../main/api'
 
-export const api = createTRPCReact<AppRouter>()
+function setDarkMode() {
+  // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+  document.documentElement.classList.toggle(
+    'dark',
+    localStorage.theme === 'dark' ||
+    (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+  )
+}
 
+setDarkMode()
+
+export const api = createTRPCReact<AppRouter>()
 function AppWithProviders() {
   const [queryClient] = useState(() => new QueryClient())
   const [trpcClient] = useState(() =>
