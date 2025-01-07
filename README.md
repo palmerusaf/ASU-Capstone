@@ -1,4 +1,6 @@
-# Centralize Job App Platform
+# TailGatherer
+
+A centralized job application platform.
 
 ## Objective
 
