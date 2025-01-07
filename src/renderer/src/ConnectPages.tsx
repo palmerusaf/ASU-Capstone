@@ -77,7 +77,7 @@ export function ConnectHandshakePage(): JSX.Element {
           Testing Connection
         </Button>
       )
-    if (test.isSuccess)
+    if (test.data !== undefined && test.data)
       return (
         <StepsNextTrigger>
           <Button>Passed Continue?</Button>
