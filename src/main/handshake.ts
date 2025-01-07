@@ -1,6 +1,6 @@
-import rookie from '@rookie-rs/api';
+import rookie from '@rookie-rs/api'
 
-const ErrorExample = { errors: { not_logged_in: true } };
+const ErrorExample = { errors: { not_logged_in: true } }
 const SuccessExample = {
   results: [
     {
@@ -28,7 +28,7 @@ const SuccessExample = {
           updated_at: '2016-03-16T05:32:32.049+07:00',
           industry_category_id: 17,
           nubs_category: 'Technology/Science',
-          behavior_identifier: 'Internet & Software',
+          behavior_identifier: 'Internet & Software'
         },
         title: 'Software Developer (New Grad, Summer 2025 Start)',
         work_schedule: null,
@@ -60,11 +60,11 @@ const SuccessExample = {
         applied: false,
         is_promoted: null,
         should_promote: false,
-        curations: [],
+        curations: []
       },
       annotation: null,
-      employer_curations: [],
-    },
+      employer_curations: []
+    }
   ],
   current_page: 1,
   total_pages: 2242,
@@ -80,7 +80,7 @@ const SuccessExample = {
         configuration: {
           type: 'facet',
           name: 'Employer',
-          search_method: {},
+          search_method: {}
         },
         tooltip_type: 'none',
         hidden: false,
@@ -90,31 +90,31 @@ const SuccessExample = {
             name: 'Epic Special Education Staffing',
             count: 706,
             label: 'Epic Special Education Staffing',
-            data: 706,
+            data: 706
           },
           {
             id: 19979,
             name: 'D.R. Horton, Inc.',
             count: 387,
             label: 'D.R. Horton, Inc.',
-            data: 387,
+            data: 387
           },
           {
             id: 538470,
             name: 'Alliance Animal Health',
             count: 310,
             label: 'Alliance Animal Health',
-            data: 310,
+            data: 310
           },
           {
             id: 48226,
             name: 'Fairfax County VA Public Schools',
             count: 250,
             label: 'Fairfax County VA Public Schools',
-            data: 250,
-          },
+            data: 250
+          }
         ],
-        placeholder: null,
+        placeholder: null
       },
       {
         name: 'Label',
@@ -123,12 +123,12 @@ const SuccessExample = {
         configuration: {
           type: 'facet',
           name: 'Label',
-          search_method: {},
+          search_method: {}
         },
         tooltip_type: 'none',
         hidden: false,
         options: [],
-        placeholder: null,
+        placeholder: null
       },
       {
         name: 'Employer Industry',
@@ -137,7 +137,7 @@ const SuccessExample = {
         configuration: {
           type: 'facet',
           name: 'Employer Industry',
-          search_method: {},
+          search_method: {}
         },
         tooltip_type: 'none',
         hidden: false,
@@ -147,31 +147,31 @@ const SuccessExample = {
             name: 'Healthcare',
             count: 8103,
             label: 'Healthcare',
-            data: 8103,
+            data: 8103
           },
           {
             id: 1040,
             name: 'K-12 Education',
             count: 4413,
             label: 'K-12 Education',
-            data: 4413,
+            data: 4413
           },
           {
             id: 1032,
             name: 'Non-Profit - Other',
             count: 3933,
             label: 'Non-Profit - Other',
-            data: 3933,
+            data: 3933
           },
           {
             id: 1046,
             name: 'Government - Local, State & Federal',
             count: 3523,
             label: 'Government - Local, State & Federal',
-            data: 3523,
-          },
+            data: 3523
+          }
         ],
-        placeholder: null,
+        placeholder: null
       },
       {
         name: 'Job Role',
@@ -180,7 +180,7 @@ const SuccessExample = {
         configuration: {
           type: 'facet',
           name: 'Job Role',
-          search_method: {},
+          search_method: {}
         },
         tooltip_type: 'none',
         hidden: false,
@@ -190,31 +190,31 @@ const SuccessExample = {
             name: 'Office and Administrative Support Workers',
             count: 2929,
             label: 'Office and Administrative Support Workers',
-            data: 2929,
+            data: 2929
           },
           {
             id: 373,
             name: 'Accountants and Auditors',
             count: 2117,
             label: 'Accountants and Auditors',
-            data: 2117,
+            data: 2117
           },
           {
             id: 81,
             name: 'Civil Engineers',
             count: 2043,
             label: 'Civil Engineers',
-            data: 2043,
+            data: 2043
           },
           {
             id: 89,
             name: 'Mechanical Engineers',
             count: 1810,
             label: 'Mechanical Engineers',
-            data: 1810,
-          },
+            data: 1810
+          }
         ],
-        placeholder: null,
+        placeholder: null
       },
       {
         name: 'Employer Groups',
@@ -223,7 +223,7 @@ const SuccessExample = {
         configuration: {
           type: 'facet',
           name: 'Employer Groups',
-          search_method: {},
+          search_method: {}
         },
         tooltip_type: 'none',
         hidden: false,
@@ -233,10 +233,10 @@ const SuccessExample = {
             name: 'CEO Action for Diversity & Inclusion',
             count: 5119,
             label: 'CEO Action for Diversity & Inclusion',
-            data: 5119,
-          },
+            data: 5119
+          }
         ],
-        placeholder: null,
+        placeholder: null
       },
       {
         name: 'Majors',
@@ -245,12 +245,12 @@ const SuccessExample = {
         configuration: {
           type: 'facet',
           name: 'Majors',
-          search_method: {},
+          search_method: {}
         },
         tooltip_type: 'none',
         hidden: false,
         options: [],
-        placeholder: null,
+        placeholder: null
       },
       {
         name: 'Job Type',
@@ -259,7 +259,7 @@ const SuccessExample = {
         configuration: {
           type: 'facet',
           name: 'Job Type',
-          search_method: {},
+          search_method: {}
         },
         tooltip_type: 'none',
         hidden: false,
@@ -269,59 +269,59 @@ const SuccessExample = {
             name: 'Job',
             count: null,
             label: 'Job',
-            data: null,
+            data: null
           },
           {
             id: 3,
             name: 'Internship',
             count: null,
             label: 'Internship',
-            data: null,
+            data: null
           },
           {
             id: 6,
             name: 'On Campus Student Employment',
             count: null,
             label: 'On Campus Student Employment',
-            data: null,
+            data: null
           },
           {
             id: 4,
             name: 'Cooperative Education',
             count: null,
             label: 'Cooperative Education',
-            data: null,
+            data: null
           },
           {
             id: 5,
             name: 'Experiential Learning',
             count: null,
             label: 'Experiential Learning',
-            data: null,
+            data: null
           },
           {
             id: 10,
             name: 'Volunteer',
             count: null,
             label: 'Volunteer',
-            data: null,
+            data: null
           },
           {
             id: 7,
             name: 'Fellowship',
             count: null,
             label: 'Fellowship',
-            data: null,
+            data: null
           },
           {
             id: 8,
             name: 'Graduate School',
             count: null,
             label: 'Graduate School',
-            data: null,
-          },
+            data: null
+          }
         ],
-        placeholder: null,
+        placeholder: null
       },
       {
         name: 'Employment Type',
@@ -330,7 +330,7 @@ const SuccessExample = {
         configuration: {
           type: 'facet',
           name: 'Employment Type',
-          search_method: {},
+          search_method: {}
         },
         tooltip_type: 'none',
         hidden: false,
@@ -340,24 +340,24 @@ const SuccessExample = {
             name: 'Seasonal',
             count: null,
             label: 'Seasonal',
-            data: null,
+            data: null
           },
           {
             id: 1,
             name: 'Full-Time',
             count: null,
             label: 'Full-Time',
-            data: null,
+            data: null
           },
           {
             id: 2,
             name: 'Part-Time',
             count: null,
             label: 'Part-Time',
-            data: null,
-          },
+            data: null
+          }
         ],
-        placeholder: null,
+        placeholder: null
       },
       {
         name: 'Salary Type',
@@ -366,7 +366,7 @@ const SuccessExample = {
         configuration: {
           type: 'facet',
           name: 'Salary Type',
-          search_method: {},
+          search_method: {}
         },
         tooltip_type: 'none',
         hidden: false,
@@ -376,17 +376,17 @@ const SuccessExample = {
             name: 'Paid',
             count: null,
             label: 'Paid',
-            data: null,
+            data: null
           },
           {
             id: 2,
             name: 'Unpaid',
             count: null,
             label: 'Unpaid',
-            data: null,
-          },
+            data: null
+          }
         ],
-        placeholder: null,
+        placeholder: null
       },
       {
         name: 'Benefits',
@@ -395,7 +395,7 @@ const SuccessExample = {
         configuration: {
           type: 'facet',
           name: 'Benefits',
-          search_method: {},
+          search_method: {}
         },
         tooltip_type: 'none',
         hidden: false,
@@ -405,172 +405,172 @@ const SuccessExample = {
             name: 'Medical',
             count: null,
             label: 'Medical',
-            data: null,
+            data: null
           },
           {
             id: 8,
             name: 'Dental',
             count: null,
             label: 'Dental',
-            data: null,
+            data: null
           },
           {
             id: 7,
             name: 'Vision',
             count: null,
             label: 'Vision',
-            data: null,
+            data: null
           },
           {
             id: 9,
             name: 'Paid time off',
             count: null,
             label: 'Paid time off',
-            data: null,
+            data: null
           },
           {
             id: 1,
             name: 'Signing bonus',
             count: null,
             label: 'Signing bonus',
-            data: null,
+            data: null
           },
           {
             id: 2,
             name: 'Bonus',
             count: null,
             label: 'Bonus',
-            data: null,
+            data: null
           },
           {
             id: 3,
             name: 'Commission',
             count: null,
             label: 'Commission',
-            data: null,
+            data: null
           },
           {
             id: 4,
             name: 'Tips',
             count: null,
             label: 'Tips',
-            data: null,
+            data: null
           },
           {
             id: 5,
             name: 'Equity package',
             count: null,
             label: 'Equity package',
-            data: null,
+            data: null
           },
           {
             id: 10,
             name: 'Paid sick leave',
             count: null,
             label: 'Paid sick leave',
-            data: null,
+            data: null
           },
           {
             id: 11,
             name: 'Parental leave',
             count: null,
             label: 'Parental leave',
-            data: null,
+            data: null
           },
           {
             id: 12,
             name: '401(k) match',
             count: null,
             label: '401(k) match',
-            data: null,
+            data: null
           },
           {
             id: 13,
             name: 'FSA or HSA plans',
             count: null,
             label: 'FSA or HSA plans',
-            data: null,
+            data: null
           },
           {
             id: 14,
             name: 'Life insurance',
             count: null,
             label: 'Life insurance',
-            data: null,
+            data: null
           },
           {
             id: 15,
             name: 'Disability insurance',
             count: null,
             label: 'Disability insurance',
-            data: null,
+            data: null
           },
           {
             id: 16,
             name: 'Student loan repayment',
             count: null,
             label: 'Student loan repayment',
-            data: null,
+            data: null
           },
           {
             id: 17,
             name: 'Tuition reimbursement',
             count: null,
             label: 'Tuition reimbursement',
-            data: null,
+            data: null
           },
           {
             id: 18,
             name: 'Relocation assistance',
             count: null,
             label: 'Relocation assistance',
-            data: null,
+            data: null
           },
           {
             id: 19,
             name: 'Commuter assistance',
             count: null,
             label: 'Commuter assistance',
-            data: null,
+            data: null
           },
           {
             id: 20,
             name: 'Pet insurance',
             count: null,
             label: 'Pet insurance',
-            data: null,
+            data: null
           },
           {
             id: 21,
             name: 'Learning stipend',
             count: null,
             label: 'Learning stipend',
-            data: null,
+            data: null
           },
           {
             id: 22,
             name: 'Home office stipend',
             count: null,
             label: 'Home office stipend',
-            data: null,
+            data: null
           },
           {
             id: 23,
             name: 'Career development',
             count: null,
             label: 'Career development',
-            data: null,
+            data: null
           },
           {
             id: 24,
             name: 'Gym membership',
             count: null,
             label: 'Gym membership',
-            data: null,
-          },
+            data: null
+          }
         ],
-        placeholder: null,
-      },
+        placeholder: null
+      }
     ],
     booleans: [
       {
@@ -579,10 +579,10 @@ const SuccessExample = {
         id: 'job.job_applicant_preference.accepts_opt_cpt_candidates',
         configuration: {
           type: 'boolean',
-          name: 'Accepts OPT/CPT',
+          name: 'Accepts OPT/CPT'
         },
         tooltip_type: 'none',
-        hidden: false,
+        hidden: false
       },
       {
         name: 'Accepts OPT',
@@ -590,10 +590,10 @@ const SuccessExample = {
         id: 'job.job_applicant_preference.accepts_opt_candidates',
         configuration: {
           type: 'boolean',
-          name: 'Accepts OPT',
+          name: 'Accepts OPT'
         },
         tooltip_type: 'none',
-        hidden: false,
+        hidden: false
       },
       {
         name: 'Accepts CPT',
@@ -601,10 +601,10 @@ const SuccessExample = {
         id: 'job.job_applicant_preference.accepts_cpt_candidates',
         configuration: {
           type: 'boolean',
-          name: 'Accepts CPT',
+          name: 'Accepts CPT'
         },
         tooltip_type: 'none',
-        hidden: false,
+        hidden: false
       },
       {
         name: 'Employer is Messageable',
@@ -612,10 +612,10 @@ const SuccessExample = {
         id: 'job.messageable_job_user_profile',
         configuration: {
           type: 'boolean',
-          name: 'Employer is Messageable',
+          name: 'Employer is Messageable'
         },
         tooltip_type: 'none',
-        hidden: false,
+        hidden: false
       },
       {
         name: 'Hybrid',
@@ -623,10 +623,10 @@ const SuccessExample = {
         id: 'job.hybrid',
         configuration: {
           type: 'boolean',
-          name: 'Hybrid',
+          name: 'Hybrid'
         },
         tooltip_type: 'none',
-        hidden: false,
+        hidden: false
       },
       {
         name: 'Interviewing on Campus',
@@ -634,10 +634,10 @@ const SuccessExample = {
         id: 'interviewing_on_campus',
         configuration: {
           type: 'boolean',
-          name: 'Interviewing on Campus',
+          name: 'Interviewing on Campus'
         },
         tooltip_type: 'none',
-        hidden: false,
+        hidden: false
       },
       {
         name: 'Onsite',
@@ -645,10 +645,10 @@ const SuccessExample = {
         id: 'job.on_site',
         configuration: {
           type: 'boolean',
-          name: 'Onsite',
+          name: 'Onsite'
         },
         tooltip_type: 'none',
-        hidden: false,
+        hidden: false
       },
       {
         name: 'Remote Workers Allowed',
@@ -656,10 +656,10 @@ const SuccessExample = {
         id: 'job.remote',
         configuration: {
           type: 'boolean',
-          name: 'Remote Workers Allowed',
+          name: 'Remote Workers Allowed'
         },
         tooltip_type: 'none',
-        hidden: false,
+        hidden: false
       },
       {
         name: 'Salary Disclosure Opted Out',
@@ -667,10 +667,10 @@ const SuccessExample = {
         id: 'job.salary_disclosure_opted_out',
         configuration: {
           type: 'boolean',
-          name: 'Salary Disclosure Opted Out',
+          name: 'Salary Disclosure Opted Out'
         },
         tooltip_type: 'none',
-        hidden: false,
+        hidden: false
       },
       {
         name: 'US Authorization Optional',
@@ -678,10 +678,10 @@ const SuccessExample = {
         id: 'job.job_applicant_preference.us_authorization_optional',
         configuration: {
           type: 'boolean',
-          name: 'US Authorization Optional',
+          name: 'US Authorization Optional'
         },
         tooltip_type: 'none',
-        hidden: false,
+        hidden: false
       },
       {
         name: 'US Work Authorization Not Required',
@@ -689,10 +689,10 @@ const SuccessExample = {
         id: 'job.job_applicant_preference.work_auth_not_required',
         configuration: {
           type: 'boolean',
-          name: 'US Work Authorization Not Required',
+          name: 'US Work Authorization Not Required'
         },
         tooltip_type: 'none',
-        hidden: false,
+        hidden: false
       },
       {
         name: 'Unknown',
@@ -700,10 +700,10 @@ const SuccessExample = {
         id: 'job.job_applicant_preference.work_auth_not_disclosed',
         configuration: {
           type: 'boolean',
-          name: 'Unknown',
+          name: 'Unknown'
         },
         tooltip_type: 'none',
-        hidden: false,
+        hidden: false
       },
       {
         name: 'Willing to Sponsor',
@@ -711,10 +711,10 @@ const SuccessExample = {
         id: 'job.job_applicant_preference.willing_to_sponsor_candidate',
         configuration: {
           type: 'boolean',
-          name: 'Willing to Sponsor',
+          name: 'Willing to Sponsor'
         },
         tooltip_type: 'none',
-        hidden: false,
+        hidden: false
       },
       {
         name: 'Work Study',
@@ -722,20 +722,20 @@ const SuccessExample = {
         id: 'job.work_study',
         configuration: {
           type: 'boolean',
-          name: 'Work Study',
+          name: 'Work Study'
         },
         tooltip_type: 'none',
-        hidden: false,
-      },
+        hidden: false
+      }
     ],
-    success: true,
+    success: true
   },
-  search_id: 'c86815d9-008f-4d36-bfd5-c4bfd6a3ea3d',
-};
-type SuccessResponse = typeof SuccessExample;
-type ErrorResponse = typeof ErrorExample;
+  search_id: 'c86815d9-008f-4d36-bfd5-c4bfd6a3ea3d'
+}
+type SuccessResponse = typeof SuccessExample
+type ErrorResponse = typeof ErrorExample
 
-export async function testHandshakeLink(): Promise<boolean> {
+export async function test(): Promise<boolean> {
   const res = await fetch(
     'https://app.joinhandshake.com/stu/postings?category=Posting&ajax=true&including_all_facets_in_searches=true&page=1&per_page=25&sort_direction=desc&sort_column=default&_=1734355282760',
     {
@@ -746,10 +746,10 @@ export async function testHandshakeLink(): Promise<boolean> {
         cookie: rookie
           .load(['joinhandshake.com'])
           .map(({ name, value }) => `${name}=${value}`)
-          .join('; '),
-      },
-    },
-  );
-  const data = (await res.json()) as SuccessResponse | ErrorResponse;
-  return !('errors' in data);
+          .join('; ')
+      }
+    }
+  )
+  const data = (await res.json()) as SuccessResponse | ErrorResponse
+  return !('errors' in data)
 }

@@ -2,6 +2,7 @@ import { Layout } from '@renderer/components/layout'
 import { Switch } from '@renderer/components/ui/switch'
 import * as icon from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { ConnectHandshakePage } from './ConnectPages'
 
 const data = [
   {
@@ -49,7 +50,7 @@ type PageRouterType = { [key in SubMenuType]: JSX.Element }
 
 const pageRouter: PageRouterType = {
   Display: <DisplaySettings />,
-  Handshake: undefined,
+  Handshake: <ConnectHandshakePage />,
   'Find New Jobs': undefined,
   'Upload Resume': undefined
 }
@@ -73,7 +74,7 @@ function NotImplemented() {
 function DisplaySettings(): JSX.Element {
   const [active, setActive] = useState(
     localStorage.theme === 'dark' ||
-    (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+      (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
   )
   useEffect(() => {
     if (!('theme' in localStorage)) {

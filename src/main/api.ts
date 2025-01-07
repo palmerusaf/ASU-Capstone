@@ -1,19 +1,21 @@
 import 'dotenv/config'
 import z from 'zod'
-import { posts } from '../db/schema'
 import { initTRPC } from '@trpc/server'
-import { db } from './db'
+import { shell } from 'electron'
+import * as handshakeUtils from './handshake'
 
 const t = initTRPC.create({ isServer: true })
 
 export const router = t.router({
-  posts: t.router({
-    get: t.procedure.query(async () => {
-      const res = await db.select().from(posts)
-      return res
-    }),
-    set: t.procedure.input(z.string()).mutation(async ({ input }) => {
-      await db.insert(posts).values({ title: input })
+  providers: t.router({
+    handshake: t.router({
+      openLogin: t.procedure.input(z.void()).mutation(() => {
+        shell.openExternal('https://asu.joinhandshake.com/login')
+      }),
+      test: t.procedure.input(z.void()).mutation(async () => {
+        const res = await handshakeUtils.test()
+        return res
+      })
     })
   })
 })
