@@ -19,7 +19,7 @@ export function ConnectHandshakePage(): JSX.Element {
 
   return (
     <div className="p-4">
-      <Card.Card>
+      <Card.Card className="mx-auto max-w-2xl">
         <Card.CardHeader>
           <Card.CardTitle>
             <div className="text-xl text-center">Connect Provider</div>

@@ -1,4 +1,5 @@
 import { Layout } from '@renderer/components/layout'
+import * as Card from '@renderer/components/ui/card'
 import { Switch } from '@renderer/components/ui/switch'
 import * as icon from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -85,15 +86,20 @@ function DisplaySettings(): JSX.Element {
   }, [active])
 
   return (
-    <div className="flex justify-center items-center w-full h-full">
-      <div className="flex items-center space-x-2">
+    <Card.Card className="mx-auto max-w-2xl">
+      <Card.CardHeader>
+        <Card.CardTitle>
+          <div className="text-xl text-center">Display Settings</div>
+        </Card.CardTitle>
+      </Card.CardHeader>
+      <Card.CardContent className="flex gap-2">
         <Switch
           id="airplane-mode"
           checked={active}
           onCheckedChange={(e) => setActive(e.valueOf())}
         />
         <label htmlFor="airplane-mode">Dark Mode</label>
-      </div>
-    </div>
+      </Card.CardContent>
+    </Card.Card>
   )
 }
