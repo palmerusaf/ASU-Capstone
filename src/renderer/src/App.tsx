@@ -79,7 +79,7 @@ function NotImplemented() {
 function DisplaySettings(): JSX.Element {
   const [active, setActive] = useState(
     localStorage.theme === 'dark' ||
-    (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+      (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
   )
   useEffect(() => {
     if (!('theme' in localStorage)) {
@@ -90,10 +90,10 @@ function DisplaySettings(): JSX.Element {
   }, [active])
 
   return (
-    <Card.Card className="mx-auto max-w-2xl">
+    <Card.Card className="flex flex-col items-center mx-auto w-full max-w-2xl">
       <Card.CardHeader>
         <Card.CardTitle>
-          <div className="text-xl text-center">Display Settings</div>
+          <div className="text-xl">Display Settings</div>
         </Card.CardTitle>
       </Card.CardHeader>
       <Card.CardContent className="flex gap-2">
