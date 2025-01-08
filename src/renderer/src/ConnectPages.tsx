@@ -23,7 +23,7 @@ export function ConnectHandshakePage(): JSX.Element {
     if (list.data?.includes('handshake')) {
       lastStep()
     }
-  }, [test.data, list.data])
+  }, [])
 
   return (
     <div className="p-4">
@@ -67,7 +67,7 @@ export function ConnectHandshakePage(): JSX.Element {
             </StepsContent>
             <StepsContent index={2}>
               <div className="flex justify-center">
-                <TestResults />
+                <TestResults test={test} firstStep={firstStep} lastStep={lastStep} />
               </div>
             </StepsContent>
             <StepsCompletedContent>
@@ -81,18 +81,19 @@ export function ConnectHandshakePage(): JSX.Element {
       </Card>
     </div>
   )
-  function TestResults() {
-    if (test.isLoading)
-      return (
-        <Button disabled>
-          <Loader2 className={'animate-spin'} />
-          Testing Connection
-        </Button>
-      )
+}
+function TestResults({ test, firstStep, lastStep }) {
+  if (test.isLoading)
     return (
-      <Button onClick={firstStep} variant={'destructive'}>
-        Failed Retry?
+      <Button disabled>
+        <Loader2 className={'animate-spin'} />
+        Testing Connection
       </Button>
     )
-  }
+  if (test.data) lastStep()
+  return (
+    <Button onClick={firstStep} variant={'destructive'}>
+      Failed Retry?
+    </Button>
+  )
 }
