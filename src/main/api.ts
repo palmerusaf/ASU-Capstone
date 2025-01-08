@@ -7,7 +7,7 @@ import * as handshakeUtils from './handshake'
 const t = initTRPC.create({ isServer: true })
 
 export const router = t.router({
-  providers: t.router({
+  connect: t.router({
     handshake: t.router({
       openLogin: t.procedure.input(z.void()).mutation(() => {
         shell.openExternal('https://asu.joinhandshake.com/login')
