@@ -26,23 +26,23 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem
 } from '@renderer/components/ui/sidebar'
-import type { DataType, MenuType, SubMenuType } from '@renderer/App'
+import type { MenuData, MainMenu, SubMenu } from '@renderer/App'
 
 export function Layout({
   menu,
   submenu,
   children,
-  data,
+  menuData,
   setActive
 }: {
-  menu: MenuType
-  submenu: SubMenuType
+  menu: MainMenu
+  submenu: SubMenu
   children?: React.ReactNode
-  data: DataType
+  menuData: MenuData
   setActive: React.Dispatch<
     React.SetStateAction<{
-      menu: MenuType
-      submenu: SubMenuType
+      menu: MainMenu
+      submenu: SubMenu
     }>
   >
 }) {
@@ -50,7 +50,7 @@ export function Layout({
     <SidebarProvider>
       <Sidebar collapsible="icon">
         <SidebarContent>
-          <NavMain setActive={setActive} items={data} />
+          <NavMain setActive={setActive} items={menuData} />
         </SidebarContent>
         <SidebarRail />
       </Sidebar>
@@ -82,19 +82,19 @@ function NavMain({
   setActive
 }: {
   items: {
-    title: MenuType
+    title: MainMenu
     url: string
     icon?: LucideIcon
     isActive?: boolean
     items?: {
-      title: SubMenuType
+      title: SubMenu
       url: string
     }[]
   }[]
   setActive: React.Dispatch<
     React.SetStateAction<{
-      menu: MenuType
-      submenu: SubMenuType
+      menu: MainMenu
+      submenu: SubMenu
     }>
   >
 }) {

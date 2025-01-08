@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 import { ConnectHandshakePage } from './ConnectPages'
 import { WithProviders } from './WithProviders'
 
-const data = [
+const menuData = [
   {
     title: 'Connect Providers',
     icon: icon.Link,
@@ -46,10 +46,10 @@ const data = [
   }
 ] as const
 
-export type DataType = typeof data
-export type MenuType = DataType[number]['title']
-export type SubMenuType = DataType[number]['items'][number]['title']
-type PageRouterType = { [key in SubMenuType]: JSX.Element }
+export type MenuData = typeof menuData
+export type MainMenu = MenuData[number]['title']
+export type SubMenu = MenuData[number]['items'][number]['title']
+type PageRouterType = { [key in SubMenu]: JSX.Element }
 
 const pageRouter: PageRouterType = {
   Display: <DisplaySettings />,
@@ -59,13 +59,13 @@ const pageRouter: PageRouterType = {
 }
 
 export default function App() {
-  const [active, setActive] = useState<{ menu: MenuType; submenu: SubMenuType }>({
+  const [active, setActive] = useState<{ menu: MainMenu; submenu: SubMenu }>({
     menu: 'Connect Providers',
     submenu: 'Handshake'
   })
   return (
     <WithProviders>
-      <Layout setActive={setActive} data={data} menu={active.menu} submenu={active.submenu}>
+      <Layout setActive={setActive} menuData={menuData} menu={active.menu} submenu={active.submenu}>
         {pageRouter[active.submenu] || <NotImplemented />}
       </Layout>
     </WithProviders>
@@ -79,7 +79,7 @@ function NotImplemented() {
 function DisplaySettings(): JSX.Element {
   const [active, setActive] = useState(
     localStorage.theme === 'dark' ||
-      (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+    (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
   )
   useEffect(() => {
     if (!('theme' in localStorage)) {
