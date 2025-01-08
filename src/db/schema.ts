@@ -1,6 +1,8 @@
-import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { int, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 
-export const posts = sqliteTable('posts', {
-  id: int("id").primaryKey({ autoIncrement: true }),
-  title: text("title").notNull().default(""),
+export const connect = sqliteTable('connect', {
+  id: int('id').primaryKey({ autoIncrement: true }),
+  name: text('name', { enum: ['handshake'] })
+    .notNull()
+    .unique()
 })

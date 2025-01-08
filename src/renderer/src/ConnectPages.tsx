@@ -9,15 +9,21 @@ import { Button } from '@renderer/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@renderer/components/ui/card'
 import { Loader2 } from 'lucide-react'
 import { api } from './WithProviders'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export function ConnectHandshakePage(): JSX.Element {
   const open = api.connect.handshake.openLogin.useMutation()
   const test = api.connect.handshake.test.useMutation()
+  const list = api.connect.getList.useQuery()
   const [step, setStep] = useState(0)
   const nextStep = () => setStep((prev) => prev + 1)
   const firstStep = () => setStep(0)
   const lastStep = () => setStep(3)
+  useEffect(() => {
+    if (list.data?.includes('handshake')) {
+      lastStep()
+    }
+  }, [test.data, list.data])
 
   return (
     <div className="p-4">
@@ -49,8 +55,9 @@ export function ConnectHandshakePage(): JSX.Element {
             <StepsContent index={1}>
               <div className="flex justify-center">
                 <Button
-                  onClick={() => {
+                  onClick={async () => {
                     test.mutate()
+                    await list.refetch()
                     nextStep()
                   }}
                 >
@@ -64,7 +71,10 @@ export function ConnectHandshakePage(): JSX.Element {
               </div>
             </StepsContent>
             <StepsCompletedContent>
-              <div className="flex justify-center">You are now connected</div>
+              <div className="flex flex-col gap-2 items-center">
+                <div>You are now connected</div>
+                <Button onClick={firstStep}>Retest?</Button>
+              </div>
             </StepsCompletedContent>
           </StepsRoot>
         </CardContent>
@@ -79,8 +89,6 @@ export function ConnectHandshakePage(): JSX.Element {
           Testing Connection
         </Button>
       )
-    if (test.data !== undefined && test.data)
-      return <Button onClick={lastStep}>Passed Continue?</Button>
     return (
       <Button onClick={firstStep} variant={'destructive'}>
         Failed Retry?
