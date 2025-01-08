@@ -1,4 +1,5 @@
 import { Layout } from '@renderer/components/layout'
+import { SearchJobs } from './JobPages.js'
 import * as Card from '@renderer/components/ui/card'
 import { Switch } from '@renderer/components/ui/switch'
 import * as icon from 'lucide-react'
@@ -53,7 +54,7 @@ type PageRouterType = { [key in SubMenuType]: JSX.Element }
 const pageRouter: PageRouterType = {
   Display: <DisplaySettings />,
   Handshake: <ConnectHandshakePage />,
-  'Find New Jobs': undefined,
+  'Find New Jobs': <SearchJobs />,
   'Upload Resume': undefined
 }
 
