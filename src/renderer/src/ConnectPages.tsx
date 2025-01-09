@@ -23,7 +23,7 @@ export function ConnectHandshakePage(): JSX.Element {
     if (list.data?.includes('handshake')) {
       lastStep()
     }
-  }, [])
+  }, [list.isLoading])
 
   return (
     <div className="p-4">

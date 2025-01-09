@@ -30,6 +30,16 @@ export const router = t.router({
         return res
       })
     })
+  }),
+  jobs: t.router({
+    search: t.router({
+      new: t.procedure.input(z.string()).mutation(async ({ input }) => {
+        console.log({ input })
+      }),
+      results: t.procedure.query(async () => {
+        return []
+      })
+    })
   })
 })
 
