@@ -18,7 +18,7 @@ const jobStatus = [
   'search result'
 ] as const
 
-export const jobs = sqliteTable('connect', {
+export const jobs = sqliteTable('jobs', {
   id: int('id').primaryKey({ autoIncrement: true }),
   closeOutDate: int('closeOutDate', { mode: 'timestamp' }).notNull(),
   lastUpdated: int('lastUpdated', { mode: 'timestamp' })
