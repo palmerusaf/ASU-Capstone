@@ -36,11 +36,12 @@ export function SearchJobs() {
 
 function SearchMenu() {
   const searchResults = api.jobs.search.results.useQuery()
+  const newSearch = api.jobs.search.new.useMutation()
   const hasCurrentResume = api.resumes.hasCurrent.useQuery()
-  const mainTabDefualt = !searchResults.data?.length ? 'Results' : 'Search'
+  const mainTabDefault = !searchResults.data?.length ? 'Results' : 'Search'
 
   return (
-    <Tabs defaultValue={mainTabDefualt} className="w-full max-w-2xl">
+    <Tabs defaultValue={mainTabDefault} className="w-full max-w-2xl">
       <TabsList className="grid grid-cols-2 w-full rounded">
         <TabsTrigger className="rounded" value="Search">
           New Search
@@ -81,9 +82,10 @@ function SearchMenu() {
           <Location />
         </CardContent>
         <CardFooter className="flex justify-center">
-          {!searchResults.isFetching ? (
+          {!newSearch.isLoading ? (
             <Button
               onClick={() => {
+                newSearch.mutate('foo')
                 searchResults.refetch()
               }}
             >

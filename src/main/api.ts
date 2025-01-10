@@ -36,7 +36,7 @@ export const router = t.router({
     search: t.router({
       new: t.procedure.input(z.string()).mutation(async ({ input }) => {
         const fakeJobs = genFakeJobs()
-        db.insert(tb.jobs).values(fakeJobs)
+        await db.insert(tb.jobs).values(fakeJobs)
       }),
       results: t.procedure.query(async () => {
         const res = await db.select().from(tb.jobs).where(eq(tb.jobs.status, 'search result'))
@@ -59,14 +59,14 @@ function genFakeJobs(numOfJobs = 25): (typeof tb.jobs.$inferInsert)[] {
     const job: typeof tb.jobs.$inferInsert = {
       closeOutDate: faker.date.future(),
       companyName: faker.company.name(),
-      description: faker.lorem.paragraphs(),
+      description: faker.lorem.paragraphs({ min: 7, max: 12 }),
       easyApply: faker.helpers.arrayElement([true, false]),
       remote: faker.helpers.arrayElement([true, false]),
       jobSite: 'handshake',
       positionTitle: faker.person.jobTitle(),
       postLink: faker.internet.url(),
       companyLogoUrl: faker.image.url(),
-      location: `${faker.location.city}, ${faker.location.state}`,
+      location: `${faker.location.city()}, ${faker.location.state()}`,
       jobId: faker.number.int(),
       status: 'search result'
     }
