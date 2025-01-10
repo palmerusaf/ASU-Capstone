@@ -21,6 +21,8 @@ import {
 } from '@renderer/components/ui/alert-dialog'
 import { api } from './WithProviders'
 import * as card from './components/ui/card'
+import { useEffect, useRef, useState } from 'react'
+import { Loader2 } from 'lucide-react'
 
 export function SearchJobs() {
   const list = api.connect.getList.useQuery()
@@ -33,8 +35,12 @@ export function SearchJobs() {
 }
 
 function SearchMenu() {
+  const searchResults = api.jobs.search.results.useQuery()
+  const hasCurrentResume = api.resumes.hasCurrent.useQuery()
+  const mainTabDefualt = !searchResults.data?.length ? 'Results' : 'Search'
+
   return (
-    <Tabs defaultValue="Search" className="w-full max-w-2xl">
+    <Tabs defaultValue={mainTabDefualt} className="w-full max-w-2xl">
       <TabsList className="grid grid-cols-2 w-full rounded">
         <TabsTrigger className="rounded" value="Search">
           New Search
@@ -75,10 +81,47 @@ function SearchMenu() {
           <Location />
         </CardContent>
         <CardFooter className="flex justify-center">
-          <Button>Search</Button>
+          {!searchResults.isFetching ? (
+            <Button
+              onClick={() => {
+                searchResults.refetch()
+              }}
+            >
+              Search
+            </Button>
+          ) : (
+            <Button disabled>
+              <Loader2 className="animate-spin" />
+              Searching...
+            </Button>
+          )}
         </CardFooter>
       </Card>
     )
+
+    function Keywords() {
+      return (
+        <Tabs defaultValue="keywords">
+          <TabsList className="grid grid-cols-2 mb-2 w-full rounded">
+            <TabsTrigger className="rounded" value="keywords">
+              Use Keywords
+            </TabsTrigger>
+            <TabsTrigger className="rounded" value="resume">
+              Use Resume
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="keywords">
+            <div className="space-y-1">
+              <Label htmlFor="keywords">Keywords</Label>
+              <Input id="keywords" />
+            </div>
+          </TabsContent>
+          <TabsContent className="text-center text-red-500" value="resume">
+            {!hasCurrentResume.data && 'Please upload your resume to use this option.'}
+          </TabsContent>
+        </Tabs>
+      )
+    }
 
     function Location() {
       return (
@@ -98,28 +141,6 @@ function SearchMenu() {
             </div>
           </TabsContent>
           <TabsContent value="remote"></TabsContent>
-        </Tabs>
-      )
-    }
-
-    function Keywords() {
-      return (
-        <Tabs defaultValue="keywords">
-          <TabsList className="grid grid-cols-2 mb-2 w-full rounded">
-            <TabsTrigger className="rounded" value="keywords">
-              Use Keywords
-            </TabsTrigger>
-            <TabsTrigger className="rounded" value="resume">
-              Use Resume
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value="keywords">
-            <div className="space-y-1">
-              <Label htmlFor="keywords">Keywords</Label>
-              <Input id="keywords" />
-            </div>
-          </TabsContent>
-          <TabsContent value="resume"></TabsContent>
         </Tabs>
       )
     }

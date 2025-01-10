@@ -37,8 +37,16 @@ export const router = t.router({
         console.log({ input })
       }),
       results: t.procedure.query(async () => {
-        return []
+        const res: string[] = await new Promise((resolve) =>
+          setTimeout(() => resolve(['foo']), 2000)
+        )
+        return res
       })
+    })
+  }),
+  resumes: t.router({
+    hasCurrent: t.procedure.query(async () => {
+      return false
     })
   })
 })
