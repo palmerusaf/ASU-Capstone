@@ -28,9 +28,11 @@ export const jobs = sqliteTable('connect', {
   companyName: text('companyName').notNull(),
   description: text('description').notNull(),
   easyApply: int('easyApply', { mode: 'boolean' }).notNull(),
+  remote: int('remote', { mode: 'boolean' }).notNull().default(false),
   jobId: int('jobId').notNull(),
   jobSite: text('jobSite', { enum: jobSites }).notNull(),
   positionTitle: text('positionTitle').notNull(),
+  location: text('location').notNull(),
   postLink: text('postLink').notNull(),
   status: text('status', { enum: jobStatus }).notNull()
 })

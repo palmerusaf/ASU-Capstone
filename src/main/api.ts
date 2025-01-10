@@ -34,12 +34,11 @@ export const router = t.router({
   jobs: t.router({
     search: t.router({
       new: t.procedure.input(z.string()).mutation(async ({ input }) => {
-        console.log({ input })
+        const fakeJobs = genFakeJobs()
+        db.insert(tb.jobs).values(fakeJobs)
       }),
       results: t.procedure.query(async () => {
-        const res: string[] = await new Promise((resolve) =>
-          setTimeout(() => resolve(['foo']), 2000)
-        )
+        const res = await db.select().from(tb.jobs).where(eq(tb.jobs.status, 'search result'))
         return res
       })
     })
@@ -52,3 +51,25 @@ export const router = t.router({
 })
 
 export type AppRouter = typeof router
+
+function genFakeJobs(numOfJobs = 20): (typeof tb.jobs.$inferSelect)[] {
+  const res: (typeof tb.jobs.$inferSelect)[] = []
+  for (let i = 0; i < numOfJobs; i++) {
+    const job: typeof tb.jobs.$inferSelect = {
+      id: 0,
+      closeOutDate: Date.now(),
+      lastUpdated: Date.now(),
+      companyLogoUrl: null,
+      companyName: '',
+      description: '',
+      easyApply: false,
+      jobId: 0,
+      jobSite: 'handshake',
+      positionTitle: '',
+      postLink: '',
+      status: 'applied'
+    }
+    res.push(job)
+  }
+  return res
+}
