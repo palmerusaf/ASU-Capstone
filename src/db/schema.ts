@@ -1,8 +1,36 @@
+import { sql } from 'drizzle-orm'
 import { int, sqliteTable, text } from 'drizzle-orm/sqlite-core'
+
+const jobSites = ['handshake'] as const
 
 export const connect = sqliteTable('connect', {
   id: int('id').primaryKey({ autoIncrement: true }),
-  name: text('name', { enum: ['handshake'] })
+  name: text('name', { enum: jobSites }).notNull().unique()
+})
+
+const jobStatus = [
+  'applied',
+  'ghosted',
+  'interested',
+  'not interested',
+  'rejected',
+  'scheduled interview',
+  'search result'
+] as const
+
+export const jobs = sqliteTable('connect', {
+  id: int('id').primaryKey({ autoIncrement: true }),
+  closeOutDate: int('closeOutDate', { mode: 'timestamp' }).notNull(),
+  lastUpdated: int('lastUpdated', { mode: 'timestamp' })
     .notNull()
-    .unique()
+    .default(sql`(unixepoch())`),
+  companyLogoUrl: text('companyLogoUrl').default(''),
+  companyName: text('companyName').notNull(),
+  description: text('description').notNull(),
+  easyApply: int('easyApply', { mode: 'boolean' }).notNull(),
+  jobId: int('jobId').notNull(),
+  jobSite: text('jobSite', { enum: jobSites }).notNull(),
+  positionTitle: text('positionTitle').notNull(),
+  postLink: text('postLink').notNull(),
+  status: text('status', { enum: jobStatus }).notNull()
 })
