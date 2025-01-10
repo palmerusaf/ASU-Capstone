@@ -7,6 +7,7 @@ import * as handshakeUtils from './handshake'
 import { db } from './db'
 import * as tb from '../db/schema'
 import { eq } from 'drizzle-orm'
+import { is } from '@electron-toolkit/utils'
 
 const t = initTRPC.create({ isServer: true })
 
@@ -22,6 +23,10 @@ export const router = t.router({
         shell.openExternal('https://asu.joinhandshake.com/login')
       }),
       test: t.procedure.input(z.void()).mutation(async () => {
+        if (is.dev) {
+          await db.insert(tb.connect).values({ name: 'handshake' }).onConflictDoNothing()
+          return true
+        }
         const res = await handshakeUtils.test()
         if (res) {
           await db.insert(tb.connect).values({ name: 'handshake' }).onConflictDoNothing()
@@ -35,8 +40,12 @@ export const router = t.router({
   jobs: t.router({
     search: t.router({
       new: t.procedure.input(z.string()).mutation(async ({ input }) => {
-        const fakeJobs = genFakeJobs()
-        await db.insert(tb.jobs).values(fakeJobs)
+        if (is.dev) {
+          console.log('New search called with ', { input })
+          await db.delete(tb.jobs)
+          const fakeJobs = genFakeJobs()
+          await db.insert(tb.jobs).values(fakeJobs)
+        }
       }),
       results: t.procedure.query(async () => {
         const res = await db.select().from(tb.jobs).where(eq(tb.jobs.status, 'search result'))
@@ -65,7 +74,7 @@ function genFakeJobs(numOfJobs = 25): (typeof tb.jobs.$inferInsert)[] {
       jobSite: 'handshake',
       positionTitle: faker.person.jobTitle(),
       postLink: faker.internet.url(),
-      companyLogoUrl: faker.image.url(),
+      companyLogoUrl: faker.helpers.arrayElement(['', faker.image.url()]),
       location: `${faker.location.city()}, ${faker.location.state()}`,
       jobId: faker.number.int(),
       status: 'search result'
