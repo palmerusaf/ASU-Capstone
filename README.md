@@ -1,4 +1,4 @@
-# TailGatherer
+# Job Searcerer
 
 A centralized job application platform.
 
