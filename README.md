@@ -1,4 +1,4 @@
-# Job Searcerer
+# Job Sourcerer
 
 A centralized job application platform.
 
