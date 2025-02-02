@@ -1,13 +1,22 @@
-# Capstone
+# - [ ] Capstone
 
-## Semester One
+## - [ ] Semester One
 
-### Make It Work
+### - [ ] Make It Work
 
-### Make It Good
+- [ ] Implement all initial features for MVP
 
-## Semester Two
+### - [ ] Make It Good
 
-### Make It Addictive
+- [ ] Polish features/styling based on feedback
 
-### Make It Mobile
+## - [ ] Semester Two
+
+### - [ ] Make It Addictive
+
+- [ ] Gamify elements to encourage constructive behaviour.
+
+### - [ ] Make It Portable
+
+- [ ] Desktop App
+- [ ] Mobile App
