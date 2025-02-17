@@ -24,8 +24,6 @@ Install PNPM as a global NPM package.
 npm install -g pnpm
 ```
 
-TODO: update
-
 ### Step 4: Install Dependencies
 
 Navigate to the project's root folder. This is the folder that contains the README.md. Then install dependencies via PNPM.
@@ -33,7 +31,6 @@ Navigate to the project's root folder. This is the folder that contains the READ
 ```bash
 cd path/to/project-root/
 pnpm i
-pnpm drizzle-kit generate:sqlite
 ```
 
 ## Running the Project
@@ -46,20 +43,6 @@ To start the project in dev mode run the following command in the project root f
 npm run dev
 ```
 
-TODO: update
-
-### Building Locally
-
-To build the project run one of the following commands that match your environment:
-
-```bash
-pnpm build:win
-pnpm build:mac
-pnpm build:linux
-```
-
-The final executable will be in the root of the dist/ folder.
-
 ### Running Other Scripts
 
 A list of all available project scripts is available in the package.json file in the root folder. Each script can be run with the following convention.
@@ -67,6 +50,15 @@ A list of all available project scripts is available in the package.json file in
 ```bash
 pnpm <script-name>
 ```
+
+## Docs
+
+- [Extension Framework](https://wxt.dev/guide/introduction.html)
+- [Database ORM/Schema](https://orm.drizzle.team/docs/overview)
+- [React](https://react.dev/)
+- [TypeScript](https://www.typescriptlang.org/docs/)
+- [Git](https://git-scm.com/doc)
+- [TailwindCSS](https://tailwindcss.com/)
 
 ## Making Changes
 
