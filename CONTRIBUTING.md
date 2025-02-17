@@ -24,6 +24,8 @@ Install PNPM as a global NPM package.
 npm install -g pnpm
 ```
 
+TODO: update
+
 ### Step 4: Install Dependencies
 
 Navigate to the project's root folder. This is the folder that contains the README.md. Then install dependencies via PNPM.
@@ -43,6 +45,8 @@ To start the project in dev mode run the following command in the project root f
 ```bash
 npm run dev
 ```
+
+TODO: update
 
 ### Building Locally
 
