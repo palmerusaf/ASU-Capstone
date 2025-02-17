@@ -3,9 +3,16 @@ import reactLogo from "@/assets/react.svg";
 import wxtLogo from "/wxt.svg";
 import "./App.css";
 import "../tailwind.css";
+import { PublicPath } from "wxt/browser";
 
 function App() {
   const [count, setCount] = useState(0);
+  async function openSPA() {
+    await browser.tabs.create({
+      url: browser.runtime.getURL("/spa.html" as PublicPath),
+      active: true,
+    });
+  }
 
   return (
     <>
@@ -29,6 +36,7 @@ function App() {
       <p className="read-the-docs">
         Click on the WXT and React logos to learn more
       </p>
+      <button onClick={openSPA}>Open SPA</button>
     </>
   );
 }
