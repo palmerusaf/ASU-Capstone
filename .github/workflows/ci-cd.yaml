@@ -42,4 +42,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: wxt-extension
-          path: .output/
+          path: .output/chrome-mv3/
