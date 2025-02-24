@@ -40,7 +40,7 @@ pnpm i
 To start the project in dev mode run the following command in the project root folder.
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 ### Running Other Scripts
