@@ -1,5 +1,5 @@
-import { defineConfig, WxtViteConfig } from "wxt";
 import tailwindcss from "@tailwindcss/vite";
+import { defineConfig, WxtViteConfig } from "wxt";
 
 const vite = () =>
   ({
@@ -8,7 +8,10 @@ const vite = () =>
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
-  manifest: { permissions: ["storage"] },
+  manifest: { 
+    permissions: ["storage"],
+    host_permissions: ["*://*.joinhandshake.com/*"],
+   },
   extensionApi: "chrome",
   modules: ["@wxt-dev/module-react"],
   vite,
