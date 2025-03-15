@@ -1,44 +1,51 @@
-import { useState } from "react";
-import reactLogo from "@/assets/react.svg";
-import wxtLogo from "/wxt.svg";
-import "./App.css";
-import "../tailwind.css";
 import { PublicPath } from "wxt/browser";
+import "../tailwind.css";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0);
-  async function openSPA() {
-    await browser.tabs.create({
-      url: browser.runtime.getURL("/spa.html" as PublicPath),
-      active: true,
-    });
-  }
+    async function openSPA() {
+        await browser.tabs.create({
+            url: browser.runtime.getURL("/spa.html" as PublicPath),
+            active: true,
+        });
+    }
 
-  return (
-    <>
-      <div>
-        <a href="https://wxt.dev" target="_blank">
-          <img src={wxtLogo} className="logo" alt="WXT logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>WXT + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the WXT and React logos to learn more
-      </p>
-      <button onClick={openSPA}>Open SPA</button>
-    </>
-  );
+    // Finds and returns the url of the selected job posting as simplified form in user's active (https://asu.joinhandshake.com/stu/postings) window using DOM.
+    function saveJob() {
+        browser.tabs.query({ active: true, currentWindow: true })
+            .then(tabs => {
+                const activeTab = tabs[0];
+                if (activeTab?.id) {
+                    // Makes call to handshake.content.ts to get job URL.
+                    browser.tabs.sendMessage(activeTab.id, { message: "Handshake-getJobURL" })
+                        .then(url => {
+                            // Make call to background.ts to get job information.
+                            browser.runtime.sendMessage({
+                                type: "Handshake-fetchJobData",
+                                data: { arg1: url },
+                            })
+                                .then(response2 => {
+                                    // TODO: Save job data to database.
+                                });
+                        })
+                        .catch(error => {
+                            console.error("Error: ", error);
+                        });
+                }
+            });
+    };
+
+    return (
+        <>
+            <h1>Job Sourcerer</h1>
+            <div className="card">
+                <button onClick={saveJob}>
+                    Save Job
+                </button>
+            </div>
+            <button onClick={openSPA}>Dashboard</button>
+        </>
+    );
 }
 
 export default App;
