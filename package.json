@@ -1,6 +1,6 @@
 {
   "name": "job-sourceror",
-  "description": "manifest.json description",
+  "description": "A centralized job application platform.",
   "private": true,
   "version": "0.0.0",
   "type": "module",
