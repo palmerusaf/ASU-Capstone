@@ -1,5 +1,5 @@
 import { PublicPath } from "wxt/browser";
-import "../tailwind.css";
+import "@/assets/tailwind.css";
 import "./App.css";
 
 function App() {
