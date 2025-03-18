@@ -2,3 +2,4 @@
 .output/chrome-mv3
 .wxt
 .output
+.env.submit
