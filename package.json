@@ -12,7 +12,9 @@
     "dev:firefox": "wxt -b firefox",
     "postinstall": "wxt prepare",
     "zip": "wxt zip",
-    "zip:firefox": "wxt zip -b firefox"
+    "zip:firefox": "wxt zip -b firefox",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "engines": {
     "pnpm": "10"
@@ -42,12 +44,25 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@chromatic-com/storybook": "^3",
+    "@storybook/addon-essentials": "^8.6.7",
+    "@storybook/addon-onboarding": "^8.6.7",
+    "@storybook/blocks": "^8.6.7",
+    "@storybook/experimental-addon-test": "^8.6.7",
+    "@storybook/react": "^8.6.7",
+    "@storybook/react-vite": "^8.6.7",
+    "@storybook/test": "^8.6.7",
     "@types/chrome": "^0.0.280",
     "@types/react": "^19.0.9",
     "@types/react-dom": "^19.0.2",
+    "@vitest/browser": "^3.0.9",
+    "@vitest/coverage-v8": "^3.0.9",
     "@wxt-dev/module-react": "^1.1.2",
     "drizzle-kit": "^0.30.4",
+    "playwright": "^1.51.1",
+    "storybook": "^8.6.7",
     "typescript": "^5.6.3",
+    "vitest": "^3.0.9",
     "wxt": "^0.19.13"
   }
 }
