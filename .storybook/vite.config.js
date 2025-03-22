@@ -1,9 +1,3 @@
 import { defineConfig } from 'vite';
 
-export default defineConfig({
-  resolve: {
-    alias: {
-      entries: [{ find: '@', replacement: '..' }],
-    },
-  },
-});
+export default defineConfig({});
