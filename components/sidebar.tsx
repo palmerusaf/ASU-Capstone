@@ -1,3 +1,4 @@
+import * as icon from 'lucide-react';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -30,23 +31,23 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
-import type { MenuData, MainMenu, SubMenu } from '@/entrypoints/spa/App';
+import { useState } from 'react';
 
-export function Layout({
+function _Layout({
   menu,
   submenu,
   children,
   menuData,
   setActive,
 }: {
-  menu: MainMenu;
-  submenu: SubMenu;
+  menu: string;
+  submenu: string;
   children?: React.ReactNode;
-  menuData: MenuData;
+  menuData: MenuData[];
   setActive: React.Dispatch<
     React.SetStateAction<{
-      menu: MainMenu;
-      submenu: SubMenu;
+      menu: string;
+      submenu: string;
     }>
   >;
 }) {
@@ -54,7 +55,7 @@ export function Layout({
     <SidebarProvider>
       <Sidebar collapsible='icon'>
         <SidebarContent>
-          <NavMain setActive={setActive} items={menuData} />
+          <_NavMain setActive={setActive} items={menuData} />
         </SidebarContent>
         <SidebarRail />
       </Sidebar>
@@ -66,7 +67,7 @@ export function Layout({
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className='hidden md:block'>
-                  <BreadcrumbLink href='#'>{menu}</BreadcrumbLink>
+                  <BreadcrumbLink>{menu}</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className='hidden md:block' />
                 <BreadcrumbItem>
@@ -81,24 +82,24 @@ export function Layout({
     </SidebarProvider>
   );
 }
-function NavMain({
+function _NavMain({
   items,
   setActive,
 }: {
   items: {
-    title: MainMenu;
+    menu: string;
     url: string;
     icon?: LucideIcon;
     isActive?: boolean;
     items?: {
-      title: SubMenu;
+      subMenu: string;
       url: string;
     }[];
   }[];
   setActive: React.Dispatch<
     React.SetStateAction<{
-      menu: MainMenu;
-      submenu: SubMenu;
+      menu: string;
+      submenu: string;
     }>
   >;
 }) {
@@ -108,33 +109,37 @@ function NavMain({
       <SidebarMenu>
         {items.map((item) => (
           <Collapsible
-            key={item.title}
+            key={item.menu}
             asChild
             defaultOpen={item.isActive}
             className='group/collapsible'
           >
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
-                <SidebarMenuButton tooltip={item.title}>
+                <SidebarMenuButton
+                  className='cursor-pointer'
+                  tooltip={item.menu}
+                >
                   {item.icon && <item.icon />}
-                  <span>{item.title}</span>
+                  <span>{item.menu}</span>
                   <ChevronRight className='ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90' />
                 </SidebarMenuButton>
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <SidebarMenuSub>
                   {item.items?.map((subItem) => (
-                    <SidebarMenuSubItem key={subItem.title}>
+                    <SidebarMenuSubItem key={item.menu + subItem.subMenu}>
                       <SidebarMenuSubButton asChild>
                         <button
+                          className='cursor-pointer'
                           onClick={() =>
                             setActive({
-                              menu: item.title,
-                              submenu: subItem.title,
+                              menu: item.menu,
+                              submenu: subItem.subMenu,
                             })
                           }
                         >
-                          {subItem.title}
+                          {subItem.subMenu}
                         </button>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
@@ -148,3 +153,32 @@ function NavMain({
     </SidebarGroup>
   );
 }
+type MenuData = {
+  menu: string;
+  icon: React.ForwardRefExoticComponent<
+    Omit<icon.LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
+  >;
+  items: {
+    subMenu: string;
+    content: React.ReactNode;
+  }[];
+};
+export const SideBar = ({ menuData }: { menuData: MenuData[] }) => {
+  const [active, setActive] = useState<{ menu: string; submenu: string }>({
+    menu: menuData[0].menu,
+    submenu: menuData[0].items[0].subMenu,
+  });
+  const pageContent = menuData
+    .find((item) => item.menu === active.menu)
+    ?.items.find((item) => item.subMenu === active.submenu)?.content;
+  return (
+    <_Layout
+      setActive={setActive}
+      menuData={menuData}
+      menu={active.menu}
+      submenu={active.submenu}
+    >
+      {pageContent}
+    </_Layout>
+  );
+};
