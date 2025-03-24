@@ -39,8 +39,8 @@ export type HandshakeJobDataType = {
     externalApplyUrl?: string; 
 
     // Job
-    jobType?: string;           // e.g., Internship, Full-Time
-    employmentType?: string;    // e.g., Full-time, Part-time
+    jobType?: string;          // e.g., Internship, Full-Time
+    employmentType?: string;   // e.g., Full-time, Part-time
     title?: string;
     description?: string;
 
