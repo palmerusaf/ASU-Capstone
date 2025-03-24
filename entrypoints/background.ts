@@ -37,7 +37,7 @@ export default defineBackground(() => {
                         credentials: 'include',
                     }
                 );
-                // Get json from Handshake and parse data
+                // Get json from Handshake and parse data.
                 const jobJson = await res.json();
                 const jobData = parseJobJson(jobJson, mainUrl)
 
