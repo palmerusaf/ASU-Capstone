@@ -1,5 +1,5 @@
-import { PublicPath } from 'wxt/browser';
 import '@/assets/tailwind.css';
+import { PublicPath } from 'wxt/browser';
 import './App.css';
 
 function App() {
@@ -26,7 +26,7 @@ function App() {
                 data: { arg1: url },
               })
               .then((response2) => {
-                // TODO: Save job data to database.
+                // TODO: Indicate success once job is saved
               });
           })
           .catch((error) => {
