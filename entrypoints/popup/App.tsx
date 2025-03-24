@@ -26,7 +26,7 @@ function App() {
                 data: { arg1: url },
               })
               .then((response2) => {
-                // TODO: Indicate success once job is saved
+                // TODO: Indicate success once job is saved.
               });
           })
           .catch((error) => {
