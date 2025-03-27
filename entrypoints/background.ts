@@ -12,55 +12,72 @@ export default defineBackground(() => {
   });
 
   // Send Handshake request to fetch data
-  browser.runtime.onMessage.addListener(async function test(
-    message,
-  ) {
+  browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.type === 'Handshake-fetchJobData') {
-      const mainUrl = message.data.arg1.response;
-      const url = `${message.data.arg1.response}/search_preview`;
-      const res = await fetch(
-        // "https://asu.joinhandshake.com/stu/jobs/9694302/search_preview"
-        url,
-        {
-          headers: {
-            accept: 'application/json, text/javascript, */*; q=0.01',
-            priority: 'u=1, i',
-            'sec-fetch-dest': 'empty',
-            'sec-fetch-mode': 'cors',
-            'sec-fetch-site': 'same-origin',
-            'x-requested-with': 'XMLHttpRequest',
-          },
-          referrer: 'https://asu.joinhandshake.com/stu/postings',
-          referrerPolicy: 'strict-origin-when-cross-origin',
-          body: null,
-          method: 'GET',
-          mode: 'cors',
-          credentials: 'include',
+      (async () => {
+        try {
+          const mainUrl = message?.data?.arg1?.response;
+          if (!mainUrl) return sendResponse({ status: 'Invalid URL' });
+
+          const url = `${mainUrl}/search_preview`;
+          const res = await fetch(
+            // "https://asu.joinhandshake.com/stu/jobs/9694302/search_preview"
+            url,
+            {
+              headers: {
+                accept: 'application/json, text/javascript, */*; q=0.01',
+                priority: 'u=1, i',
+                'sec-fetch-dest': 'empty',
+                'sec-fetch-mode': 'cors',
+                'sec-fetch-site': 'same-origin',
+                'x-requested-with': 'XMLHttpRequest',
+              },
+              referrer: 'https://asu.joinhandshake.com/stu/postings',
+              referrerPolicy: 'strict-origin-when-cross-origin',
+              body: null,
+              method: 'GET',
+              mode: 'cors',
+              credentials: 'include',
+            }
+          );
+          // Get json from Handshake and parse data.
+          const jobJson = await res.json();
+          const jobData = parseJobJson(jobJson, mainUrl);
+
+          // Get already saved jobs.
+          const savedJobs =
+            (await storage.getItem<HandshakeJobDataType[]>(
+              'local:handshakeJobs'
+            )) ?? [];
+
+          // Check if job is already stored in storage.
+          const isDuplicate = savedJobs.some(
+            (job) => job.postingId === jobData.postingId
+          );
+
+          if (!isDuplicate) {
+            // Append new job to saved jobs and save.
+            await storage.setItem('local:handshakeJobs', [
+              ...savedJobs,
+              jobData,
+            ]);
+          }
+
+          const statusMessage = isDuplicate
+            ? 'Job already saved'
+            : 'Job Saved!';
+
+          const allSavedJobs =
+            (await storage.getItem<HandshakeJobDataType[]>(
+              'local:handshakeJobs'
+            )) ?? [];
+
+          sendResponse({ status: statusMessage, data: allSavedJobs });
+        } catch (error) {
+          sendResponse({ status: 'Failed to save job.' });
         }
-      );
-      // Get json from Handshake and parse data.
-      const jobJson = await res.json();
-      const jobData = parseJobJson(jobJson, mainUrl);
-
-      // Get already saved jobs.
-      const savedJobs =
-        (await storage.getItem<HandshakeJobDataType[]>(
-          'local:handshakeJobs'
-        )) ?? [];
-
-      // Check if job is already stored in storage.
-      const isDuplicate = savedJobs.some(
-        (job) => job.postingId === jobData.postingId
-      );
-
-      if (!isDuplicate) {
-        // Append new job to saved jobs and save.
-        await storage.setItem('local:handshakeJobs', [...savedJobs, jobData]);
-      }
-
-      console.log(jobData);
-
-      return { status: 'Job Saved!' };
+      })();
+      return true;
     }
   });
 });
@@ -94,7 +111,7 @@ function parseJobJson(jobJson: any, url: string): HandshakeJobDataType {
     country: job.locations?.[0]?.country || null,
 
     // Status
-    status: 'recently added'
+    status: 'recently added',
   };
 
   return usefulJobData;
