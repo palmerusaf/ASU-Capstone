@@ -11,7 +11,10 @@ const jobStatus = [
   'rejected',
   'scheduled interview',
   'search result',
+  'recently added',
 ] as const;
+
+type Status = (typeof jobStatus)[keyof typeof jobStatus];
 
 export const jobs = sqliteTable('jobs', {
   id: int('id').primaryKey({ autoIncrement: true }),
@@ -33,27 +36,30 @@ export const jobs = sqliteTable('jobs', {
 });
 
 export type HandshakeJobDataType = {
-    // Posting
-    postingId: number;
-    postingUrl: string;
-    externalApplyUrl?: string; 
+  // Posting
+  postingId: number;
+  postingUrl: string;
+  externalApplyUrl?: string;
 
-    // Job
-    jobType?: string;          // e.g., Internship, Full-Time
-    employmentType?: string;   // e.g., Full-time, Part-time
-    title?: string;
-    description?: string;
+  // Job
+  jobType: string; // e.g., Internship, Full-Time
+  employmentType: string; // e.g., Full-time, Part-time
+  title: string;
+  description: string;
 
-    // Company
-    company?: string;
-    companyWebsite?: string;    
-    companyLogoUrl?: string;    
+  // Company
+  company: string;
+  companyWebsite: string;
+  companyLogoUrl: string;
 
-    // Pay
-    payRate?: string;          // e.g., $42,411.00 Per year.
-    currency?: string;         // e.g., USD, EUR
+  // Pay
+  payRate: string; // e.g., $42,411.00 Per year.
+  currency?: string; // e.g., USD, EUR
 
-    // location
-    city?: string;
-    country?: string;
+  // location
+  city?: string;
+  country?: string;
+
+  // Status
+  status: Status;
 };
