@@ -3,3 +3,5 @@
 .wxt
 .output
 .env.submit
+
+*storybook.log
