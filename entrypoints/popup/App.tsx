@@ -1,8 +1,11 @@
 import '@/assets/tailwind.css';
+import { useState } from 'react';
 import { PublicPath } from 'wxt/browser';
 import './App.css';
 
 function App() {
+  const [status, setStatus] = useState('');
+
   async function openSPA() {
     await browser.tabs.create({
       url: browser.runtime.getURL('/spa.html' as PublicPath),
@@ -26,7 +29,11 @@ function App() {
                 data: { arg1: url },
               })
               .then((response2) => {
-                // TODO: Indicate success once job is saved.
+                if (response2?.status) {
+                  setStatus(response2.status);
+                } else {
+                  setStatus('Failed to save job.');
+                }
               });
           })
           .catch((error) => {
@@ -41,6 +48,7 @@ function App() {
       <h1>Job Sourcerer</h1>
       <div className='card'>
         <button onClick={saveJob}>Save Job</button>
+        <p id='status'>{status}</p>
       </div>
       <button onClick={openSPA}>Dashboard</button>
     </>
