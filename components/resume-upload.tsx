@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
+import resumeSchema from "@jsonresume/schema";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -12,45 +13,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { addResume } from '@/utils/db/localStorage.ts';
+import { ResumeSchema } from '@/utils/db/schema.ts';
 
-const ResumeSchema = z.object({
-  basics: z.object({
-    name: z.string().min(1, { message: "Name is required" }),
-    label: z.string().min(1, { message: "Professional title is required" }),
-    email: z.string().email({ message: "Invalid email address" }),
-    phone: z.string().min(1, { message: "Phone number is required" }),
-    website: z.string().url({ message: "Invalid website URL" }).optional(),
-    summary: z.string().optional(),
-  }),
-  education: z.array(
-    z.object({
-      institution: z.string().min(1, { message: "Institution is required" }),
-      degree: z.string().min(1, { message: "Degree is required" }),
-      startDate: z.string().min(1, { message: "Start date is required" }),
-      endDate: z.string().optional(),
-    })
-  ),
-  work: z.array(
-    z.object({
-      name: z.string().min(1, { message: "Company name is required" }),
-      position: z.string().min(1, { message: "Position is required" }),
-      startDate: z.string().min(1, { message: "Start date is required" }),
-      endDate: z.string().optional(),
-      summary: z.string().optional(),
-    })
-  ),
-  projects: z.array(
-    z.object({
-      name: z.string().min(1, { message: "Project name is required" }),
-      startDate: z.string().optional(),
-      endDate: z.string().optional(),
-      description: z.string().optional(),
-      url: z.string().url({ message: "Invalid website URL" }).optional(),
-    })
-  ),
-});
-
-export function ResumeForm() {
+export function ResumeForm() { // Set default input values to empty
   const form = useForm<z.infer<typeof ResumeSchema>>({
     mode: "onSubmit",
     reValidateMode: "onSubmit",
@@ -70,6 +36,7 @@ export function ResumeForm() {
     },
   });
 
+// Fields below can be adjusted to make room for adding more (would add 'append')
   const { fields: educationFields } = useFieldArray({
     control: form.control,
     name: "education",
@@ -84,8 +51,27 @@ export function ResumeForm() {
   });
 
   function onSubmit(data: z.infer<typeof ResumeSchema>) {
-    toast.success("Resume Data Submitted");
-    console.log(data);
+    // Use resumeSchema to validate object before saving
+    resumeSchema.validate(
+      data,
+      async (err, report) => {
+        if (err) {
+          toast.error("Resume is invalid.");
+          return;
+        }
+
+        try {
+          await addResume(data); // Saves to 'local:resumes'
+          toast.success("Resume saved successfully!");
+        } catch (e) {
+          console.error("Error saving resume:", e);
+          toast.error("Failed to save resume.");
+        }
+      },
+      () => {
+        toast.error("Resume validation failed.");
+      }
+    );
   }
 
   return (
@@ -391,8 +377,7 @@ export function ResumeForm() {
             </div>
           </div>
         </div>
-
-        <Button type="submit" className="mt-8">
+        <Button type="submit" className="mt-8 block mx-auto">
           Save
         </Button>
       </form>
