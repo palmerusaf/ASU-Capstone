@@ -1,5 +1,6 @@
 import { sql } from 'drizzle-orm';
 import { int, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { z } from 'zod';
 
 const jobSites = ['handshake'] as const;
 
@@ -63,3 +64,56 @@ export type HandshakeJobDataType = {
   // Status
   status: Status;
 };
+
+// Resume:
+const emptyToUndefined = (val: unknown) =>
+  typeof val === "string" && val.trim() === "" ? undefined : val; // Helper method to turn empty fields into undefined (to pass validation)
+
+export const ResumeSchema = z.object({
+  basics: z.object({
+    name: z.string().min(1, { message: "Name is required" }),
+    label: z.string().min(1, { message: "Professional title is required" }),
+    email: z.string().email({ message: "Invalid email address" }),
+    phone: z.string().min(1, { message: "Phone number is required" }),
+    website: z.string().url({ message: "Invalid website URL" }).optional(),
+    summary: z.string().optional(),
+  }),
+  education: z.array( // Set as array (along w/work & education) for future expansion
+    z.object({
+      institution: z.string().min(1, { message: "Institution is required" }),
+      degree: z.string().min(1, { message: "Degree is required" }),
+      startDate: z.string().min(1, { message: "Start date is required" }),
+      endDate: z
+        .string()
+        .optional()
+        .transform(emptyToUndefined),
+    })
+  ),
+  work: z.array(
+    z.object({
+      name: z.string().min(1, { message: "Company name is required" }),
+      position: z.string().min(1, { message: "Position is required" }),
+      startDate: z.string().min(1, { message: "Start date is required" }),
+      endDate: z
+        .string()
+        .optional()
+        .transform(emptyToUndefined),
+      summary: z.string().optional(),
+    })
+  ),
+  projects: z.array(
+    z.object({
+      name: z.string().min(1, { message: "Project name is required" }),
+      startDate: z
+        .string()
+        .optional()
+        .transform(emptyToUndefined),
+      endDate: z
+        .string()
+        .optional()
+        .transform(emptyToUndefined),
+      description: z.string().optional(),
+      url: z.string().url({ message: "Invalid website URL" }).optional(),
+    })
+  ),
+});

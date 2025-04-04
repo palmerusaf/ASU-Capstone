@@ -1,5 +1,6 @@
 import { DisplaySettings } from '@/components/display-settings';
 import * as icon from 'lucide-react';
+import { ResumeUpload } from '@/components/resume-upload.tsx';
 
 export default function App() {
   return (
@@ -21,7 +22,7 @@ export default function App() {
           items: [
             {
               subMenu: 'Upload Resume',
-              content: <NotImplemented />,
+              content: <ResumeUpload />,
             },
           ],
         },
