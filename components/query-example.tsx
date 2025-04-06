@@ -1,9 +1,9 @@
 import { useExampleQuery } from '@/utils/query-utils';
 
 export function QueryExample() {
-  const { isFetching, isError, data } = useExampleQuery();
-  return isFetching
-    ? 'fetching'
+  const { isPending, isError, data } = useExampleQuery();
+  return isPending
+    ? 'loading'
     : isError
       ? 'error'
       : data?.data?.map((item) => `${item.text}\n`);
