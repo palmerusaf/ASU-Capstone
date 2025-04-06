@@ -1,43 +1,46 @@
 import { DisplaySettings } from '@/components/display-settings';
 import * as icon from 'lucide-react';
 import { ResumeUpload } from '@/components/resume-upload.tsx';
+import QueryProvider from '@/components/query-provider';
 
 export default function App() {
   return (
-    <SideBar
-      menuData={[
-        {
-          menu: 'Manage Applications',
-          icon: icon.Briefcase,
-          items: [
-            {
-              subMenu: 'View Jobs',
-              content: <NotImplemented />,
-            },
-          ],
-        },
-        {
-          menu: 'Manage Resumes',
-          icon: icon.Pencil,
-          items: [
-            {
-              subMenu: 'Upload Resume',
-              content: <ResumeUpload />,
-            },
-          ],
-        },
-        {
-          menu: 'Settings',
-          icon: icon.Settings2,
-          items: [
-            {
-              subMenu: 'Display',
-              content: <DisplaySettings />,
-            },
-          ],
-        },
-      ]}
-    />
+    <QueryProvider>
+      <SideBar
+        menuData={[
+          {
+            menu: 'Manage Applications',
+            icon: icon.Briefcase,
+            items: [
+              {
+                subMenu: 'View Jobs',
+                content: <NotImplemented />,
+              },
+            ],
+          },
+          {
+            menu: 'Manage Resumes',
+            icon: icon.Pencil,
+            items: [
+              {
+                subMenu: 'Upload Resume',
+                content: <ResumeUpload />,
+              },
+            ],
+          },
+          {
+            menu: 'Settings',
+            icon: icon.Settings2,
+            items: [
+              {
+                subMenu: 'Display',
+                content: <DisplaySettings />,
+              },
+            ],
+          },
+        ]}
+      />
+    </QueryProvider>
   );
 }
 
