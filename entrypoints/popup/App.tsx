@@ -13,7 +13,9 @@ function App() {
     });
   }
 
-  // Finds and returns the url of the selected job posting as simplified form in user's active (https://asu.joinhandshake.com/stu/postings) window using DOM.
+// WEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+
+  // Finds and saves selected job posting in user's active (https://asu.joinhandshake.com/stu/postings) window.
   function saveJob() {
     browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
       const activeTab = tabs[0];
