@@ -1,6 +1,7 @@
 import { DisplaySettings } from '@/components/display-settings';
-import * as icon from 'lucide-react';
+import { JobTrackerDisplay } from '@/components/job-tracker-display';
 import { ResumeUpload } from '@/components/resume-upload.tsx';
+import * as icon from 'lucide-react';
 
 export default function App() {
   return (
@@ -12,7 +13,7 @@ export default function App() {
           items: [
             {
               subMenu: 'View Jobs',
-              content: <NotImplemented />,
+              content: <JobTrackerDisplay />,
             },
           ],
         },
@@ -48,3 +49,4 @@ function NotImplemented() {
     </div>
   );
 }
+
