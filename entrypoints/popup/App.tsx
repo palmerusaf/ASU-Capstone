@@ -2,17 +2,24 @@ import '@/assets/tailwind.css';
 import { useState } from 'react';
 import { PublicPath } from 'wxt/browser';
 import './App.css';
+import { QueryProvider } from '@/components/query-provider';
 
 function App() {
+  return (
+    <QueryProvider>
+      <PopUp />
+    </QueryProvider>
+  );
+}
+
+export default App;
+
+function PopUp() {
+  return <SignedInPopup />;
+}
+
+function SignedInPopup() {
   const [status, setStatus] = useState('');
-
-  async function openSPA() {
-    await browser.tabs.create({
-      url: browser.runtime.getURL('/spa.html' as PublicPath),
-      active: true,
-    });
-  }
-
   // Finds and returns the url of the selected job posting as simplified form in user's active (https://asu.joinhandshake.com/stu/postings) window using DOM.
   function saveJob() {
     browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
@@ -42,7 +49,6 @@ function App() {
       }
     });
   }
-
   return (
     <>
       <h1>Job Sourcerer</h1>
@@ -55,4 +61,9 @@ function App() {
   );
 }
 
-export default App;
+async function openSPA() {
+  await browser.tabs.create({
+    url: browser.runtime.getURL('/spa.html' as PublicPath),
+    active: true,
+  });
+}
