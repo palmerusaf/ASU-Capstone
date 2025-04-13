@@ -3,24 +3,21 @@
 
 'use client';
 
+import { HandshakeJobDataType } from '@/utils/db/schema';
 import { useEffect, useState } from 'react';
-import { Payment, columns } from './columns';
+import { columns } from './columns';
 import { DataTable } from './data-table';
 
-async function getSavedJobs(): Promise<Payment[]> {
-  // TODO: Fetch data from API here.
-  return [
-    {
-      id: '728ed52f',
-      amount: 10000,
-      status: 'pending',
-      email: 'm@example.com',
-    },
-  ];
+async function getSavedJobs(): Promise<HandshakeJobDataType[]> {
+  const allSavedJobs =
+    (await storage.getItem<HandshakeJobDataType[]>('local:handshakeJobs')) ??
+    [];
+
+  return allSavedJobs;
 }
 
 export default function JobTrackerPage() {
-  const [jobs, setData] = useState<Payment[]>([]);
+  const [jobs, setData] = useState<HandshakeJobDataType[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,7 +29,7 @@ export default function JobTrackerPage() {
   }, []);
 
   return (
-    <div className='container mx-auto py-10'>
+    <div className='container mx-auto py-8 px-12'>
       <DataTable columns={columns} data={jobs} />
     </div>
   );
