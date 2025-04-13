@@ -3,6 +3,7 @@ import * as icon from 'lucide-react';
 import { ResumeUpload } from '@/components/resume-upload.tsx';
 import { QueryProvider } from '@/components/query-provider';
 import { QueryExample } from '@/components/query-example';
+import { LoginPage } from '../../components/login-page';
 
 export default function App() {
   return (
@@ -15,7 +16,7 @@ export default function App() {
 function SPA() {
   const auth = useAuthQuery();
   const loggedIn = auth.data?.data.session !== null;
-  return <AuthenticatedUsersSPA />;
+  return loggedIn ? <AuthenticatedUsersSPA /> : <LoginPage />;
 }
 
 function AuthenticatedUsersSPA() {
