@@ -77,7 +77,7 @@ export function ResumeForm() { // Set default input values to empty
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full h-full p-4">
-        <div className="flex flex-col md:flex-row gap-8 h-full">
+        <div className="flex flex-col md:flex-row gap-8">
           <div className="flex-1 space-y-8 overflow-auto">
             <div className="space-y-4">
               <h2 className="text-2xl font-bold">Personal Details</h2>
@@ -387,7 +387,7 @@ export function ResumeForm() { // Set default input values to empty
 
 export function ResumeUpload() {
   return (
-    <div className="w-full h-screen">
+    <div className="w-full">
       <ResumeForm />
     </div>
   );
