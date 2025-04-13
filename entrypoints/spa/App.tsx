@@ -1,7 +1,7 @@
 import { DisplaySettings } from '@/components/display-settings';
 import * as icon from 'lucide-react';
 import { ResumeUpload } from '@/components/resume-upload.tsx';
-import QueryProvider from '@/components/query-provider';
+import { QueryProvider } from '@/components/query-provider';
 import { QueryExample } from '@/components/query-example';
 
 export default function App() {
