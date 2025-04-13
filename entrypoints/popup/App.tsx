@@ -37,11 +37,11 @@ function PopUp() {
       </>
     );
   } else {
-    return <SignedInPopup />;
+    return <AuthenticatedUsersPopup />;
   }
 }
 
-function SignedInPopup() {
+function AuthenticatedUsersPopup() {
   const [status, setStatus] = useState('');
   // Finds and returns the url of the selected job posting as simplified form in user's active (https://asu.joinhandshake.com/stu/postings) window using DOM.
   function saveJob() {

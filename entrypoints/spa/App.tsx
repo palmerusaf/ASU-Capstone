@@ -7,45 +7,57 @@ import { QueryExample } from '@/components/query-example';
 export default function App() {
   return (
     <QueryProvider>
-      <SideBar
-        menuData={[
-          {
-            menu: 'Manage Applications',
-            icon: icon.Briefcase,
-            items: [
-              {
-                subMenu: 'Fetching Example',
-                content: <QueryExample />,
-              },
-              {
-                subMenu: 'View Jobs',
-                content: <NotImplemented />,
-              },
-            ],
-          },
-          {
-            menu: 'Manage Resumes',
-            icon: icon.Pencil,
-            items: [
-              {
-                subMenu: 'Upload Resume',
-                content: <ResumeUpload />,
-              },
-            ],
-          },
-          {
-            menu: 'Settings',
-            icon: icon.Settings2,
-            items: [
-              {
-                subMenu: 'Display',
-                content: <DisplaySettings />,
-              },
-            ],
-          },
-        ]}
-      />
+      <SPA />
     </QueryProvider>
+  );
+}
+
+function SPA() {
+  const auth = useAuthQuery();
+  const loggedIn = auth.data?.data.session !== null;
+  return <AuthenticatedUsersSPA />;
+}
+
+function AuthenticatedUsersSPA() {
+  return (
+    <SideBar
+      menuData={[
+        {
+          menu: 'Manage Applications',
+          icon: icon.Briefcase,
+          items: [
+            {
+              subMenu: 'Fetching Example',
+              content: <QueryExample />,
+            },
+            {
+              subMenu: 'View Jobs',
+              content: <NotImplemented />,
+            },
+          ],
+        },
+        {
+          menu: 'Manage Resumes',
+          icon: icon.Pencil,
+          items: [
+            {
+              subMenu: 'Upload Resume',
+              content: <ResumeUpload />,
+            },
+          ],
+        },
+        {
+          menu: 'Settings',
+          icon: icon.Settings2,
+          items: [
+            {
+              subMenu: 'Display',
+              content: <DisplaySettings />,
+            },
+          ],
+        },
+      ]}
+    />
   );
 }
 
