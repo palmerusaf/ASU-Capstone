@@ -13,3 +13,11 @@ export const useExampleQuery = () =>
       return await supabase.from('Example').select();
     },
   });
+
+export const useAuthQuery = () =>
+  useQuery({
+    queryKey: ['auth'],
+    queryFn: async () => {
+      return await supabase.auth.getSession();
+    },
+  });

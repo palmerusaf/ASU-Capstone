@@ -15,7 +15,30 @@ function App() {
 export default App;
 
 function PopUp() {
-  return <SignedInPopup />;
+  const auth = useAuthQuery();
+  if (auth.isPending) {
+    return (
+      <>
+        <h1>Job Sourcerer</h1>
+        <div className='card'>
+          <p className='animate-pulse'>Checking Auth...</p>
+        </div>
+      </>
+    );
+  }
+  const loggedIn = auth.data?.data.session !== null;
+  if (!loggedIn) {
+    return (
+      <>
+        <h1>Job Sourcerer</h1>
+        <div className='card'>
+          <button onClick={openSPA}>Log In</button>
+        </div>
+      </>
+    );
+  } else {
+    return <SignedInPopup />;
+  }
 }
 
 function SignedInPopup() {
