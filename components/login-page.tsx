@@ -12,8 +12,12 @@ export function LoginForm({
         <div className='flex flex-col gap-6'>
           <div className='flex flex-col gap-2 items-center'>
             <div className='flex flex-col gap-2 items-center font-medium'>
-              <div className='flex justify-center items-center w-10 h-10 rounded-md'>
-                <img className='animate-bounce' src={logo} />
+              <div className='flex justify-center items-center w-10 h-10 rounded-md animate-bounce duration-10000'>
+                <img
+                  className='absolute w-8 animate-ping duration-5000'
+                  src={logo}
+                />
+                <img className='' src={logo} />
               </div>
               <span className='sr-only'>Job Sourcerer</span>
             </div>
