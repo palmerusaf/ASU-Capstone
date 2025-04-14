@@ -4,7 +4,7 @@ import { ResumeUpload } from '@/components/resume-upload.tsx';
 import { QueryProvider } from '@/components/query-provider';
 import { QueryExample } from '@/components/query-example';
 import { LoginPage } from '../../components/login-page';
-import useAuth from '@/utils/auth-hook';
+import useAuth from '@/utils/auth';
 
 export default function App() {
   const session = useAuth();

@@ -2,7 +2,7 @@ import '@/assets/tailwind.css';
 import { useState } from 'react';
 import { PublicPath } from 'wxt/browser';
 import './App.css';
-import useAuth from '@/utils/auth-hook';
+import useAuth from '@/utils/auth';
 
 function App() {
   const session = useAuth();
