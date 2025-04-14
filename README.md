@@ -33,7 +33,7 @@
     <img src="./public/wxt.svg" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">Job Sourceror</h3>
+<h3 align="center">Job Sourcerer</h3>
 
   <p align="center">
 A centralized job application platform.
@@ -76,7 +76,7 @@ A centralized job application platform.
 
 ## About The Project
 
-[![Job Sourceror Prototype Screen Shot][product-screenshot]](https://github.com/palmerusaf/ASU-Capstone)
+[![Job Sourcerer Prototype Screen Shot][product-screenshot]](https://github.com/palmerusaf/ASU-Capstone)
 
 Simplify the job/internship application process by automating search, application and tracking of jobs.
 
