@@ -10,7 +10,8 @@ export function ResumeDisplay() {
       const resumes = await getResumes();
       const latest = resumes.at(-1);
       if (latest) {
-        const rendered = render(latest);
+        let rendered = render(latest);
+        rendered = rendered.replace(/<a /g, '<a target="_blank" rel="noopener noreferrer" ');
         setHtml(rendered);
       }
     }
