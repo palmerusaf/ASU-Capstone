@@ -6,6 +6,7 @@ import { QueryExample } from '@/components/query-example';
 import { LoginPage } from '@/components/login-page';
 import useAuth from '@/utils/auth';
 import * as icon from 'lucide-react';
+import { ResumeDisplay } from '@/components/resume-display.tsx';
 
 export default function App() {
   const session = useAuth();
@@ -43,6 +44,10 @@ function AuthenticatedUsersSPA() {
               subMenu: 'Upload Resume',
               content: <ResumeUpload />,
             },
+            {
+              subMenu: 'Display Resume',
+              content: <ResumeDisplay />,
+            }
           ],
         },
         {
