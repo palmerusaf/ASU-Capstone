@@ -4,19 +4,16 @@ import { ResumeUpload } from '@/components/resume-upload.tsx';
 import { QueryProvider } from '@/components/query-provider';
 import { QueryExample } from '@/components/query-example';
 import { LoginPage } from '../../components/login-page';
+import useAuth from '@/utils/auth-hook';
 
 export default function App() {
+  const session = useAuth();
+  const loggedIn = session !== null;
   return (
     <QueryProvider>
-      <SPA />
+      {loggedIn ? <AuthenticatedUsersSPA /> : <LoginPage />}
     </QueryProvider>
   );
-}
-
-function SPA() {
-  const auth = useAuthQuery();
-  const loggedIn = auth.data?.data.session !== null;
-  return loggedIn ? <AuthenticatedUsersSPA /> : <LoginPage />;
 }
 
 function AuthenticatedUsersSPA() {

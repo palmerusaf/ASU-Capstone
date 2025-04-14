@@ -2,31 +2,11 @@ import '@/assets/tailwind.css';
 import { useState } from 'react';
 import { PublicPath } from 'wxt/browser';
 import './App.css';
-import { QueryProvider } from '@/components/query-provider';
+import useAuth from '@/utils/auth-hook';
 
 function App() {
-  return (
-    <QueryProvider>
-      <PopUp />
-    </QueryProvider>
-  );
-}
-
-export default App;
-
-function PopUp() {
-  const auth = useAuthQuery();
-  if (auth.isPending) {
-    return (
-      <>
-        <h1>Job Sourcerer</h1>
-        <div className='card'>
-          <p className='animate-pulse'>Checking Auth...</p>
-        </div>
-      </>
-    );
-  }
-  const loggedIn = auth.data?.data.session !== null;
+  const session = useAuth();
+  const loggedIn = session !== null;
   if (!loggedIn) {
     return (
       <>
@@ -40,6 +20,8 @@ function PopUp() {
     return <AuthenticatedUsersPopup />;
   }
 }
+
+export default App;
 
 function AuthenticatedUsersPopup() {
   const [status, setStatus] = useState('');
