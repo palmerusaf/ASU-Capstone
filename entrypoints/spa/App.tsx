@@ -1,10 +1,11 @@
 import { DisplaySettings } from '@/components/display-settings';
-import * as icon from 'lucide-react';
+import JobTrackerPage from '@/components/job-tracker-Page/page';
 import { ResumeUpload } from '@/components/resume-upload.tsx';
 import { QueryProvider } from '@/components/query-provider';
 import { QueryExample } from '@/components/query-example';
-import { LoginPage } from '../../components/login-page';
+import { LoginPage } from '@/components/login-page';
 import useAuth from '@/utils/auth';
+import * as icon from 'lucide-react';
 
 export default function App() {
   const session = useAuth();
@@ -12,7 +13,7 @@ export default function App() {
   return (
     <QueryProvider>
       {loggedIn ? <AuthenticatedUsersSPA /> : <LoginPage />}
-    </QueryProvider>
+    </QueryProvider >
   );
 }
 
@@ -30,7 +31,7 @@ function AuthenticatedUsersSPA() {
             },
             {
               subMenu: 'View Jobs',
-              content: <NotImplemented />,
+              content: <JobTrackerPage />,
             },
           ],
         },
