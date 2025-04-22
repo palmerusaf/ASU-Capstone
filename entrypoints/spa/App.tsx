@@ -4,6 +4,7 @@ import { ResumeUpload } from '@/components/resume-upload.tsx';
 import { QueryProvider } from '@/components/query-provider';
 import { QueryExample } from '@/components/query-example';
 import { LoginPage } from '@/components/login-page';
+import { Toaster } from 'sonner';
 import useAuth from '@/utils/auth';
 import * as icon from 'lucide-react';
 import { ResumeDisplay } from '@/components/resume-display.tsx';
@@ -13,7 +14,8 @@ export default function App() {
   const loggedIn = session !== null;
   return (
     <QueryProvider>
-      {loggedIn ? <AuthenticatedUsersSPA /> : <LoginPage />}
+      <Toaster richColors position="top-center" />
+      {!loggedIn ? <AuthenticatedUsersSPA /> : <LoginPage />}
     </QueryProvider >
   );
 }

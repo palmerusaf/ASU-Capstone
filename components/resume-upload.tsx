@@ -19,7 +19,7 @@ import { ResumeSchema } from "@/utils/db/schema";
 export function ResumeForm() {
   const form = useForm<z.infer<typeof ResumeSchema>>({
     mode: "onSubmit",
-    reValidateMode: "onSubmit",
+    reValidateMode: "onChange",
     resolver: zodResolver(ResumeSchema),
     defaultValues: {
       basics: {
@@ -34,7 +34,6 @@ export function ResumeForm() {
       education: [{
         institution: "",
         area: "",
-        studyType: "",
         startDate: "",
         endDate: ""
       }],
@@ -65,12 +64,11 @@ export function ResumeForm() {
   });
 
   function onSubmit(data: z.infer<typeof ResumeSchema>) {
-    // Use resumeSchema to validate object before saving
-    resumeSchema.validate(
+    resumeSchema.validate( // Use resumeSchema to validate object before saving
       data,
       async (err, report) => {
         if (err) {
-          toast.error("Resume is invalid.");
+          toast.error("Resume is invalid."); // Error if submitted resume is invalid (would need schema change)
           return;
         }
 
@@ -99,35 +97,35 @@ export function ResumeForm() {
                 <FormField control={form.control} name="basics.name" render={({ field }) => (
                   <FormItem>
                     <FormLabel>Name</FormLabel>
-                    <FormControl><Input {...field} /></FormControl>
+                    <FormControl><Input placeholder="Mark Zuckerberg (REQUIRED)" {...field} /></FormControl>
                     <FormMessage />
                   </FormItem>
                 )} />
                 <FormField control={form.control} name="basics.label" render={({ field }) => (
                   <FormItem>
                     <FormLabel>Title</FormLabel>
-                    <FormControl><Input {...field} /></FormControl>
+                    <FormControl><Input placeholder="Software Developer (REQUIRED)" {...field} /></FormControl>
                     <FormMessage />
                   </FormItem>
                 )} />
                 <FormField control={form.control} name="basics.email" render={({ field }) => (
                   <FormItem>
                     <FormLabel>Email</FormLabel>
-                    <FormControl><Input {...field} /></FormControl>
+                    <FormControl><Input placeholder="mz@yahoo.com (REQUIRED)" {...field} /></FormControl>
                     <FormMessage />
                   </FormItem>
                 )} />
                 <FormField control={form.control} name="basics.phone" render={({ field }) => (
                   <FormItem>
                     <FormLabel>Phone</FormLabel>
-                    <FormControl><Input {...field} /></FormControl>
+                    <FormControl><Input placeholder="111-111-2233 (REQUIRED)" {...field} /></FormControl>
                     <FormMessage />
                   </FormItem>
                 )} />
                 <FormField control={form.control} name="basics.website" render={({ field }) => (
                   <FormItem>
                     <FormLabel>Website</FormLabel>
-                    <FormControl><Input {...field} /></FormControl>
+                    <FormControl><Input placeholder="https://facebook.com (REQUIRED)" {...field} /></FormControl>
                     <FormMessage />
                   </FormItem>
                 )} />
@@ -164,7 +162,7 @@ export function ResumeForm() {
                     <FormField control={form.control} name={`basics.profiles.${index}.url`} render={({ field }) => (
                       <FormItem>
                         <FormLabel>Profile URL</FormLabel>
-                        <FormControl><Input placeholder="https://linkedin.com/in/edinramovic" {...field} /></FormControl>
+                        <FormControl><Input placeholder="https://linkedin.com (REQUIRED)" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
@@ -184,28 +182,21 @@ export function ResumeForm() {
                     <FormField control={form.control} name={`education.${index}.institution`} render={({ field }) => (
                       <FormItem>
                         <FormLabel>Institution</FormLabel>
-                        <FormControl><Input {...field} /></FormControl>
+                        <FormControl><Input placeholder="Arizona State University (REQUIRED)" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
                     <FormField control={form.control} name={`education.${index}.area`} render={({ field }) => (
                       <FormItem>
                         <FormLabel>Field of Study</FormLabel>
-                        <FormControl><Input {...field} /></FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
-                    <FormField control={form.control} name={`education.${index}.studyType`} render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Study Type</FormLabel>
-                        <FormControl><Input {...field} /></FormControl>
+                        <FormControl><Input placeholder="BS in Computer Science (REQUIRED)" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
                     <FormField control={form.control} name={`education.${index}.startDate`} render={({ field }) => (
                       <FormItem>
                         <FormLabel>Start Date</FormLabel>
-                        <FormControl><Input placeholder="YYYY-MM-DD" {...field} /></FormControl>
+                        <FormControl><Input placeholder="YYYY-MM-DD (REQUIRED)" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
@@ -230,21 +221,21 @@ export function ResumeForm() {
                     <FormField control={form.control} name={`work.${index}.company`} render={({ field }) => (
                       <FormItem>
                         <FormLabel>Company</FormLabel>
-                        <FormControl><Input {...field} /></FormControl>
+                        <FormControl><Input placeholder="Meta (REQUIRED)" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
                     <FormField control={form.control} name={`work.${index}.position`} render={({ field }) => (
                       <FormItem>
                         <FormLabel>Position</FormLabel>
-                        <FormControl><Input {...field} /></FormControl>
+                        <FormControl><Input placeholder="Software Developer (REQUIRED)" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
                     <FormField control={form.control} name={`work.${index}.startDate`} render={({ field }) => (
                       <FormItem>
                         <FormLabel>Start Date</FormLabel>
-                        <FormControl><Input placeholder="YYYY-MM-DD" {...field} /></FormControl>
+                        <FormControl><Input placeholder="YYYY-MM-DD (REQUIRED)" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
@@ -274,14 +265,14 @@ export function ResumeForm() {
                     <FormField control={form.control} name={`projects.${index}.name`} render={({ field }) => (
                       <FormItem>
                         <FormLabel>Project Name</FormLabel>
-                        <FormControl><Input {...field} /></FormControl>
+                        <FormControl><Input placeholder="Job Sourcerer (REQUIRED)" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
                     <FormField control={form.control} name={`projects.${index}.url`} render={({ field }) => (
                       <FormItem>
                         <FormLabel>URL</FormLabel>
-                        <FormControl><Input {...field} /></FormControl>
+                        <FormControl><Input placeholder="http://github.com (REQUIRED)" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
@@ -303,7 +294,7 @@ export function ResumeForm() {
                   <FormField control={form.control} name={`projects.${index}.description`} render={({ field }) => (
                     <FormItem>
                       <FormLabel>Description</FormLabel>
-                      <FormControl><Input {...field} /></FormControl>
+                      <FormControl><Input placeholder="(REQUIRED)" {...field} /></FormControl>
                       <FormMessage />
                     </FormItem>
                   )} />

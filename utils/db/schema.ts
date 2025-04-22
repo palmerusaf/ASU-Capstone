@@ -89,7 +89,6 @@ export const ResumeSchema = z.object({
     z.object({
       institution: z.string().min(1, { message: "Institution is required" }),
       area: z.string().min(1, { message: "Field of study is required" }),
-      studyType: z.string().min(1, { message: "Study type is required" }),
       startDate: z.string().min(1, { message: "Start date is required" }),
       endDate: z.string().optional().transform(emptyToUndefined),
     })
