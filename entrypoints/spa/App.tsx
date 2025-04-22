@@ -15,7 +15,7 @@ export default function App() {
   return (
     <QueryProvider>
       <Toaster richColors position="top-center" />
-      {!loggedIn ? <AuthenticatedUsersSPA /> : <LoginPage />}
+      {loggedIn ? <AuthenticatedUsersSPA /> : <LoginPage />}
     </QueryProvider >
   );
 }
