@@ -205,14 +205,14 @@ export function ResumeForm() {
                     <FormField control={form.control} name={`education.${index}.startDate`} render={({ field }) => (
                       <FormItem>
                         <FormLabel>Start Date</FormLabel>
-                        <FormControl><Input {...field} /></FormControl>
+                        <FormControl><Input placeholder="YYYY-MM-DD" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
                     <FormField control={form.control} name={`education.${index}.endDate`} render={({ field }) => (
                       <FormItem>
                         <FormLabel>End Date</FormLabel>
-                        <FormControl><Input {...field} /></FormControl>
+                        <FormControl><Input placeholder="YYYY-MM-DD" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
@@ -244,14 +244,14 @@ export function ResumeForm() {
                     <FormField control={form.control} name={`work.${index}.startDate`} render={({ field }) => (
                       <FormItem>
                         <FormLabel>Start Date</FormLabel>
-                        <FormControl><Input {...field} /></FormControl>
+                        <FormControl><Input placeholder="YYYY-MM-DD" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
                     <FormField control={form.control} name={`work.${index}.endDate`} render={({ field }) => (
                       <FormItem>
                         <FormLabel>End Date</FormLabel>
-                        <FormControl><Input {...field} /></FormControl>
+                        <FormControl><Input placeholder="YYYY-MM-DD" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
@@ -288,14 +288,14 @@ export function ResumeForm() {
                     <FormField control={form.control} name={`projects.${index}.startDate`} render={({ field }) => (
                       <FormItem>
                         <FormLabel>Start Date</FormLabel>
-                        <FormControl><Input {...field} /></FormControl>
+                        <FormControl><Input placeholder="YYYY-MM-DD" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
                     <FormField control={form.control} name={`projects.${index}.endDate`} render={({ field }) => (
                       <FormItem>
                         <FormLabel>End Date</FormLabel>
-                        <FormControl><Input {...field} /></FormControl>
+                        <FormControl><Input placeholder="YYYY-MM-DD" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
