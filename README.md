@@ -94,13 +94,11 @@ Simplify the job/internship application process by automating search, applicatio
 
 ### Prerequisites
 
-- Latest version of Chrome or Firefox.
+- Latest version of Chrome.
 
 ### Installation
 
-<!-- TODO:  add extension store links-->
-
-Coming Soon...
+Download from the Chrome Web Store [here](https://chromewebstore.google.com/detail/job-sourcerer/iilhhpgfemomamfecgiaaooobfbjjhpc).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -124,15 +122,15 @@ Coming Soon...
 - [ ] Upload/Extract Resume keywords
 - [ ] Search/Add functionality
 - [ ] Add job tagging system
-- [ ] Job Tracker
+- [x] Job Tracker
 - [ ] Schedule interviews/Integrate with ICal
 - [ ] Auto apply bot
 - [ ] Link and integrate with 1-2 more job sites
 
 ### Phase 2 - Semester 2 - Resume Management
 
-- [ ] Resume builder
-- [ ] Resume download
+- [x] Resume builder
+- [x] Resume download
 - [ ] Add resume tagging system
 - [ ] Resume storage/management
 - [ ] Resume to job matcher
