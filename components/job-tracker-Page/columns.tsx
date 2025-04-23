@@ -9,6 +9,10 @@ export const columns: ColumnDef<HandshakeJobDataType>[] = [
     header: 'ID',
   },
   {
+    accessorKey: 'company',
+    header: 'Company',
+  },
+  {
     accessorKey: 'title',
     header: 'Title',
     cell: ({ row }) => {
@@ -19,7 +23,7 @@ export const columns: ColumnDef<HandshakeJobDataType>[] = [
           href={row.original.postingUrl}
           target='_blank'
           rel='noopener noreferrer'
-          className='text-blue-600'
+          className='text-blue-700'
         >
           {title}
         </a>
@@ -30,7 +34,6 @@ export const columns: ColumnDef<HandshakeJobDataType>[] = [
     accessorKey: 'employmentType',
     header: 'Employment',
   },
-
   {
     accessorKey: 'jobType',
     header: 'Type',

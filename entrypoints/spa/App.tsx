@@ -1,12 +1,12 @@
 import { DisplaySettings } from '@/components/display-settings';
-import JobTrackerPage from '@/components/job-tracker-Page/page';
-import { ResumeUpload } from '@/components/resume-upload.tsx';
-import { QueryProvider } from '@/components/query-provider';
+import { JobTrackerPage } from '@/components/job-tracker-Page/page';
 import { LoginPage } from '@/components/login-page';
-import { Toaster } from 'sonner';
+import { QueryProvider } from '@/components/query-provider';
+import { ResumeDisplay } from '@/components/resume-display';
+import { ResumeUpload } from '@/components/resume-upload.tsx';
 import useAuth from '@/utils/auth';
 import * as icon from 'lucide-react';
-import { ResumeDisplay } from '@/components/resume-display.tsx';
+import { Toaster } from 'sonner';
 
 export default function App() {
   const session = useAuth();
@@ -15,7 +15,7 @@ export default function App() {
     <QueryProvider>
       <Toaster richColors position="top-center" />
       {loggedIn ? <AuthenticatedUsersSPA /> : <LoginPage />}
-    </QueryProvider >
+    </QueryProvider>
   );
 }
 
