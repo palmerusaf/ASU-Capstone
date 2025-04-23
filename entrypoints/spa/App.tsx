@@ -2,7 +2,6 @@ import { DisplaySettings } from '@/components/display-settings';
 import JobTrackerPage from '@/components/job-tracker-Page/page';
 import { ResumeUpload } from '@/components/resume-upload.tsx';
 import { QueryProvider } from '@/components/query-provider';
-import { QueryExample } from '@/components/query-example';
 import { LoginPage } from '@/components/login-page';
 import { Toaster } from 'sonner';
 import useAuth from '@/utils/auth';
@@ -28,10 +27,6 @@ function AuthenticatedUsersSPA() {
           menu: 'Manage Applications',
           icon: icon.Briefcase,
           items: [
-            {
-              subMenu: 'Fetching Example',
-              content: <QueryExample />,
-            },
             {
               subMenu: 'View Jobs',
               content: <JobTrackerPage />,
