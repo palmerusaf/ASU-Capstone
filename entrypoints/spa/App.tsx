@@ -1,11 +1,11 @@
 import { DisplaySettings } from '@/components/display-settings';
-import JobTrackerPage from '@/components/job-tracker-Page/page';
-import { ResumeUpload } from '@/components/resume-upload.tsx';
-import { QueryProvider } from '@/components/query-provider';
-import { QueryExample } from '@/components/query-example';
 import { LoginPage } from '@/components/login-page';
+import { QueryExample } from '@/components/query-example';
+import { QueryProvider } from '@/components/query-provider';
+import { ResumeUpload } from '@/components/resume-upload.tsx';
 import useAuth from '@/utils/auth';
 import * as icon from 'lucide-react';
+import { JobTrackerPage } from "c:/Users/ARYA/Desktop/ASU-Capstone/components/job-tracker-Page/page";
 
 export default function App() {
   const session = useAuth();
