@@ -5,15 +5,16 @@ import { QueryProvider } from '@/components/query-provider';
 import { ResumeUpload } from '@/components/resume-upload.tsx';
 import useAuth from '@/utils/auth';
 import * as icon from 'lucide-react';
-import { JobTrackerPage } from "c:/Users/ARYA/Desktop/ASU-Capstone/components/job-tracker-Page/page";
+import { Toaster } from 'sonner';
 
 export default function App() {
   const session = useAuth();
   const loggedIn = session !== null;
   return (
     <QueryProvider>
+      <Toaster richColors position="top-center" />
       {loggedIn ? <AuthenticatedUsersSPA /> : <LoginPage />}
-    </QueryProvider >
+    </QueryProvider>
   );
 }
 
@@ -43,6 +44,10 @@ function AuthenticatedUsersSPA() {
               subMenu: 'Upload Resume',
               content: <ResumeUpload />,
             },
+            {
+              subMenu: 'Display Resume',
+              content: <ResumeDisplay />,
+            }
           ],
         },
         {
