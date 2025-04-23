@@ -4,14 +4,17 @@ import { ResumeUpload } from '@/components/resume-upload.tsx';
 import { QueryProvider } from '@/components/query-provider';
 import { QueryExample } from '@/components/query-example';
 import { LoginPage } from '@/components/login-page';
+import { Toaster } from 'sonner';
 import useAuth from '@/utils/auth';
 import * as icon from 'lucide-react';
+import { ResumeDisplay } from '@/components/resume-display.tsx';
 
 export default function App() {
   const session = useAuth();
   const loggedIn = session !== null;
   return (
     <QueryProvider>
+      <Toaster richColors position="top-center" />
       {loggedIn ? <AuthenticatedUsersSPA /> : <LoginPage />}
     </QueryProvider >
   );
@@ -43,6 +46,10 @@ function AuthenticatedUsersSPA() {
               subMenu: 'Upload Resume',
               content: <ResumeUpload />,
             },
+            {
+              subMenu: 'Display Resume',
+              content: <ResumeDisplay />,
+            }
           ],
         },
         {
