@@ -1,20 +1,23 @@
 import { DisplaySettings } from '@/components/display-settings';
 import { JobTrackerPage } from '@/components/job-tracker-Page/page';
-import { LoginPage } from '@/components/login-page';
+// import { LoginPage } from '@/components/login-page';
 import { QueryProvider } from '@/components/query-provider';
 import { ResumeDisplay } from '@/components/resume-display';
 import { ResumeUpload } from '@/components/resume-upload.tsx';
-import useAuth from '@/utils/auth';
+// import useAuth from '@/utils/auth';
 import * as icon from 'lucide-react';
 import { Toaster } from 'sonner';
 
 export default function App() {
-  const session = useAuth();
-  const loggedIn = session !== null;
+  // disable auth
+  // const session = useAuth();
+  // const loggedIn = session !== null;
   return (
     <QueryProvider>
-      <Toaster richColors position="top-center" />
-      {loggedIn ? <AuthenticatedUsersSPA /> : <LoginPage />}
+      <Toaster richColors position='top-center' />
+      {/* disable auth workflow */}
+      {/* {loggedIn ? <AuthenticatedUsersSPA /> : <LoginPage />} */}
+      <AuthenticatedUsersSPA />
     </QueryProvider>
   );
 }
@@ -44,7 +47,7 @@ function AuthenticatedUsersSPA() {
             {
               subMenu: 'Display Resume',
               content: <ResumeDisplay />,
-            }
+            },
           ],
         },
         {
