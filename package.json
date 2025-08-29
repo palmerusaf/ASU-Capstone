@@ -6,16 +6,17 @@
   "type": "module",
   "scripts": {
     "build": "pnpm gendb;wxt build",
+    "build-storybook": "storybook build",
     "build:firefox": "pnpm gendb;wxt build -b firefox",
     "compile": "tsc --noEmit",
     "dev": "pnpm gendb;wxt",
     "dev:firefox": "pnpm gendb;wxt -b firefox",
-    "postinstall": "wxt prepare",
-    "zip": "pnpm gendb;wxt zip",
-    "zip:firefox": "pnpm gendb;wxt zip -b firefox",
-    "storybook": "storybook dev -p 6006",
     "gendb": "node ./genDb.js",
-    "build-storybook": "storybook build"
+    "postinstall": "wxt prepare",
+    "storybook": "storybook dev -p 6006",
+    "test": "pnpm gendb;vitest",
+    "zip": "pnpm gendb;wxt zip",
+    "zip:firefox": "pnpm gendb;wxt zip -b firefox"
   },
   "engines": {
     "pnpm": "10"
@@ -78,6 +79,7 @@
     "@vitest/coverage-v8": "^3.0.9",
     "@wxt-dev/module-react": "^1.1.2",
     "drizzle-kit": "^0.31.0",
+    "fake-indexeddb": "^6.2.0",
     "playwright": "^1.51.1",
     "storybook": "^8.6.7",
     "typescript": "^5.6.3",

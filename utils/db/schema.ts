@@ -124,3 +124,8 @@ export const ResumeSchema = z.object({
     })
   ),
 });
+
+export const testSchema = pgTable('testSchema', {
+  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+  testField: text('test_field').notNull(),
+});
