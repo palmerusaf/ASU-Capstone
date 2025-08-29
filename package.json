@@ -14,7 +14,7 @@
     "zip": "pnpm gendb;wxt zip",
     "zip:firefox": "pnpm gendb;wxt zip -b firefox",
     "storybook": "storybook dev -p 6006",
-    "gendb": "rm -rf ./drizzle/;pnpm drizzle-kit generate --dialect=postgresql --schema=./utils/db/schema.ts;echo 'export const createTbleSqlRaw = `' > ./utils/db/createTbleSqlRaw.ts;cat ./drizzle/*sql >> ./utils/db/createTbleSqlRaw.ts;echo '\n`;'>> ./utils/db/createTbleSqlRaw.ts",
+    "gendb": "node ./genDb.js",
     "build-storybook": "storybook build"
   },
   "engines": {
