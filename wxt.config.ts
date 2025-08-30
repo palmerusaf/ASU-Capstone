@@ -3,6 +3,7 @@ import { defineConfig, WxtViteConfig } from 'wxt';
 
 const vite = () =>
   ({
+    optimizeDeps: { exclude: ['@electric-sql/pglite'] },
     plugins: [tailwindcss()],
   }) as WxtViteConfig;
 

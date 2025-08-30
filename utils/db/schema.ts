@@ -1,5 +1,10 @@
-import { sql } from 'drizzle-orm';
-import { int, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import {
+  pgTable,
+  integer,
+  text,
+  boolean,
+  timestamp,
+} from 'drizzle-orm/pg-core';
 import { z } from 'zod';
 
 const jobSites = ['handshake'] as const;
@@ -17,23 +22,28 @@ const jobStatus = [
 
 type Status = (typeof jobStatus)[keyof typeof jobStatus];
 
-export const jobs = sqliteTable('jobs', {
-  id: int('id').primaryKey({ autoIncrement: true }),
-  closeOutDate: int('closeOutDate', { mode: 'timestamp' }).notNull(),
-  lastUpdated: int('lastUpdated', { mode: 'timestamp' })
-    .notNull()
-    .default(sql`(unixepoch())`),
-  companyLogoUrl: text('companyLogoUrl').default(''),
-  companyName: text('companyName').notNull(),
+export const jobs = pgTable('jobs', {
+  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+
+  closeOutDate: timestamp('close_out_date').notNull(),
+  lastUpdated: timestamp('last_updated').notNull().defaultNow(),
+
+  companyLogoUrl: text('company_logo_url').default(''),
+  companyName: text('company_name').notNull(),
   description: text('description').notNull(),
-  easyApply: int('easyApply', { mode: 'boolean' }).notNull(),
-  remote: int('remote', { mode: 'boolean' }).notNull().default(false),
-  jobId: int('jobId').notNull(),
-  jobSite: text('jobSite', { enum: jobSites }).notNull(),
-  positionTitle: text('positionTitle').notNull(),
+
+  easyApply: boolean('easy_apply').notNull(),
+  remote: boolean('remote').notNull().default(false),
+
+  jobId: integer('job_id').notNull(),
+
+  jobSite: text('job_site').$type<(typeof jobSites)[number]>().notNull(),
+
+  positionTitle: text('position_title').notNull(),
   location: text('location').notNull(),
-  postLink: text('postLink').notNull(),
-  status: text('status', { enum: jobStatus }).notNull(),
+  postLink: text('post_link').notNull(),
+
+  status: text('status').$type<(typeof jobStatus)[number]>().notNull(),
 });
 
 export type HandshakeJobDataType = {
@@ -67,48 +77,55 @@ export type HandshakeJobDataType = {
 
 // Resume:
 const emptyToUndefined = (val: unknown) =>
-  typeof val === "string" && val.trim() === "" ? undefined : val; // Helper method to turn empty fields into undefined (to pass validation)
+  typeof val === 'string' && val.trim() === '' ? undefined : val; // Helper method to turn empty fields into undefined (to pass validation)
 
 export const ResumeSchema = z.object({
   basics: z.object({
-    name: z.string().min(1, { message: "Name is required" }),
-    label: z.string().min(1, { message: "Professional title is required" }),
-    email: z.string().email({ message: "Invalid email address" }),
-    phone: z.string().min(1, { message: "Phone number is required" }),
-    website: z.string().url({ message: "Invalid website URL" }).optional(),
+    name: z.string().min(1, { message: 'Name is required' }),
+    label: z.string().min(1, { message: 'Professional title is required' }),
+    email: z.string().email({ message: 'Invalid email address' }),
+    phone: z.string().min(1, { message: 'Phone number is required' }),
+    website: z.string().url({ message: 'Invalid website URL' }).optional(),
     summary: z.string().optional(),
-    profiles: z.array(
-      z.object({
-        network: z.string(),
-        username: z.string(),
-        url: z.string().url()
-      })
-    ).optional()
+    profiles: z
+      .array(
+        z.object({
+          network: z.string(),
+          username: z.string(),
+          url: z.string().url(),
+        })
+      )
+      .optional(),
   }),
   education: z.array(
     z.object({
-      institution: z.string().min(1, { message: "Institution is required" }),
-      area: z.string().min(1, { message: "Field of study is required" }),
-      startDate: z.string().min(1, { message: "Start date is required" }),
+      institution: z.string().min(1, { message: 'Institution is required' }),
+      area: z.string().min(1, { message: 'Field of study is required' }),
+      startDate: z.string().min(1, { message: 'Start date is required' }),
       endDate: z.string().optional().transform(emptyToUndefined),
     })
   ),
   work: z.array(
     z.object({
-      company: z.string().min(1, { message: "Company name is required" }),
-      position: z.string().min(1, { message: "Position is required" }),
-      startDate: z.string().min(1, { message: "Start date is required" }),
+      company: z.string().min(1, { message: 'Company name is required' }),
+      position: z.string().min(1, { message: 'Position is required' }),
+      startDate: z.string().min(1, { message: 'Start date is required' }),
       endDate: z.string().optional().transform(emptyToUndefined),
       summary: z.string().optional(),
     })
   ),
   projects: z.array(
     z.object({
-      name: z.string().min(1, { message: "Project name is required" }),
+      name: z.string().min(1, { message: 'Project name is required' }),
       startDate: z.string().optional().transform(emptyToUndefined),
       endDate: z.string().optional().transform(emptyToUndefined),
-      description: z.string().min(1, { message: "Description is required" }),
-      url: z.string().url({ message: "Invalid website URL" }),
+      description: z.string().min(1, { message: 'Description is required' }),
+      url: z.string().url({ message: 'Invalid website URL' }),
     })
   ),
+});
+
+export const testSchema = pgTable('testSchema', {
+  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+  testField: text('test_field').notNull(),
 });
