@@ -5,9 +5,7 @@ import {
   boolean,
   timestamp,
 } from 'drizzle-orm/pg-core';
-import { z } from 'zod';
-
-const jobSites = ['handshake'] as const;
+import { number, z } from 'zod';
 
 const jobStatus = [
   'applied',
@@ -20,30 +18,38 @@ const jobStatus = [
   'recently added',
 ] as const;
 
+const employmentTypeList = [
+  'Full-Time',
+  'Part-Time',
+  'Temporary',
+  'Seasonal',
+  'Contractor',
+] as const;
+
 type Status = (typeof jobStatus)[keyof typeof jobStatus];
 
-export const jobs = pgTable('jobs', {
+export const jobTable = pgTable('jobs', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-
-  closeOutDate: timestamp('close_out_date').notNull(),
-  lastUpdated: timestamp('last_updated').notNull().defaultNow(),
-
+  datePosted: timestamp('date_posted'),
+  closeOutDate: timestamp('close_out_date'),
+  statusChangeDate: timestamp('status_change_date').notNull().defaultNow(),
+  intern: boolean('intern').notNull(),
   companyLogoUrl: text('company_logo_url').default(''),
+  employmentType:
+    text('employment_type').$type<(typeof employmentTypeList)[number]>(),
   companyName: text('company_name').notNull(),
   description: text('description').notNull(),
-
-  easyApply: boolean('easy_apply').notNull(),
-  remote: boolean('remote').notNull().default(false),
-
+  remote: boolean('remote').notNull(),
   jobId: integer('job_id').notNull(),
-
-  jobSite: text('job_site').$type<(typeof jobSites)[number]>().notNull(),
-
-  positionTitle: text('position_title').notNull(),
+  title: text('title').notNull(),
   location: text('location').notNull(),
-  postLink: text('post_link').notNull(),
-
-  status: text('status').$type<(typeof jobStatus)[number]>().notNull(),
+  //in USD cents
+  payrate: integer('pay_rate'),
+  link: text('link').notNull(),
+  status: text('status')
+    .$type<(typeof jobStatus)[number]>()
+    .notNull()
+    .default('recently added'),
 });
 
 export type HandshakeJobDataType = {
