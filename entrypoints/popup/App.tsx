@@ -26,7 +26,7 @@ function App() {
     const jobId = await browser.tabs.sendMessage(activeTab.id, {
       message: 'Handshake-getJobId',
     });
-    if (!jobId) {
+    if (jobId === null) {
       setStatus('No job ID found.');
       return;
     }
@@ -34,12 +34,12 @@ function App() {
       type: 'Handshake-fetchJobData',
       data: { jobId },
     });
-    if (!fetchedJob) {
+    if (fetchedJob === null) {
       setStatus('Fetch failed.');
       return;
     }
     const jobData = parseFetchedJob(fetchedJob);
-    if (!jobData) {
+    if (jobData === null) {
       setStatus('Job Parsing failed.');
       return;
     }
