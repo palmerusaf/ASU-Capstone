@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { PublicPath } from 'wxt/browser';
 import './App.css';
 import { HandshakeJobDataType } from '@/utils/db/schema';
+import { parseFetchedJob } from '@/utils/popup/popup-utils';
 
 function App() {
   const [status, setStatus] = useState('');
@@ -61,8 +62,4 @@ export default App;
 async function saveJobData(jobData: unknown) {
   console.log('App#saveJobData jobData:', jobData);
   return true;
-}
-
-function parseFetchedJob(fetchedJob: any): HandshakeJobDataType | null {
-  return null;
 }
