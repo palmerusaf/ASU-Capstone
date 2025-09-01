@@ -19,30 +19,27 @@ function App() {
       active: true,
       currentWindow: true,
     });
-    if (!activeTab?.id) {
-      setStatus('No active tab found.');
-      return;
-    }
+    if (!activeTab?.id) return setStatus('No active tab found.');
+
     const jobId = await browser.tabs.sendMessage(activeTab.id, {
       message: 'Handshake-getJobId',
     });
-    if (jobId === null) {
-      setStatus('No job ID found.');
-      return;
-    }
+    if (jobId === null) return setStatus('No job ID found.');
+
+    const token = await browser.tabs.sendMessage(activeTab.id, {
+      message: 'Handshake-getToken',
+    });
+    if (token === null) return setStatus('Failed to get token.');
+
     const fetchedJob = await browser.runtime.sendMessage({
       type: 'Handshake-fetchJobData',
-      data: { jobId },
+      data: { jobId, token },
     });
-    if (fetchedJob === null) {
-      setStatus('Fetch failed.');
-      return;
-    }
+    if (fetchedJob === null) return setStatus('Fetch failed.');
+
     const jobData = parseFetchedJob(fetchedJob);
-    if (jobData === null) {
-      setStatus('Job Parsing failed.');
-      return;
-    }
+    if (jobData === null) return setStatus('Job Parsing failed.');
+
     const saveOk = await saveJobData(jobData);
     setStatus(!saveOk ? 'Failed to save job.' : 'Job Saved');
   }
