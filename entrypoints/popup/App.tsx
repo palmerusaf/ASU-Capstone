@@ -37,7 +37,7 @@ function App() {
       type: 'Handshake-fetchJobData',
       data: { jobId, token },
     });
-    if (fetchedJob === null) return setStatus('Fetch failed.');
+    if (!fetchedJob) return setStatus('Fetch failed.');
 
     const jobData = parseFetchedJob(fetchedJob);
     if (jobData === null) return setStatus('Job Parsing failed.');

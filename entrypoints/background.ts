@@ -17,17 +17,16 @@ export default defineBackground(() => {
   });
 
   // Send Handshake request to fetch data
-  browser.runtime.onMessage.addListener(
-    async (message, sender, sendResponse) => {
-      if (message.type === 'Handshake-fetchJobData') {
+  browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.type === 'Handshake-fetchJobData') {
+      (async () => {
         const { jobId, token } = message.data;
         const data = await fetchJobData(jobId, token);
-        // __AUTO_GENERATED_PRINT_VAR_START__
-        console.log('foo', data); // __AUTO_GENERATED_PRINT_VAR_END__
         sendResponse(data);
-      }
+      })();
+      return true;
     }
-  );
+  });
 });
 
 async function fetchJobData(jobId: number, token: string) {
