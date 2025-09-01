@@ -2,8 +2,9 @@ import '@/assets/tailwind.css';
 import { useState } from 'react';
 import { PublicPath } from 'wxt/browser';
 import './App.css';
-import { HandshakeJobDataType } from '@/utils/db/schema';
+import { HandshakeJobDataType, jobTable } from '@/utils/db/schema';
 import { parseFetchedJob } from '@/utils/popup/popup-utils';
+import { db } from '@/utils/db/db';
 
 function App() {
   const [status, setStatus] = useState('');
@@ -59,7 +60,11 @@ function App() {
 
 export default App;
 
-async function saveJobData(jobData: unknown) {
-  console.log('App#saveJobData jobData:', jobData);
-  return true;
+async function saveJobData(jobData: typeof jobTable.$inferInsert) {
+  try {
+    await db.insert(jobTable).values(jobData);
+    return true;
+  } catch (error) {
+    return false;
+  }
 }
