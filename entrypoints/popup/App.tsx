@@ -2,29 +2,17 @@ import '@/assets/tailwind.css';
 import { useState } from 'react';
 import { PublicPath } from 'wxt/browser';
 import './App.css';
-import useAuth from '@/utils/auth';
 
 function App() {
-  const session = useAuth();
-  const loggedIn = session !== null;
-  if (!loggedIn) {
-    return (
-      <>
-        <h1>Job Sourcerer</h1>
-        <div className='card'>
-          <button onClick={openSPA}>Log In</button>
-        </div>
-      </>
-    );
-  } else {
-    return <AuthenticatedUsersPopup />;
-  }
-}
-
-export default App;
-
-function AuthenticatedUsersPopup() {
   const [status, setStatus] = useState('');
+
+  async function openSPA() {
+    await browser.tabs.create({
+      url: browser.runtime.getURL('/spa.html' as PublicPath),
+      active: true,
+    });
+  }
+
   // Finds and saves selected job posting in user's active (https://asu.joinhandshake.com/stu/postings) window.
   function saveJob() {
     browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
@@ -54,6 +42,7 @@ function AuthenticatedUsersPopup() {
       }
     });
   }
+
   return (
     <>
       <h1>Job Sourcerer</h1>
@@ -66,9 +55,4 @@ function AuthenticatedUsersPopup() {
   );
 }
 
-async function openSPA() {
-  await browser.tabs.create({
-    url: browser.runtime.getURL('/spa.html' as PublicPath),
-    active: true,
-  });
-}
+export default App;
