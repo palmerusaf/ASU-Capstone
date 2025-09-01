@@ -13,34 +13,37 @@ function App() {
     });
   }
 
-  // Finds and saves selected job posting in user's active (https://asu.joinhandshake.com/stu/postings) window.
-  function saveJob() {
-    browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
-      const activeTab = tabs[0];
-      if (activeTab?.id) {
-        // Makes call to handshake.content.ts to get job URL.
-        browser.tabs
-          .sendMessage(activeTab.id, { message: 'Handshake-getJobURL' })
-          .then((url) => {
-            // Make call to background.ts to get job information.
-            browser.runtime
-              .sendMessage({
-                type: 'Handshake-fetchJobData',
-                data: { arg1: url },
-              })
-              .then((response2) => {
-                if (response2?.status) {
-                  setStatus(response2.status);
-                } else {
-                  setStatus('Failed to save job.');
-                }
-              });
-          })
-          .catch((error) => {
-            console.error('Error: ', error);
-          });
-      }
+  async function saveJobData(jobData: unknown) {
+    console.log('App#saveJobData jobData:', jobData);
+    return true;
+  }
+
+  async function saveJob() {
+    const [activeTab] = await browser.tabs.query({
+      active: true,
+      currentWindow: true,
     });
+    if (!activeTab?.id) {
+      setStatus('No active tab found.');
+      return;
+    }
+    const jobId = await browser.tabs.sendMessage(activeTab.id, {
+      message: 'Handshake-getJobId',
+    });
+    if (!jobId) {
+      setStatus('No job ID found.');
+      return;
+    }
+    const fetchedData = await browser.runtime.sendMessage({
+      type: 'Handshake-fetchJobData',
+      data: { jobId },
+    });
+    if (!fetchedData) {
+      setStatus('Fetch failed.');
+      return;
+    }
+    const saveOk = await saveJobData(fetchedData);
+    setStatus(!saveOk ? 'Failed to save job.' : 'Job Saved');
   }
 
   return (
