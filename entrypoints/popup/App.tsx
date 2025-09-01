@@ -2,6 +2,7 @@ import '@/assets/tailwind.css';
 import { useState } from 'react';
 import { PublicPath } from 'wxt/browser';
 import './App.css';
+import { HandshakeJobDataType } from '@/utils/db/schema';
 
 function App() {
   const [status, setStatus] = useState('');
@@ -11,11 +12,6 @@ function App() {
       url: browser.runtime.getURL('/spa.html' as PublicPath),
       active: true,
     });
-  }
-
-  async function saveJobData(jobData: unknown) {
-    console.log('App#saveJobData jobData:', jobData);
-    return true;
   }
 
   async function saveJob() {
@@ -34,15 +30,20 @@ function App() {
       setStatus('No job ID found.');
       return;
     }
-    const fetchedData = await browser.runtime.sendMessage({
+    const fetchedJob = await browser.runtime.sendMessage({
       type: 'Handshake-fetchJobData',
       data: { jobId },
     });
-    if (!fetchedData) {
+    if (!fetchedJob) {
       setStatus('Fetch failed.');
       return;
     }
-    const saveOk = await saveJobData(fetchedData);
+    const jobData = parseFetchedJob(fetchedJob);
+    if (!jobData) {
+      setStatus('Job Parsing failed.');
+      return;
+    }
+    const saveOk = await saveJobData(jobData);
     setStatus(!saveOk ? 'Failed to save job.' : 'Job Saved');
   }
 
@@ -59,3 +60,12 @@ function App() {
 }
 
 export default App;
+
+async function saveJobData(jobData: unknown) {
+  console.log('App#saveJobData jobData:', jobData);
+  return true;
+}
+
+function parseFetchedJob(fetchedJob: any): HandshakeJobDataType | null {
+  return null;
+}
