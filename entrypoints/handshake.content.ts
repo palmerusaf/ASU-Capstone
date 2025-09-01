@@ -7,8 +7,7 @@ export default defineContentScript({
     browser.runtime.onMessage.addListener(
       function (request, sender, sendResponse) {
         if (request.message === 'Handshake-getJobId') {
-          console.log('Handshake-getJobId called');
-          getJobId(location.href);
+          sendResponse(getJobId(location.href));
         }
       }
     );
