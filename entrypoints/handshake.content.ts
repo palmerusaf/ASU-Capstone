@@ -9,6 +9,12 @@ export default defineContentScript({
         if (request.message === 'Handshake-getJobId') {
           sendResponse(getJobId(location.href));
         }
+        if (request.message === 'Handshake-getToken') {
+          const token = document
+            .querySelector('meta[name="csrf-token"]')
+            ?.getAttribute('content');
+          sendResponse(token);
+        }
       }
     );
   },
