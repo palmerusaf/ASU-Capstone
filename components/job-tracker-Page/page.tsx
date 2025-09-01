@@ -1,14 +1,11 @@
-import { HandshakeJobDataType } from '@/utils/db/schema';
+import { HandshakeJobDataType, jobTable } from '@/utils/db/schema';
 import { useQuery } from '@tanstack/react-query';
 import { columns } from './columns';
 import { DataTable } from './data-table';
+import { db } from '@/utils/db/db';
 
 async function getSavedJobs(): Promise<HandshakeJobDataType[]> {
-  const allSavedJobs =
-    (await storage.getItem<HandshakeJobDataType[]>('local:handshakeJobs')) ??
-    [];
-
-  return allSavedJobs;
+  return await db.select().from(jobTable);
 }
 
 export function JobTrackerPage() {
@@ -17,7 +14,7 @@ export function JobTrackerPage() {
     queryFn: getSavedJobs,
   });
 
-  if (isPending) {  
+  if (isPending) {
     return <div className='p-24 text-center'>Loading saved jobs...</div>;
   }
 

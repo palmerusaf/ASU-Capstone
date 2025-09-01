@@ -5,11 +5,15 @@ import { ColumnDef } from '@tanstack/react-table';
 
 export const columns: ColumnDef<HandshakeJobDataType>[] = [
   {
-    accessorKey: 'postingId',
-    header: 'ID',
+    accessorKey: 'companyLogoUrl',
+    header: '',
+    cell: ({ row }) => {
+      const imgUrl = row.getValue('companyLogoUrl') as string;
+      return <img src={imgUrl} alt={imgUrl} width='25' height='25' />;
+    },
   },
   {
-    accessorKey: 'company',
+    accessorKey: 'companyName',
     header: 'Company',
   },
   {
@@ -20,7 +24,7 @@ export const columns: ColumnDef<HandshakeJobDataType>[] = [
 
       return (
         <a
-          href={row.original.postingUrl}
+          href={row.original.link}
           target='_blank'
           rel='noopener noreferrer'
           className='text-blue-700'
@@ -35,11 +39,7 @@ export const columns: ColumnDef<HandshakeJobDataType>[] = [
     header: 'Employment',
   },
   {
-    accessorKey: 'jobType',
-    header: 'Type',
-  },
-  {
-    accessorKey: 'payRate',
+    accessorKey: 'payrate',
     header: 'Pay',
   },
   {

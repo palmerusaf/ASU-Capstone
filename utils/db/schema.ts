@@ -52,34 +52,7 @@ export const jobTable = pgTable('jobs', {
     .default('recently added'),
 });
 
-export type HandshakeJobDataType = {
-  // Posting
-  postingId: number;
-  postingUrl: string;
-  externalApplyUrl?: string;
-
-  // Job
-  jobType: string; // e.g., Internship, Full-Time
-  employmentType: string; // e.g., Full-time, Part-time
-  title: string;
-  description: string;
-
-  // Company
-  company: string;
-  companyWebsite: string;
-  companyLogoUrl: string;
-
-  // Pay
-  payRate: string; // e.g., $42,411.00 Per year.
-  currency?: string; // e.g., USD, EUR
-
-  // location
-  city?: string;
-  country?: string;
-
-  // Status
-  status: Status;
-};
+export type HandshakeJobDataType = typeof jobTable.$inferSelect;
 
 // Resume:
 const emptyToUndefined = (val: unknown) =>
