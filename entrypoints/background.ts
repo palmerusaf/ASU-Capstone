@@ -9,6 +9,11 @@ export default defineBackground(() => {
       url: browser.runtime.getURL('/spa.html'),
       active: true,
     });
+
+    await browser.tabs.create({
+      url: 'https://app.joinhandshake.com/login',
+      active: true,
+    });
   });
 
   // Send Handshake request to fetch data
@@ -26,40 +31,67 @@ export default defineBackground(() => {
 });
 
 async function fetchJobData(jobId: number, token: string) {
+  const body = {
+    operationName: 'GetBasicJobDetails',
+    variables: { id: jobId },
+    query: `
+      query GetBasicJobDetails($id: ID!) {
+        job(id: $id) {
+          id
+          title
+          description
+          createdAt
+          expirationDate
+          employer {
+            id
+            name
+            logo { url }
+          }
+          locations {
+            id
+            name
+            city
+            state
+            country
+            latitude
+            longitude
+          }
+          salaryRange {
+            min
+            max
+            currency
+          }
+          jobType {
+            id
+            name
+          }
+          employmentType {
+            id
+            name
+          }
+          workStudy
+          remote  
+        }
+      }
+    `,
+  };
+
   const response = await fetch('https://app.joinhandshake.com/hs/graphql', {
     method: 'POST',
-    credentials: 'include', // includes cookies automatically
+    credentials: 'include', // cookies automatically included
     headers: {
       'Content-Type': 'application/json',
-      'x-csrf-token': token, // still required
+      'x-csrf-token': token, // required for GraphQL POST
     },
-    body: JSON.stringify({
-      operationName: 'JobSearchQuery',
-      variables: {
-        first: 25,
-        after: 'MA==',
-        input: {
-          filter: { jobIds: [jobId] }, // only fetch the job you care about
-          sort: { direction: 'ASC', field: 'RELEVANCE' },
-        },
-      },
-      query: `query JobSearchQuery($first: Int, $after: String, $input: JobSearchInput) {
-        jobSearch(first: $first, after: $after, input: $input) {
-          edges {
-            node {
-              job {
-                id
-                title
-                description
-                employer { id name logo { url } }
-              }
-            }
-          }
-        }
-      }`,
-    }),
+    body: JSON.stringify(body),
   });
 
-  if (!response.ok) throw new Error(`HTTP ${response.status}`);
-  return response.json();
+  const data = await response.json();
+
+  if (data.errors) {
+    console.error('GraphQL errors:', data.errors);
+    return null;
+  }
+
+  return data.data?.job;
 }
