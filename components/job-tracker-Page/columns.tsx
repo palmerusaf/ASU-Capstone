@@ -1,7 +1,7 @@
 // (client component) will contain our column definitions.
 import logo from '/wxt.svg';
 
-import { HandshakeJobDataType } from '@/utils/db/schema';
+import { HandshakeJobDataType, jobStatusEmojis } from '@/utils/db/schema';
 import { ColumnDef } from '@tanstack/react-table';
 
 export const columns: ColumnDef<HandshakeJobDataType>[] = [
@@ -46,5 +46,10 @@ export const columns: ColumnDef<HandshakeJobDataType>[] = [
   {
     accessorKey: 'status',
     header: 'Status',
+    cell: ({
+      row: {
+        original: { status },
+      },
+    }) => jobStatusEmojis[status],
   },
 ];
