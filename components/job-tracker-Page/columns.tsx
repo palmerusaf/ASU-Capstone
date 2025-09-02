@@ -42,6 +42,17 @@ export const columns: ColumnDef<HandshakeJobDataType>[] = [
   {
     accessorKey: 'payrate',
     header: 'Pay',
+    cell: ({
+      row: {
+        original: { payrate },
+      },
+    }) =>
+      payrate
+        ? new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: 'USD',
+        }).format(payrate / 100)
+        : 'n/a',
   },
   {
     accessorKey: 'status',
