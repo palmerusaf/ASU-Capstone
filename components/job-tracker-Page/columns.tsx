@@ -1,4 +1,5 @@
 // (client component) will contain our column definitions.
+import logo from '/wxt.svg';
 
 import { HandshakeJobDataType } from '@/utils/db/schema';
 import { ColumnDef } from '@tanstack/react-table';
@@ -8,7 +9,7 @@ export const columns: ColumnDef<HandshakeJobDataType>[] = [
     accessorKey: 'companyLogoUrl',
     header: '',
     cell: ({ row }) => {
-      const imgUrl = row.getValue('companyLogoUrl') as string;
+      const imgUrl = row.original.companyLogoUrl ?? logo;
       return <img src={imgUrl} alt={imgUrl} width='25' height='25' />;
     },
   },
@@ -47,32 +48,3 @@ export const columns: ColumnDef<HandshakeJobDataType>[] = [
     header: 'Status',
   },
 ];
-
-// export type HandshakeJobDataType = {
-//   // Posting
-//   postingId: number;
-//   postingUrl: string;
-//   externalApplyUrl?: string;
-
-//   // Job
-//   jobType: string; // e.g., Internship, Full-Time
-//   employmentType: string; // e.g., Full-time, Part-time
-//   title: string;
-//   description: string;
-
-//   // Company
-//   company: string;
-//   companyWebsite: string;
-//   companyLogoUrl: string;
-
-//   // Pay
-//   payRate: string; // e.g., $42,411.00 Per year.
-//   currency?: string; // e.g., USD, EUR
-
-//   // location
-//   city?: string;
-//   country?: string;
-
-//   // Status
-//   status: Status;
-// };
