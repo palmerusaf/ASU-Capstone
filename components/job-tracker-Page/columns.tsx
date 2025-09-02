@@ -36,6 +36,10 @@ export const columns: ColumnDef<HandshakeJobDataType>[] = [
     },
   },
   {
+    accessorKey: 'location',
+    header: 'Location',
+  },
+  {
     accessorKey: 'employmentType',
     header: 'Employment',
   },
@@ -61,6 +65,6 @@ export const columns: ColumnDef<HandshakeJobDataType>[] = [
       row: {
         original: { status },
       },
-    }) => jobStatusEmojis[status],
+    }) => <span className='text-lg'>{jobStatusEmojis[status]}</span>,
   },
 ];
