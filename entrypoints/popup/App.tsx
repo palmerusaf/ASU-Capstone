@@ -2,58 +2,50 @@ import '@/assets/tailwind.css';
 import { useState } from 'react';
 import { PublicPath } from 'wxt/browser';
 import './App.css';
-import useAuth from '@/utils/auth';
+import { HandshakeJobDataType, jobTable } from '@/utils/db/schema';
+import { parseFetchedJob } from '@/utils/popup/popup-utils';
+import { db } from '@/utils/db/db';
 
 function App() {
-  const session = useAuth();
-  const loggedIn = session !== null;
-  if (!loggedIn) {
-    return (
-      <>
-        <h1>Job Sourcerer</h1>
-        <div className='card'>
-          <button onClick={openSPA}>Log In</button>
-        </div>
-      </>
-    );
-  } else {
-    return <AuthenticatedUsersPopup />;
-  }
-}
-
-export default App;
-
-function AuthenticatedUsersPopup() {
   const [status, setStatus] = useState('');
-  // Finds and saves selected job posting in user's active (https://asu.joinhandshake.com/stu/postings) window.
-  function saveJob() {
-    browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
-      const activeTab = tabs[0];
-      if (activeTab?.id) {
-        // Makes call to handshake.content.ts to get job URL.
-        browser.tabs
-          .sendMessage(activeTab.id, { message: 'Handshake-getJobURL' })
-          .then((url) => {
-            // Make call to background.ts to get job information.
-            browser.runtime
-              .sendMessage({
-                type: 'Handshake-fetchJobData',
-                data: { arg1: url },
-              })
-              .then((response2) => {
-                if (response2?.status) {
-                  setStatus(response2.status);
-                } else {
-                  setStatus('Failed to save job.');
-                }
-              });
-          })
-          .catch((error) => {
-            console.error('Error: ', error);
-          });
-      }
+
+  async function openSPA() {
+    await browser.tabs.create({
+      url: browser.runtime.getURL('/spa.html' as PublicPath),
+      active: true,
     });
   }
+
+  async function saveJob() {
+    const [activeTab] = await browser.tabs.query({
+      active: true,
+      currentWindow: true,
+    });
+    if (!activeTab?.id) return setStatus('No active tab found.');
+
+    const jobId = await browser.tabs.sendMessage(activeTab.id, {
+      message: 'Handshake-getJobId',
+    });
+    if (jobId === null) return setStatus('No job ID found.');
+
+    const token = await browser.tabs.sendMessage(activeTab.id, {
+      message: 'Handshake-getToken',
+    });
+    if (token === null) return setStatus('Failed to get token.');
+
+    const fetchedJob = await browser.runtime.sendMessage({
+      type: 'Handshake-fetchJobData',
+      data: { jobId, token },
+    });
+    if (!fetchedJob) return setStatus('Fetch failed.');
+
+    const jobData = parseFetchedJob(fetchedJob);
+    if (jobData === null) return setStatus('Job Parsing failed.');
+
+    const saveOk = await saveJobData(jobData);
+    setStatus(!saveOk ? 'Failed to save job.' : 'Job Saved');
+  }
+
   return (
     <>
       <h1>Job Sourcerer</h1>
@@ -66,9 +58,13 @@ function AuthenticatedUsersPopup() {
   );
 }
 
-async function openSPA() {
-  await browser.tabs.create({
-    url: browser.runtime.getURL('/spa.html' as PublicPath),
-    active: true,
-  });
+export default App;
+
+async function saveJobData(jobData: typeof jobTable.$inferInsert) {
+  try {
+    await db.insert(jobTable).values(jobData);
+    return true;
+  } catch (error) {
+    return false;
+  }
 }
