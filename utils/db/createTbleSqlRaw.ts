@@ -10,12 +10,13 @@ CREATE TABLE "jobs" (
 	"company_name" text NOT NULL,
 	"description" text NOT NULL,
 	"remote" boolean NOT NULL,
-	"job_id" integer NOT NULL,
+	"job_id" text,
 	"title" text NOT NULL,
 	"location" text NOT NULL,
 	"pay_rate" integer,
 	"link" text NOT NULL,
-	"status" text DEFAULT 'recently added' NOT NULL
+	"status" text DEFAULT 'recently added' NOT NULL,
+	CONSTRAINT "jobs_job_id_unique" UNIQUE("job_id")
 );
 --> statement-breakpoint
 CREATE TABLE "testSchema" (
