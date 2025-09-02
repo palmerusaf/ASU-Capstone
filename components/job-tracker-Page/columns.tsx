@@ -13,6 +13,7 @@ import {
 
 import {
   HandshakeJobDataType,
+  jobStatus,
   jobStatusEmojis,
   jobTable,
 } from '@/utils/db/schema';
@@ -20,6 +21,8 @@ import { ColumnDef } from '@tanstack/react-table';
 import { Button } from '../ui/button';
 import { Label } from '@radix-ui/react-dropdown-menu';
 import { JobModal } from './job-modal';
+import { Pencil } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 
 export const columns: ColumnDef<HandshakeJobDataType>[] = [
   {
@@ -94,12 +97,37 @@ export const columns: ColumnDef<HandshakeJobDataType>[] = [
     header: 'Status',
     cell: ({
       row: {
-        original: { status },
+        original: { status, id },
       },
-    }) => <span className='text-lg'>{jobStatusEmojis[status]}</span>,
+    }) => <EditStatus id={id} status={status} />,
   },
   {
     header: 'Details',
     cell: ({ row: { original } }) => <JobModal data={original} />,
   },
 ];
+
+function EditStatus({
+  id,
+  status,
+}: Pick<typeof jobTable.$inferSelect, 'id' | 'status'>) {
+  return (
+    <Popover>
+      <PopoverTrigger className='cursor-pointer'>
+        <div className='text-lg gap-2 flex'>
+          {jobStatusEmojis[status]}
+          <Pencil className='size-4 my-auto ' />
+        </div>
+      </PopoverTrigger>
+      <PopoverContent className='grid gap-4'>
+        {jobStatus.map((el) => {
+          return (
+            <Button className='capitalize cursor-pointer'>
+              {jobStatusEmojis[el]} {el}
+            </Button>
+          );
+        })}
+      </PopoverContent>
+    </Popover>
+  );
+}

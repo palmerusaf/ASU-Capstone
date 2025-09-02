@@ -22,7 +22,7 @@ export const jobStatusEmojis = {
   applied: '📨', // sent application
   ghosted: '👻', // no reply
   interested: '⭐', // marked as interested
-  'not interested': '🚫', // declined / passed
+  'not interested': '👎', // declined / passed
   rejected: '❌', // got rejected
   'scheduled interview': '📅', // upcoming interview
   'search result': '🔍', // found in search
