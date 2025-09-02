@@ -7,7 +7,7 @@ import {
 } from 'drizzle-orm/pg-core';
 import { number, z } from 'zod';
 
-const jobStatus = [
+export const jobStatus = [
   'applied',
   'ghosted',
   'interested',

@@ -19,6 +19,7 @@ import {
 import { ColumnDef } from '@tanstack/react-table';
 import { Button } from '../ui/button';
 import { Label } from '@radix-ui/react-dropdown-menu';
+import { JobModal } from './job-modal';
 
 export const columns: ColumnDef<HandshakeJobDataType>[] = [
   {
@@ -102,28 +103,3 @@ export const columns: ColumnDef<HandshakeJobDataType>[] = [
     cell: ({ row: { original } }) => <JobModal data={original} />,
   },
 ];
-
-function JobModal({ data }: { data: typeof jobTable.$inferSelect }) {
-  return (
-    <Dialog>
-      <DialogTrigger>
-        <Button className='p-3 py-1'>View</Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Job Details</DialogTitle>
-          <DialogDescription></DialogDescription>
-        </DialogHeader>
-        <div>
-          <Label>Title:</Label>
-          {data.title}
-        </div>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button variant='outline'>Close</Button>
-          </DialogClose>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-}
