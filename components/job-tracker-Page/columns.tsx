@@ -133,16 +133,22 @@ function EditStatus({
         </div>
       </PopoverTrigger>
       <PopoverContent className='grid gap-4'>
-        {jobStatus.map((el) => {
-          return (
-            <Button
-              onClick={() => updateStatus(el)}
-              className='capitalize cursor-pointer'
-            >
-              {jobStatusEmojis[el]} {el}
-            </Button>
-          );
-        })}
+        {jobStatus
+          .filter((el) => {
+            if (el === 'search result') return false;
+            if (el === 'recently added') return false;
+            return true;
+          })
+          .map((el) => {
+            return (
+              <Button
+                onClick={() => updateStatus(el)}
+                className='capitalize cursor-pointer'
+              >
+                {jobStatusEmojis[el]} {el}
+              </Button>
+            );
+          })}
       </PopoverContent>
     </Popover>
   );
