@@ -23,6 +23,9 @@ import { Label } from '@radix-ui/react-dropdown-menu';
 import { JobModal } from './job-modal';
 import { Pencil } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { db } from '@/utils/db/db';
+import { eq } from 'drizzle-orm';
+import { useQueryClient } from '@tanstack/react-query';
 
 export const columns: ColumnDef<HandshakeJobDataType>[] = [
   {
@@ -86,10 +89,10 @@ export const columns: ColumnDef<HandshakeJobDataType>[] = [
     }) =>
       payrate
         ? new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-            maximumFractionDigits: 0,
-          }).format(payrate / 100)
+          style: 'currency',
+          currency: 'USD',
+          maximumFractionDigits: 0,
+        }).format(payrate / 100)
         : 'n/a',
   },
   {
@@ -111,6 +114,16 @@ function EditStatus({
   id,
   status,
 }: Pick<typeof jobTable.$inferSelect, 'id' | 'status'>) {
+  const queryClient = useQueryClient();
+
+  async function updateStatus(newStatus: typeof status) {
+    await db
+      .update(jobTable)
+      .set({ status: newStatus })
+      .where(eq(jobTable.id, id));
+    queryClient.invalidateQueries({ queryKey: ['savedJobs'] });
+  }
+
   return (
     <Popover>
       <PopoverTrigger className='cursor-pointer'>
@@ -122,7 +135,10 @@ function EditStatus({
       <PopoverContent className='grid gap-4'>
         {jobStatus.map((el) => {
           return (
-            <Button className='capitalize cursor-pointer'>
+            <Button
+              onClick={() => updateStatus(el)}
+              className='capitalize cursor-pointer'
+            >
               {jobStatusEmojis[el]} {el}
             </Button>
           );
