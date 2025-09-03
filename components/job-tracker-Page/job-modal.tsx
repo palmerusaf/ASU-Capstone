@@ -11,6 +11,9 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import DOMPurify from 'dompurify';
 import { jobStatusEmojis, jobTable } from '@/utils/db/schema';
+import { db } from '@/utils/db/db';
+import { eq } from 'drizzle-orm';
+import { useQueryClient } from '@tanstack/react-query';
 
 function SafeHTML({ html }: { html: string }) {
   const clean = DOMPurify.sanitize(html);
@@ -23,6 +26,7 @@ function SafeHTML({ html }: { html: string }) {
 }
 
 export function JobModal({ data }: { data: typeof jobTable.$inferSelect }) {
+  const qclient = useQueryClient();
   return (
     <Dialog>
       <DialogTrigger className='cursor-pointer'>
@@ -68,10 +72,10 @@ export function JobModal({ data }: { data: typeof jobTable.$inferSelect }) {
             <p>
               {data.payrate
                 ? new Intl.NumberFormat('en-US', {
-                    style: 'currency',
-                    currency: 'USD',
-                    maximumFractionDigits: 0,
-                  }).format(data.payrate / 100)
+                  style: 'currency',
+                  currency: 'USD',
+                  maximumFractionDigits: 0,
+                }).format(data.payrate / 100)
                 : 'n/a'}
             </p>
           </div>
@@ -87,7 +91,17 @@ export function JobModal({ data }: { data: typeof jobTable.$inferSelect }) {
               {jobStatusEmojis[data.status]} {data.status}
             </p>
           </div>
-
+          <div>
+            <Button
+              onClick={async () => {
+                await db.delete(jobTable).where(eq(jobTable.id, data.id));
+                qclient.invalidateQueries({ queryKey: ['savedJobs'] });
+              }}
+              variant={'destructive'}
+            >
+              Delete
+            </Button>
+          </div>
           <div className='md:col-span-2'>
             <a
               href={data.link}
