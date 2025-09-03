@@ -1,4 +1,10 @@
-import { HandshakeJobDataType, jobTable } from '@/utils/db/schema';
+import {
+  HandshakeJobDataType,
+  jobStatus,
+  jobStatusEmojis,
+  jobTable,
+} from '@/utils/db/schema';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useQuery } from '@tanstack/react-query';
 import { columns } from './columns';
 import { DataTable } from './data-table';
@@ -13,6 +19,9 @@ export function JobTrackerPage() {
     queryKey: ['savedJobs'],
     queryFn: getSavedJobs,
   });
+  const [tabValue, setTabValue] = useState<
+    typeof jobTable.$inferInsert.status | 'all'
+  >('all');
 
   if (isPending) {
     return <div className='p-24 text-center'>Loading saved jobs...</div>;
@@ -25,8 +34,30 @@ export function JobTrackerPage() {
   }
 
   return (
-    <div className='container mx-auto py-8 px-12'>
-      <DataTable columns={columns} data={data} />
+    <div className='grid gap-2 content-center px-12'>
+      <Tabs
+        value={tabValue}
+        className='flex justify-center'
+        onValueChange={(val) => setTabValue(val as typeof tabValue)}
+      >
+        <TabsList>
+          <TabsTrigger className='cursor-pointer' value='all'>
+            All
+          </TabsTrigger>
+          {jobStatus.map((el) => (
+            <TabsTrigger className='cursor-pointer' value={el}>
+              {jobStatusEmojis[el]}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
+      <DataTable
+        columns={columns}
+        data={data.filter((el) => {
+          if (tabValue === 'all') return true;
+          return el.status === tabValue;
+        })}
+      />
     </div>
   );
 }
