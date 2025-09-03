@@ -8,14 +8,14 @@ import {
 import { number, z } from 'zod';
 
 export const jobStatus = [
-  'applied',
-  'ghosted',
-  'interested',
-  'not interested',
-  'rejected',
-  'scheduled interview',
   'search result',
   'recently added',
+  'interested',
+  'applied',
+  'scheduled interview',
+  'ghosted',
+  'rejected',
+  'not interested',
 ] as const;
 
 export const jobStatusEmojis = {
