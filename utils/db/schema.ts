@@ -1,13 +1,13 @@
 import {
-  pgTable,
-  integer,
-  text,
-  boolean,
-  timestamp,
+    boolean,
+    integer,
+    pgTable,
+    text,
+    timestamp,
 } from 'drizzle-orm/pg-core';
-import { number, z } from 'zod';
+import { z } from 'zod';
 
-const jobStatus = [
+export const jobStatus = [
   'applied',
   'ghosted',
   'interested',
@@ -18,7 +18,7 @@ const jobStatus = [
   'recently added',
 ] as const;
 
-const employmentTypeList = [
+export const employmentTypeList = [
   'Full-Time',
   'Part-Time',
   'Temporary',
@@ -53,6 +53,23 @@ export const jobTable = pgTable('jobs', {
 });
 
 export type HandshakeJobDataType = typeof jobTable.$inferSelect;
+
+
+// Manual Add Job
+export const addJobFormSchema = z.object({
+  companyName: z.string().min(1, 'Company Name Required'),
+  link: z.string().url('Invalid URL'), // Posting URL
+  companyLogoUrl: z.string().url('Invalid URL').optional(),
+  title: z.string().min(1, 'Job Title Required'), // Job Title
+  description: z.string().min(1, 'Job Description Required'), // Job Description
+  intern: z.boolean(),
+  location: z.string().min(1, 'Job Location Required'),
+  remote: z.boolean(),
+  employmentType: z.enum(employmentTypeList),
+  payRate: z.number().int().optional(), // PayRate, in cents
+  status: z.enum(jobStatus), // Application status
+}); 
+
 
 // Resume:
 const emptyToUndefined = (val: unknown) =>
