@@ -206,7 +206,6 @@ export function AddJobForm() {
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name='location'
