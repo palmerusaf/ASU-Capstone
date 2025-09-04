@@ -1,3 +1,4 @@
+import { AddJobPage } from '@/components/add-job-Page/page';
 import { DisplaySettings } from '@/components/display-settings';
 import { JobTrackerPage } from '@/components/job-tracker-Page/page';
 // import { LoginPage } from '@/components/login-page';
@@ -33,6 +34,10 @@ function AuthenticatedUsersSPA() {
             {
               subMenu: 'View Jobs',
               content: <JobTrackerPage />,
+            },
+                        {
+              subMenu: 'Add Job',
+              content: <AddJobPage />,
             },
           ],
         },
