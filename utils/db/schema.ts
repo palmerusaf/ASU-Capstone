@@ -77,7 +77,7 @@ export const addJobFormSchema = z.object({
   location: z.string().min(1, 'Job Location Required'),
   remote: z.boolean(),
   employmentType: z.enum(employmentTypeList),
-  payRate: z.number().int().optional(), // PayRate, in cents
+  payrate: z.number().int().optional(), // PayRate, in cents
   status: z.enum(jobStatus), // Application status
 }); 
 
