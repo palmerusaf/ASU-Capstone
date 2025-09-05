@@ -7,16 +7,27 @@ import {
 } from 'drizzle-orm/pg-core';
 import { number, z } from 'zod';
 
-const jobStatus = [
-  'applied',
-  'ghosted',
-  'interested',
-  'not interested',
-  'rejected',
-  'scheduled interview',
+export const jobStatus = [
   'search result',
   'recently added',
+  'interested',
+  'applied',
+  'scheduled interview',
+  'ghosted',
+  'rejected',
+  'not interested',
 ] as const;
+
+export const jobStatusEmojis = {
+  applied: '📨', // sent application
+  ghosted: '👻', // no reply
+  interested: '⭐', // marked as interested
+  'not interested': '👎', // declined / passed
+  rejected: '❌', // got rejected
+  'scheduled interview': '📅', // upcoming interview
+  'search result': '🔍', // found in search
+  'recently added': '🆕', // new job entry
+} as const;
 
 const employmentTypeList = [
   'Full-Time',
