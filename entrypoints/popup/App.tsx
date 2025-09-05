@@ -5,6 +5,7 @@ import './App.css';
 import { HandshakeJobDataType, jobTable } from '@/utils/db/schema';
 import { parseFetchedJob } from '@/utils/popup/popup-utils';
 import { db } from '@/utils/db/db';
+import { saveJobData } from '@/utils/db/saveJobData';
 
 function App() {
   const [status, setStatus] = useState('');
@@ -59,12 +60,3 @@ function App() {
 }
 
 export default App;
-
-async function saveJobData(jobData: typeof jobTable.$inferInsert) {
-  try {
-    await db.insert(jobTable).values(jobData);
-    return true;
-  } catch (error) {
-    return false;
-  }
-}
