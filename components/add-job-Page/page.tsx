@@ -43,13 +43,14 @@ export function AddJobForm() {
       intern: false,
       location: '',
       remote: false,
-      payRate: undefined,
+      payrate: undefined,
       status: jobStatus[7],
     },
   });
 
   async function onSubmit(values: z.infer<typeof addJobFormSchema>) {
     const saved = await saveJobData(values);
+    console.log(values)
     if (saved) {
       toast.success('Job saved successfully!');
       form.reset();
@@ -225,7 +226,7 @@ export function AddJobForm() {
           <div className='w-full grid grid-cols-2 gap-8'>
             <FormField
               control={form.control}
-              name='payRate'
+              name='payrate'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Pay Rate (USD)</FormLabel>
