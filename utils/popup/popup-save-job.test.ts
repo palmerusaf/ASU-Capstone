@@ -107,81 +107,29 @@ export const onsiteData = {
   remote: false,
 };
 describe('parse handshake fetch', () => {
-  test('parses remote data', () => {
-    const pd = parseFetchedJob(remoteData);
-    expect(pd).not.toBeNull();
-    if (pd === null) return;
-    const {
-      closeOutDate,
-      companyLogoUrl,
-      companyName,
-      datePosted,
-      description,
-      employmentType,
-      intern,
-      jobId,
-      link,
-      location,
-      remote,
-      payrate,
-      title,
-    } = pd;
+  test('parses data', () => {
+    [remoteData, onsiteData].forEach((el) => {
+      const pd = parseFetchedJob(el);
+      expect(pd).not.toBeNull();
+      if (pd === null) return;
 
-    expect(closeOutDate).toStrictEqual(new Date(remoteData.expirationDate));
-    expect(companyLogoUrl).toBe(remoteData.employer.logo);
-    expect(companyName).toBe(remoteData.employer.name);
-    expect(datePosted).toStrictEqual(new Date(remoteData.createdAt));
-    expect(description).toBe(remoteData.description);
-    expect(employmentType).toBe(remoteData.employmentType.name);
-    expect(intern).toBe(false);
-    expect(jobId).toBe(remoteData.id);
-    expect(link).toBe(`https://app.joinhandshake.com/jobs/${remoteData.id}`);
-    expect(location).toBe('remote');
-    expect(remote).toBe(remoteData.remote);
-    expect(title).toBe(remoteData.title);
-    const testRate = Math.floor(
-      (remoteData.salaryRange.max + remoteData.salaryRange.min) / 2
-    );
-    expect(payrate).toBe(testRate);
-  });
-
-  test('parses onsite data', () => {
-    const pd = parseFetchedJob(onsiteData);
-    expect(pd).not.toBeNull();
-    if (pd === null) return;
-
-    const {
-      closeOutDate,
-      companyLogoUrl,
-      companyName,
-      datePosted,
-      description,
-      employmentType,
-      intern,
-      jobId,
-      link,
-      location,
-      remote,
-      payrate,
-      title,
-    } = pd;
-
-    expect(closeOutDate).toStrictEqual(new Date(onsiteData.expirationDate));
-    expect(companyLogoUrl).toBe(onsiteData.employer.logo.url);
-    expect(companyName).toBe(onsiteData.employer.name);
-    expect(datePosted).toStrictEqual(new Date(onsiteData.createdAt));
-    expect(description).toBe(onsiteData.description);
-    expect(employmentType).toBe(onsiteData.employmentType.name);
-    expect(intern).toBe(false);
-    expect(jobId).toBe(onsiteData.id);
-    expect(link).toBe(`https://app.joinhandshake.com/jobs/${onsiteData.id}`);
-    expect(location).toBe(onsiteData.locations[0].name);
-    expect(remote).toBe(onsiteData.remote);
-    expect(title).toBe(onsiteData.title);
-    const testRate = Math.floor(
-      (onsiteData.salaryRange.max + onsiteData.salaryRange.min) / 2
-    );
-    expect(payrate).toBe(testRate);
+      expect(pd.closeOutDate).toStrictEqual(new Date(el.expirationDate));
+      expect(pd.companyLogoUrl).toBe(el.employer.logo?.url ?? null);
+      expect(pd.companyName).toBe(el.employer.name);
+      expect(pd.datePosted).toStrictEqual(new Date(el.createdAt));
+      expect(pd.description).toBe(el.description);
+      expect(pd.employmentType).toBe(el.employmentType.name);
+      expect(pd.intern).toBe(false);
+      expect(pd.jobId).toBe(`handshake-${el.id}`);
+      expect(pd.link).toBe(`https://app.joinhandshake.com/jobs/${el.id}`);
+      expect(pd.location).toBe(el.locations?.[0]?.name ?? 'remote');
+      expect(pd.remote).toBe(el.remote);
+      expect(pd.title).toBe(el.title);
+      const testRate = Math.floor(
+        (el.salaryRange.max + el.salaryRange.min) / 2
+      );
+      expect(pd.payrate).toBe(testRate);
+    });
   });
 
   test('invalid data returns null', () => {

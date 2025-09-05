@@ -13,6 +13,12 @@ export default function App() {
   // disable auth
   // const session = useAuth();
   // const loggedIn = session !== null;
+  useEffect(() => {
+    document.documentElement.classList.toggle(
+      'dark',
+      window.matchMedia('(prefers-color-scheme: dark)').matches
+    );
+  }, []);
   return (
     <QueryProvider>
       <Toaster richColors position='top-center' />
