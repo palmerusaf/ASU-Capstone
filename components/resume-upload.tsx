@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { addResume } from "@/utils/db/localStorage";
 import { ResumeSchema } from "@/utils/db/schema";
+import ResumePasteForm from '@/components/external-resume-upload.tsx';
 
 export function ResumeForm() {
   const form = useForm<z.infer<typeof ResumeSchema>>({
@@ -310,5 +311,29 @@ export function ResumeForm() {
 }
 
 export function ResumeUpload() {
-  return <div className="w-full"><ResumeForm /></div>;
+  const [mode, setMode] = useState<"builder" | "paste">("builder");
+  return (
+    <div className="w-full max-w-5xl mx-auto p-6 space-y-4">
+      <h1 className="text-2xl font-semibold">Upload Resume</h1>
+
+      <div className="inline-flex rounded-xl border overflow-hidden">
+        <button
+          className={`px-4 py-2 text-sm ${mode === "builder" ? "bg-black text-white" : ""}`}
+          onClick={() => setMode("builder")}
+        >
+          Build (JSON Resume)
+        </button>
+        <button
+          className={`px-4 py-2 text-sm ${mode === "paste" ? "bg-black text-white" : ""}`}
+          onClick={() => setMode("paste")}
+        >
+          Paste Text
+        </button>
+      </div>
+
+      <div className="mt-4">
+        {mode === "builder" ? <ResumeForm /> : <ResumePasteForm />}
+      </div>
+    </div>
+  );
 }
