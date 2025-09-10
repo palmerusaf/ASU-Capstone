@@ -1,17 +1,6 @@
 // (client component) will contain our column definitions.
 import logo from '/wxt.svg';
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-
-import {
   HandshakeJobDataType,
   jobStatus,
   jobStatusEmojis,
@@ -19,7 +8,6 @@ import {
 } from '@/utils/db/schema';
 import { ColumnDef } from '@tanstack/react-table';
 import { Button } from '../ui/button';
-import { Label } from '@radix-ui/react-dropdown-menu';
 import { JobModal } from './job-modal';
 import { Pencil } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
@@ -31,8 +19,12 @@ export const columns: ColumnDef<HandshakeJobDataType>[] = [
   {
     accessorKey: 'companyLogoUrl',
     header: '',
-    cell: ({ row }) => {
-      const imgUrl = row.original.companyLogoUrl ?? logo;
+    cell: ({
+      row: {
+        original: { companyLogoUrl },
+      },
+    }) => {
+      const imgUrl = !companyLogoUrl?.length ? logo : companyLogoUrl;
       return (
         <img
           className='ml-2'
