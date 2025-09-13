@@ -16,6 +16,8 @@ import { toast } from "sonner";
 import { addResume } from "@/utils/db/localStorage";
 import { ResumeSchema } from "@/utils/db/schema";
 import ResumePasteForm from '@/components/external-resume-upload.tsx';
+import { addRawResume } from '@/utils/db/rawResumes.ts';
+import { concatResumeFields } from '@/utils/concatResumeFields.ts';
 
 export function ResumeForm() {
   const form = useForm<z.infer<typeof ResumeSchema>>({
@@ -75,6 +77,9 @@ export function ResumeForm() {
 
         try {
           await addResume(data); // Saves to 'local:resumes'
+          const name = data?.basics?.name || "Unnamed Resume";
+          const rawText = concatResumeFields(data);
+          addRawResume({ name, rawText, source: "builder", jsonId: null }); // Save raw text resume
           toast.success("Resume saved successfully!");
         } catch (e) {
           console.error("Error saving resume:", e);

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { addResume } from "@/utils/db/localStorage";
 import { textToJsonResume } from "@/utils/textToJsonResume";
+import { addRawResume } from '@/utils/db/rawResumes.ts';
 
 const STOP = new Set(["a","an","and","the","or","to","of","for","in","on","with","at","by","from","as","is","are","be","this","that","it","was","were","i","me","my"]);
 function extractKeywords(text: string) {
@@ -26,7 +27,9 @@ export default function ResumePasteForm() {
     }
     try {
       const json = textToJsonResume(text);
-      await addResume(json);       // same localStorage method used by regular resume upload
+      await addResume(json);       // same localStorage method used by regular resume upload - for display
+      const name = json?.basics?.name || "Pasted Resume";
+      addRawResume({ name, rawText: text, source: "paste", jsonId: null }); // Raw resume save
       toast.success("Pasted resume saved!");
       setText("");
     } catch (e) {
