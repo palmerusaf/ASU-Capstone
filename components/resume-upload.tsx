@@ -317,20 +317,32 @@ export function ResumeForm() {
 
 export function ResumeUpload() {
   const [mode, setMode] = useState<"builder" | "paste">("builder");
+  const base =
+    "px-4 py-2 text-sm font-medium rounded-full border transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500";
+  const active = // styling fix to have selected upload button be colored differently than unselected one
+    "bg-black text-white border-black dark:bg-white dark:text-zinc-900 dark:border-white shadow";
+  const inactive =
+    "bg-white text-zinc-900 border-zinc-300 hover:bg-zinc-50 " +
+    "dark:bg-zinc-900 dark:text-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800";
   return (
     <div className="w-full max-w-5xl mx-auto p-6 space-y-4">
       <h1 className="text-2xl font-semibold">Upload Resume</h1>
 
-      <div className="inline-flex rounded-xl border overflow-hidden">
+      <div className="inline-flex rounded-full p-1 bg-transparent gap-2">
         <button
-          className={`px-4 py-2 text-sm ${mode === "builder" ? "bg-black text-white" : ""}`}
+          type="button"
+          aria-pressed={mode === "builder"}
           onClick={() => setMode("builder")}
+          className={`${base} ${mode === "builder" ? active : inactive}`}
         >
           Build (JSON Resume)
         </button>
+
         <button
-          className={`px-4 py-2 text-sm ${mode === "paste" ? "bg-black text-white" : ""}`}
+          type="button"
+          aria-pressed={mode === "paste"}
           onClick={() => setMode("paste")}
+          className={`${base} ${mode === "paste" ? active : inactive}`}
         >
           Paste Text
         </button>
