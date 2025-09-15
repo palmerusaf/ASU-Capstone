@@ -63,7 +63,10 @@ export function ResumeDisplay() {
         <select
           value={selectedIndex}
           onChange={(e) => setSelectedIndex(Number(e.target.value))}
-          className="border rounded-md px-3 py-2 text-sm"
+          className="border border-slate-700 rounded-md px-3 py-2 text-sm
+             bg-slate-900 text-slate-100 shadow-sm
+             focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500
+             min-w-[16rem] max-w-[20rem] truncate"
         >
           {nameOptions.map(({ label, index }) => (
             <option key={index} value={index}>{label}</option>
