@@ -50,7 +50,6 @@ export function AddJobForm() {
 
   async function onSubmit(values: z.infer<typeof addJobFormSchema>) {
     const saved = await saveJobData(values);
-    console.log(values)
     if (saved) {
       toast.success('Job saved successfully!');
       form.reset();
@@ -88,7 +87,11 @@ export function AddJobForm() {
                 <FormItem>
                   <FormLabel>Company Logo URL</FormLabel>
                   <FormControl>
-                    <Input placeholder='' {...field} />
+                    <Input
+                      placeholder=''
+                      {...field}
+                      value={field.value ?? ''}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
