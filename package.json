@@ -5,18 +5,18 @@
   "version": "0.0.4",
   "type": "module",
   "scripts": {
-    "build": "pnpm gendb;wxt build",
+    "build": "pnpm gendb && wxt build",
     "build-storybook": "storybook build",
-    "build:firefox": "pnpm gendb;wxt build -b firefox",
+    "build:firefox": "pnpm gendb && wxt build -b firefox",
     "compile": "tsc --noEmit",
-    "dev": "pnpm gendb;wxt",
-    "dev:firefox": "pnpm gendb;wxt -b firefox",
+    "dev": "pnpm gendb && wxt",
+    "dev:firefox": "pnpm gendb && wxt -b firefox",
     "gendb": "node ./genDb.js",
     "postinstall": "wxt prepare",
     "storybook": "storybook dev -p 6006",
-    "test": "pnpm gendb;vitest",
-    "zip": "pnpm gendb;wxt zip",
-    "zip:firefox": "pnpm gendb;wxt zip -b firefox"
+    "test": "pnpm gendb && vitest",
+    "zip": "pnpm gendb && wxt zip",
+    "zip:firefox": "pnpm gendb && wxt zip -b firefox"
   },
   "engines": {
     "pnpm": "10"
