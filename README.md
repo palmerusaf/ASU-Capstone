@@ -100,6 +100,8 @@ Simplify the job/internship application process by automating search, applicatio
 
 Download from the Chrome Web Store [here](https://chromewebstore.google.com/detail/job-sourcerer/iilhhpgfemomamfecgiaaooobfbjjhpc).
 
+Download from the Firefox Add-on Store [here](https://addons.mozilla.org/en-US/firefox/addon/job-sourcerer/).
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- USAGE EXAMPLES -->
