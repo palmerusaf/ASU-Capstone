@@ -14,6 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { db } from '@/utils/db/db';
 import { eq } from 'drizzle-orm';
 import { useQueryClient } from '@tanstack/react-query';
+import { ResumeMatchesModal } from './resume-matches-modal';
 
 export const columns: ColumnDef<HandshakeJobDataType>[] = [
   {
@@ -81,10 +82,10 @@ export const columns: ColumnDef<HandshakeJobDataType>[] = [
     }) =>
       payrate
         ? new Intl.NumberFormat('en-US', {
-          style: 'currency',
-          currency: 'USD',
-          maximumFractionDigits: 0,
-        }).format(payrate / 100)
+            style: 'currency',
+            currency: 'USD',
+            maximumFractionDigits: 0,
+          }).format(payrate / 100)
         : 'n/a',
   },
   {
@@ -99,6 +100,10 @@ export const columns: ColumnDef<HandshakeJobDataType>[] = [
   {
     header: 'Details',
     cell: ({ row: { original } }) => <JobModal data={original} />,
+  },
+  {
+    header: 'Resume',
+    cell: ({ row: { original } }) => <ResumeMatchesModal data={original} />,
   },
 ];
 
