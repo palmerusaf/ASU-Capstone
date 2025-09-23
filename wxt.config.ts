@@ -12,10 +12,12 @@ const authRedirectUrl =
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
-  //   runner: {
-  //     chromiumProfile: './.chrome-dev-folder/',
-  //     keepProfileChanges: true,
-  //   },
+  // run this in the console to seed the dev profile
+  // chromium --user-data-dir=$(pwd)/.chrome-dev-folder --no-first-run --headless=new about:blank
+  runner: {
+    chromiumProfile: './.chrome-dev-folder/',
+    keepProfileChanges: true,
+  },
   manifest: {
     permissions: ['storage', 'identity'],
     host_permissions: [
