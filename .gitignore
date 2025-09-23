@@ -5,6 +5,4 @@
 .env.submit
 
 *storybook.log
-drizzle
-.chrome-dev-folder/*
-!.chrome-dev-folder/readme
+.chrome-dev-folder/

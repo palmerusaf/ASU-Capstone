@@ -1,4 +1,5 @@
 import tailwindcss from '@tailwindcss/vite';
+import { resolve } from 'node:path';
 import { defineConfig, WxtViteConfig } from 'wxt';
 
 const vite = () =>
@@ -12,10 +13,10 @@ const authRedirectUrl =
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
-//   runner: {
-//     chromiumProfile: './.chrome-dev-folder/',
-//     keepProfileChanges: true,
-//   },
+  runner: {
+    chromiumProfile: resolve('./.chrome-dev-folder/'),
+    keepProfileChanges: true,
+  },
   manifest: {
     permissions: ['storage', 'identity'],
     host_permissions: [
@@ -31,6 +32,10 @@ export default defineConfig({
       client_id:
         '279554326966-7pna66lsrfre17smtt0dsdbhiraqshbh.apps.googleusercontent.com',
       scopes: ['openid', 'email', 'profile'],
+    },
+    content_security_policy: {
+      extension_pages:
+        "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'",
     },
   },
   extensionApi: 'chrome',

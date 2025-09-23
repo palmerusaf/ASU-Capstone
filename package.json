@@ -2,7 +2,7 @@
   "name": "job-sourcerer",
   "description": "A centralized job application platform.",
   "private": true,
-  "version": "0.0.4",
+  "version": "0.0.5",
   "type": "module",
   "scripts": {
     "build": "pnpm gendb && wxt build",
@@ -89,6 +89,6 @@
     "typescript": "^5.6.3",
     "vite": "^6.2.2",
     "vitest": "^3.0.9",
-    "wxt": "^0.19.13"
+    "wxt": "^0.20.7"
   }
 }
