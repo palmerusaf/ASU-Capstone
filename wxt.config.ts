@@ -1,4 +1,5 @@
 import tailwindcss from '@tailwindcss/vite';
+import { resolve } from 'node:path';
 import { defineConfig, WxtViteConfig } from 'wxt';
 
 const vite = () =>
@@ -15,7 +16,7 @@ export default defineConfig({
   // run this in the console to seed the dev profile
   // chromium --user-data-dir=$(pwd)/.chrome-dev-folder --no-first-run --headless=new about:blank
   runner: {
-    chromiumProfile: './.chrome-dev-folder/',
+    chromiumProfile: resolve('./.chrome-dev-folder/'),
     keepProfileChanges: true,
   },
   manifest: {
