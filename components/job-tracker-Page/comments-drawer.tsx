@@ -34,11 +34,11 @@ export function CommentsDrawer({ id }: { id: number }) {
       <SheetTrigger>
         <Button>Comments</Button>
       </SheetTrigger>
-      <SheetContent>
+      <SheetContent className='overflow-y-auto'>
         <SheetHeader>
           <SheetTitle className='text-xl'>Comments</SheetTitle>
-          <div>
-            {(data?.length && data?.map((e) => e.comment + '\n')) ||
+          <div className='grid gap-3'>
+            {(data?.length && data?.map((el) => <ShowComment data={el} />)) ||
               'No Comments'}
             <NewComment />
           </div>
@@ -85,4 +85,26 @@ export function CommentsDrawer({ id }: { id: number }) {
       </Form>
     );
   }
+}
+
+function ShowComment({
+  data: { comment, createdAt, id, jobId, updatedAt },
+}: {
+  data: typeof jobCommentsTable.$inferSelect;
+}) {
+  const [edit, setEdit] = useState(false);
+  if (edit) return 'edit mode';
+
+  return (
+    <div className='flex flex-col'>
+      <div className='text-lg'>{comment}</div>
+      <div className='ml-auto'>Created: {createdAt.toLocaleString()}</div>
+      {createdAt.valueOf() !== updatedAt.valueOf() && (
+        <div className='ml-auto'>Modified: {updatedAt.toLocaleString()}</div>
+      )}
+      <Button variant={'outline'} size={'sm'} className='ml-auto'>
+        Edit
+      </Button>
+    </div>
+  );
 }
