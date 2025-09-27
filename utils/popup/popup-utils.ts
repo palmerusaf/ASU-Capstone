@@ -37,7 +37,7 @@ export function parseFetchedJob(
     companyName: d.employer.name,
     description: d.description,
     remote: d.remote ?? false,
-    jobId: `handshake-${d.id}`,
+    jobIdFromSite: `handshake-${d.id}`,
     title: d.title,
     location: d.locations?.[0]?.name ?? 'remote',
     payrate: d.salaryRange

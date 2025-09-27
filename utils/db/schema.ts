@@ -51,7 +51,7 @@ export const jobTable = pgTable('jobs', {
   companyName: text('company_name').notNull(),
   description: text('description').notNull(),
   remote: boolean('remote').notNull(),
-  jobId: text('job_id').unique(),
+  jobIdFromSite: text('job_id').unique(),
   title: text('title').notNull(),
   location: text('location').notNull(),
   //in USD cents
