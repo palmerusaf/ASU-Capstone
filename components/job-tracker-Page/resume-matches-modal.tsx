@@ -21,7 +21,11 @@ import {
   TableRow,
 } from '../ui/table';
 
-export function ResumeMatchesModal({ data }: { data: typeof jobTable.$inferSelect }) {
+export function ResumeMatchesModal({
+  data,
+}: {
+  data: typeof jobTable.$inferSelect;
+}) {
   const [resumes, setResumes] = useState<{ text: string; score: number }[]>([]);
 
   useEffect(() => {
@@ -44,7 +48,9 @@ export function ResumeMatchesModal({ data }: { data: typeof jobTable.$inferSelec
   return (
     <Dialog>
       <DialogTrigger>
-        <button className='text-blue-600 underline'>View Matches</button>
+        <div className="p-3 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 py-1">
+          Matches
+        </div>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
