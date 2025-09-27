@@ -1,5 +1,4 @@
 import tailwindcss from '@tailwindcss/vite';
-import { resolve } from 'node:path';
 import { defineConfig, WxtViteConfig } from 'wxt';
 
 const vite = () =>
@@ -14,7 +13,7 @@ const authRedirectUrl =
 // See https://wxt.dev/api/config.html
 export default defineConfig({
   runner: {
-    chromiumProfile: resolve('./.chrome-dev-folder/'),
+    chromiumProfile: './.chrome-dev-folder/',
     keepProfileChanges: true,
   },
   manifest: {
