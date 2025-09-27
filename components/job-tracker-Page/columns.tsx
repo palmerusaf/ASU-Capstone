@@ -82,10 +82,10 @@ export const columns: ColumnDef<JobSelectType>[] = [
     }) =>
       payrate
         ? new Intl.NumberFormat('en-US', {
-          style: 'currency',
-          currency: 'USD',
-          maximumFractionDigits: 0,
-        }).format(payrate / 100)
+            style: 'currency',
+            currency: 'USD',
+            maximumFractionDigits: 0,
+          }).format(payrate / 100)
         : 'n/a',
   },
   {
@@ -98,12 +98,14 @@ export const columns: ColumnDef<JobSelectType>[] = [
     }) => <EditStatus id={id} status={status} />,
   },
   {
-    header: 'Details',
-    cell: ({ row: { original } }) => <JobModal data={original} />,
-  },
-  {
     header: 'Resume',
     cell: ({ row: { original } }) => <ResumeMatchesModal data={original} />,
+  },
+  {
+    header: 'Actions',
+    cell: ({ row: { original } }) => (
+      <ActionMenu items={[<JobModal data={original} />]} />
+    ),
   },
 ];
 
@@ -147,6 +149,19 @@ function EditStatus({
             );
           })}
       </PopoverContent>
+    </Popover>
+  );
+}
+
+function ActionMenu({ items }: { items: React.ReactNode[] }) {
+  return (
+    <Popover>
+      <PopoverTrigger className='cursor-pointer'>
+        <div className="p-3 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 py-1">
+          View
+        </div>
+      </PopoverTrigger>
+      <PopoverContent className='grid gap-4 max-w-fit'>{items}</PopoverContent>
     </Popover>
   );
 }
