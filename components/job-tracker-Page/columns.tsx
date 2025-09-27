@@ -1,6 +1,29 @@
-// (client component) will contain our column definitions.
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
+
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 import logo from '/wxt.svg';
 import {
+  jobCommentsTable,
   JobSelectType,
   jobStatus,
   jobStatusEmojis,
@@ -15,6 +38,8 @@ import { db } from '@/utils/db/db';
 import { eq } from 'drizzle-orm';
 import { useQueryClient } from '@tanstack/react-query';
 import { ResumeMatchesModal } from './resume-matches-modal';
+import { Input } from '../ui/input';
+import { Textarea } from '../ui/textarea';
 
 export const columns: ColumnDef<JobSelectType>[] = [
   {
@@ -104,7 +129,12 @@ export const columns: ColumnDef<JobSelectType>[] = [
   {
     header: 'Actions',
     cell: ({ row: { original } }) => (
-      <ActionMenu items={[<JobModal data={original} />]} />
+      <ActionMenu
+        items={[
+          <JobModal data={original} />,
+          <CommentsDrawer id={original.id} />,
+        ]}
+      />
     ),
   },
 ];
@@ -155,13 +185,67 @@ function EditStatus({
 
 function ActionMenu({ items }: { items: React.ReactNode[] }) {
   return (
-    <Popover>
+    <Popover open={1}>
       <PopoverTrigger className='cursor-pointer'>
         <div className="p-3 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 py-1">
           View
         </div>
       </PopoverTrigger>
-      <PopoverContent className='grid gap-4 max-w-fit'>{items}</PopoverContent>
+      <PopoverContent className='grid gap-4  max-w-fit'>{items}</PopoverContent>
     </Popover>
   );
+}
+
+function CommentsDrawer({ id }: { id: number }) {
+  return (
+    <Sheet open={1}>
+      <SheetTrigger>
+        <Button>Comments</Button>
+      </SheetTrigger>
+      <SheetContent>
+        <SheetHeader>
+          <SheetTitle className='text-xl'>Comments</SheetTitle>
+          <div>
+            <NewComment />
+          </div>
+        </SheetHeader>
+      </SheetContent>
+    </Sheet>
+  );
+
+  function NewComment() {
+    const FormSchema = z.object({
+      comment: z.string().min(1, {
+        message: 'Comment Blank',
+      }),
+    });
+    const form = useForm<z.infer<typeof FormSchema>>({
+      resolver: zodResolver(FormSchema),
+    });
+
+    function onSubmit(data: z.infer<typeof FormSchema>) {
+      db.insert(jobCommentsTable).values({ jobId: id, comment: data.comment });
+      form.resetField('comment', { defaultValue: '' });
+    }
+
+    return (
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className='grid gap-3'>
+          <FormField
+            control={form.control}
+            name='comment'
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Textarea placeholder='New Comment' {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type='submit'>Add</Button>
+        </form>
+      </Form>
+    );
+  }
 }
