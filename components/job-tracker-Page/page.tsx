@@ -1,5 +1,5 @@
 import {
-  HandshakeJobDataType,
+  JobSelectType,
   jobStatus,
   jobStatusEmojis,
   jobTable,
@@ -10,12 +10,12 @@ import { columns } from './columns';
 import { DataTable } from './data-table';
 import { db } from '@/utils/db/db';
 
-async function getSavedJobs(): Promise<HandshakeJobDataType[]> {
+async function getSavedJobs(): Promise<JobSelectType[]> {
   return await db.select().from(jobTable);
 }
 
 export function JobTrackerPage() {
-  const { isPending, error, data } = useQuery<HandshakeJobDataType[]>({
+  const { isPending, error, data } = useQuery<JobSelectType[]>({
     queryKey: ['savedJobs'],
     queryFn: getSavedJobs,
   });

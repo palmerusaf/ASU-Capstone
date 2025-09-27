@@ -63,8 +63,7 @@ export const jobTable = pgTable('jobs', {
     .default('recently added'),
 });
 
-export type HandshakeJobDataType = typeof jobTable.$inferSelect;
-
+export type JobSelectType = typeof jobTable.$inferSelect;
 
 // Manual Add Job
 export type JobInsertType = typeof jobTable.$inferInsert;
@@ -86,7 +85,6 @@ export const addJobFormSchema: z.ZodType<JobInsertType> = z.object({
   payrate: z.number().int().optional(), // PayRate, in cents
   status: z.enum(jobStatus), // Application status
 });
-
 
 // Resume:
 const emptyToUndefined = (val: unknown) =>

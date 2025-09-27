@@ -1,7 +1,7 @@
 // (client component) will contain our column definitions.
 import logo from '/wxt.svg';
 import {
-  HandshakeJobDataType,
+  JobSelectType,
   jobStatus,
   jobStatusEmojis,
   jobTable,
@@ -16,7 +16,7 @@ import { eq } from 'drizzle-orm';
 import { useQueryClient } from '@tanstack/react-query';
 import { ResumeMatchesModal } from './resume-matches-modal';
 
-export const columns: ColumnDef<HandshakeJobDataType>[] = [
+export const columns: ColumnDef<JobSelectType>[] = [
   {
     accessorKey: 'companyLogoUrl',
     header: '',
@@ -82,10 +82,10 @@ export const columns: ColumnDef<HandshakeJobDataType>[] = [
     }) =>
       payrate
         ? new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-            maximumFractionDigits: 0,
-          }).format(payrate / 100)
+          style: 'currency',
+          currency: 'USD',
+          maximumFractionDigits: 0,
+        }).format(payrate / 100)
         : 'n/a',
   },
   {

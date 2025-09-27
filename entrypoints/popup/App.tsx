@@ -2,7 +2,7 @@ import '@/assets/tailwind.css';
 import { useState } from 'react';
 import { PublicPath } from 'wxt/browser';
 import './App.css';
-import { HandshakeJobDataType, jobTable } from '@/utils/db/schema';
+import { JobSelectType, jobTable } from '@/utils/db/schema';
 import { parseFetchedJob } from '@/utils/popup/popup-utils';
 import { db } from '@/utils/db/db';
 import { saveJobData } from '@/utils/db/saveJobData';

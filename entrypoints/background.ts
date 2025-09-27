@@ -1,4 +1,4 @@
-import { HandshakeJobDataType } from '@/utils/db/schema';
+import { JobSelectType } from '@/utils/db/schema';
 
 export default defineBackground(() => {
   browser.runtime.onInstalled.addListener(async ({ reason }) => {

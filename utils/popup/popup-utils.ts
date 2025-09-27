@@ -1,4 +1,4 @@
-import { HandshakeJobDataType, jobTable } from '../db/schema';
+import { JobSelectType, jobTable } from '../db/schema';
 import { onsiteData, remoteData } from './popup-save-job.test';
 
 export function getJobId(url: string): number | null {
