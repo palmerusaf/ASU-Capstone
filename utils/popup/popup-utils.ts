@@ -1,4 +1,4 @@
-import { HandshakeJobDataType, jobTable } from '../db/schema';
+import { JobSelectType, jobTable } from '../db/schema';
 import { onsiteData, remoteData } from './popup-save-job.test';
 
 export function getJobId(url: string): number | null {
@@ -37,7 +37,7 @@ export function parseFetchedJob(
     companyName: d.employer.name,
     description: d.description,
     remote: d.remote ?? false,
-    jobId: `handshake-${d.id}`,
+    jobIdFromSite: `handshake-${d.id}`,
     title: d.title,
     location: d.locations?.[0]?.name ?? 'remote',
     payrate: d.salaryRange

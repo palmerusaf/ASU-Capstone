@@ -51,7 +51,7 @@ export const jobTable = pgTable('jobs', {
   companyName: text('company_name').notNull(),
   description: text('description').notNull(),
   remote: boolean('remote').notNull(),
-  jobId: text('job_id').unique(),
+  jobIdFromSite: text('job_id').unique(),
   title: text('title').notNull(),
   location: text('location').notNull(),
   //in USD cents
@@ -63,8 +63,17 @@ export const jobTable = pgTable('jobs', {
     .default('recently added'),
 });
 
-export type HandshakeJobDataType = typeof jobTable.$inferSelect;
+export const jobCommentsTable = pgTable('job_comments', {
+  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+  jobId: integer('job_id')
+    .notNull()
+    .references(() => jobTable.id, { onDelete: 'cascade' }),
+  comment: text('comment').notNull(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+});
 
+export type JobSelectType = typeof jobTable.$inferSelect;
 
 // Manual Add Job
 export type JobInsertType = typeof jobTable.$inferInsert;
@@ -86,7 +95,6 @@ export const addJobFormSchema: z.ZodType<JobInsertType> = z.object({
   payrate: z.number().int().optional(), // PayRate, in cents
   status: z.enum(jobStatus), // Application status
 });
-
 
 // Resume:
 const emptyToUndefined = (val: unknown) =>

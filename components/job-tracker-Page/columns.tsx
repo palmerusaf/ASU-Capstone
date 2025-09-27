@@ -1,7 +1,24 @@
-// (client component) will contain our column definitions.
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '@/components/ui/form';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 import logo from '/wxt.svg';
 import {
-  HandshakeJobDataType,
+  jobCommentsTable,
+  JobSelectType,
   jobStatus,
   jobStatusEmojis,
   jobTable,
@@ -15,8 +32,10 @@ import { db } from '@/utils/db/db';
 import { eq } from 'drizzle-orm';
 import { useQueryClient } from '@tanstack/react-query';
 import { ResumeMatchesModal } from './resume-matches-modal';
+import { Textarea } from '../ui/textarea';
+import { CommentsDrawer } from './comments-drawer';
 
-export const columns: ColumnDef<HandshakeJobDataType>[] = [
+export const columns: ColumnDef<JobSelectType>[] = [
   {
     accessorKey: 'companyLogoUrl',
     header: '',
@@ -98,12 +117,19 @@ export const columns: ColumnDef<HandshakeJobDataType>[] = [
     }) => <EditStatus id={id} status={status} />,
   },
   {
-    header: 'Details',
-    cell: ({ row: { original } }) => <JobModal data={original} />,
-  },
-  {
     header: 'Resume',
     cell: ({ row: { original } }) => <ResumeMatchesModal data={original} />,
+  },
+  {
+    header: 'Actions',
+    cell: ({ row: { original } }) => (
+      <ActionMenu
+        items={[
+          <JobModal data={original} />,
+          <CommentsDrawer id={original.id} />,
+        ]}
+      />
+    ),
   },
 ];
 
@@ -147,6 +173,19 @@ function EditStatus({
             );
           })}
       </PopoverContent>
+    </Popover>
+  );
+}
+
+function ActionMenu({ items }: { items: React.ReactNode[] }) {
+  return (
+    <Popover>
+      <PopoverTrigger className='cursor-pointer'>
+        <div className="p-3 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 py-1">
+          View
+        </div>
+      </PopoverTrigger>
+      <PopoverContent className='grid gap-4  max-w-fit'>{items}</PopoverContent>
     </Popover>
   );
 }

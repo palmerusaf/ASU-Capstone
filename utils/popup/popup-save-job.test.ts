@@ -120,7 +120,7 @@ describe('parse handshake fetch', () => {
       expect(pd.description).toBe(el.description);
       expect(pd.employmentType).toBe(el.employmentType.name);
       expect(pd.intern).toBe(false);
-      expect(pd.jobId).toBe(`handshake-${el.id}`);
+      expect(pd.jobIdFromSite).toBe(`handshake-${el.id}`);
       expect(pd.link).toBe(`https://app.joinhandshake.com/jobs/${el.id}`);
       expect(pd.location).toBe(el.locations?.[0]?.name ?? 'remote');
       expect(pd.remote).toBe(el.remote);

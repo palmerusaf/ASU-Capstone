@@ -1,3 +1,4 @@
+import { storage } from 'wxt/storage';
 import { jobs } from './schema';
 
 export async function getJobs() {
@@ -9,10 +10,10 @@ export async function addJob(job: typeof jobs.$inferSelect) {
 }
 
 export async function getResumes() {
-  return (await storage.getItem('local:resumes')) || [];
+  return (await storage.getItem("local:resumes")) || [];
 }
 
 export async function addResume(resume: unknown) {
   const resumes = await getResumes();
-  await storage.setItem('local:resumes', [...resumes, resume]);
+  await storage.setItem("local:resumes", [...resumes, resume]);
 }
