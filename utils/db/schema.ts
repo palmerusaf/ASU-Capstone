@@ -63,6 +63,16 @@ export const jobTable = pgTable('jobs', {
     .default('recently added'),
 });
 
+export const jobCommentsTable = pgTable('job_comments', {
+  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+  jobId: integer('job_id')
+    .notNull()
+    .references(() => jobTable.id, { onDelete: 'cascade' }),
+  comment: text('comment').notNull(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+});
+
 export type JobSelectType = typeof jobTable.$inferSelect;
 
 // Manual Add Job
