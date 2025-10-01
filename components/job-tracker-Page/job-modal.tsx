@@ -70,10 +70,10 @@ export function JobModal({ data }: { data: typeof jobTable.$inferSelect }) {
             <p>
               {data.payrate
                 ? new Intl.NumberFormat('en-US', {
-                    style: 'currency',
-                    currency: 'USD',
-                    maximumFractionDigits: 0,
-                  }).format(data.payrate / 100)
+                  style: 'currency',
+                  currency: 'USD',
+                  maximumFractionDigits: 0,
+                }).format(data.payrate / 100)
                 : 'n/a'}
             </p>
           </div>
@@ -88,17 +88,6 @@ export function JobModal({ data }: { data: typeof jobTable.$inferSelect }) {
             <p className='capitalize'>
               {jobStatusEmojis[data.status]} {data.status}
             </p>
-          </div>
-          <div>
-            <Button
-              onClick={async () => {
-                await db.delete(jobTable).where(eq(jobTable.id, data.id));
-                qclient.invalidateQueries({ queryKey: ['savedJobs'] });
-              }}
-              variant={'destructive'}
-            >
-              Delete
-            </Button>
           </div>
           <div className='md:col-span-2'>
             <a

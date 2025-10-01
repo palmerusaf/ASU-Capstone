@@ -128,6 +128,7 @@ export const columns: ColumnDef<JobSelectType>[] = [
           <JobModal key={'job'} data={original} />,
           <CommentsDrawer key={'comment'} id={original.id} />,
           <ArchiveButton key={'archive'} id={original.id} />,
+          <DeleteButton key={'del'} id={original.id} />,
         ]}
       />
     ),
@@ -176,10 +177,26 @@ function EditStatus({ id, status }: Pick<JobSelectType, 'id' | 'status'>) {
   );
 }
 
+function DeleteButton({ id }: Pick<JobSelectType, 'id'>) {
+  const qc = useQueryClient();
+  return (
+    <Button
+      onClick={async () => {
+        await db.delete(jobTable).where(eq(jobTable.id, data.id));
+        qc.invalidateQueries({ queryKey: ['savedJobs'] });
+      }}
+      variant={'destructive'}
+    >
+      Delete
+    </Button>
+  );
+}
+
 function ArchiveButton({ id }: Pick<JobSelectType, 'id'>) {
   const qc = useQueryClient();
   return (
     <Button
+      variant={'secondary'}
       onClick={async () => {
         await db
           .update(jobTable)
