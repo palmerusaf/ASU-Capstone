@@ -1,5 +1,6 @@
 import { AddJobPage } from '@/components/add-job-Page/page';
 import { DisplaySettings } from '@/components/display-settings';
+import { JobArchivePage } from '@/components/job-archive-Page/page';
 import { JobTrackerPage } from '@/components/job-tracker-Page/page';
 // import { LoginPage } from '@/components/login-page';
 import { QueryProvider } from '@/components/query-provider';
@@ -38,12 +39,16 @@ function AuthenticatedUsersSPA() {
           icon: icon.Briefcase,
           items: [
             {
-              subMenu: 'View Jobs',
+              subMenu: 'Job Tracker',
               content: <JobTrackerPage />,
             },
-                        {
+            {
               subMenu: 'Add Job',
               content: <AddJobPage />,
+            },
+            {
+              subMenu: 'Archived Jobs',
+              content: <JobArchivePage />,
             },
           ],
         },

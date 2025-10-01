@@ -11,8 +11,6 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import DOMPurify from 'dompurify';
 import { jobStatusEmojis, jobTable } from '@/utils/db/schema';
-import { db } from '@/utils/db/db';
-import { eq } from 'drizzle-orm';
 import { useQueryClient } from '@tanstack/react-query';
 
 function SafeHTML({ html }: { html: string }) {

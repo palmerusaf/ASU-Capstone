@@ -45,6 +45,11 @@ function App() {
 
     const saveOk = await saveJobData(jobData);
     setStatus(!saveOk ? 'Failed to save job.' : 'Job Saved');
+
+    if (saveOk)
+      await browser.runtime.sendMessage({
+        type: 'close-spa',
+      });
   }
 
   return (

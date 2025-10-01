@@ -9,9 +9,10 @@ import { useQuery } from '@tanstack/react-query';
 import { columns } from './columns';
 import { DataTable } from './data-table';
 import { db } from '@/utils/db/db';
+import { eq } from 'drizzle-orm';
 
 async function getSavedJobs(): Promise<JobSelectType[]> {
-  return await db.select().from(jobTable);
+  return await db.select().from(jobTable).where(eq(jobTable.archived, false));
 }
 
 export function JobTrackerPage() {
@@ -45,7 +46,7 @@ export function JobTrackerPage() {
             All
           </TabsTrigger>
           {jobStatus.map((el) => (
-            <TabsTrigger className='cursor-pointer' value={el}>
+            <TabsTrigger key={el} className='cursor-pointer' value={el}>
               {jobStatusEmojis[el]}
             </TabsTrigger>
           ))}

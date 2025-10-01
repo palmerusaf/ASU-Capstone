@@ -1,23 +1,5 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from '@/components/ui/form';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet';
 import logo from '/wxt.svg';
 import {
-  jobCommentsTable,
   JobSelectType,
   jobStatus,
   jobStatusEmojis,
@@ -31,8 +13,6 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { db } from '@/utils/db/db';
 import { eq } from 'drizzle-orm';
 import { useQueryClient } from '@tanstack/react-query';
-import { ResumeMatchesModal } from './resume-matches-modal';
-import { Textarea } from '../ui/textarea';
 import { CommentsDrawer } from './comments-drawer';
 
 export const columns: ColumnDef<JobSelectType>[] = [
@@ -114,11 +94,7 @@ export const columns: ColumnDef<JobSelectType>[] = [
       row: {
         original: { status, id },
       },
-    }) => <EditStatus id={id} status={status} />,
-  },
-  {
-    header: 'Resume',
-    cell: ({ row: { original } }) => <ResumeMatchesModal data={original} />,
+    }) => <Status id={id} status={status} />,
   },
   {
     header: 'Actions',
@@ -135,46 +111,8 @@ export const columns: ColumnDef<JobSelectType>[] = [
   },
 ];
 
-function EditStatus({ id, status }: Pick<JobSelectType, 'id' | 'status'>) {
-  const queryClient = useQueryClient();
-
-  async function updateStatus(newStatus: typeof status) {
-    await db
-      .update(jobTable)
-      .set({ status: newStatus })
-      .where(eq(jobTable.id, id));
-    queryClient.invalidateQueries({ queryKey: ['savedJobs'] });
-  }
-
-  return (
-    <Popover>
-      <PopoverTrigger className='cursor-pointer'>
-        <div className='text-lg gap-2 flex'>
-          {jobStatusEmojis[status]}
-          <Pencil className='size-4 my-auto ' />
-        </div>
-      </PopoverTrigger>
-      <PopoverContent className='grid gap-4'>
-        {jobStatus
-          .filter((el) => {
-            if (el === 'search result') return false;
-            if (el === 'recently added') return false;
-            return true;
-          })
-          .map((el) => {
-            return (
-              <Button
-                key={el}
-                onClick={() => updateStatus(el)}
-                className='capitalize cursor-pointer'
-              >
-                {jobStatusEmojis[el]} {el}
-              </Button>
-            );
-          })}
-      </PopoverContent>
-    </Popover>
-  );
+function Status({ id, status }: Pick<JobSelectType, 'id' | 'status'>) {
+  return <div className='text-lg gap-2 flex'>{jobStatusEmojis[status]}</div>;
 }
 
 function DeleteButton({ id }: Pick<JobSelectType, 'id'>) {
@@ -183,7 +121,7 @@ function DeleteButton({ id }: Pick<JobSelectType, 'id'>) {
     <Button
       onClick={async () => {
         await db.delete(jobTable).where(eq(jobTable.id, id));
-        qc.invalidateQueries({ queryKey: ['savedJobs'] });
+        qc.invalidateQueries({ queryKey: ['archivedJobs'] });
       }}
       variant={'destructive'}
     >
@@ -200,12 +138,13 @@ function ArchiveButton({ id }: Pick<JobSelectType, 'id'>) {
       onClick={async () => {
         await db
           .update(jobTable)
-          .set({ archived: true })
+          .set({ archived: false })
           .where(eq(jobTable.id, id));
         qc.invalidateQueries({ queryKey: ['savedJobs'] });
+        qc.invalidateQueries({ queryKey: ['archivedJobs'] });
       }}
     >
-      Archive
+      Unarchive
     </Button>
   );
 }
