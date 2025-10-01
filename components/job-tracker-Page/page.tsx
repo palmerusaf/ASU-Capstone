@@ -9,9 +9,10 @@ import { useQuery } from '@tanstack/react-query';
 import { columns } from './columns';
 import { DataTable } from './data-table';
 import { db } from '@/utils/db/db';
+import { eq } from 'drizzle-orm';
 
 async function getSavedJobs(): Promise<JobSelectType[]> {
-  return await db.select().from(jobTable);
+  return await db.select().from(jobTable).where(eq(jobTable.archived, false));
 }
 
 export function JobTrackerPage() {

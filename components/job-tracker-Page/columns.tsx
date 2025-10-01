@@ -176,11 +176,15 @@ function EditStatus({ id, status }: Pick<JobSelectType, 'id' | 'status'>) {
 }
 
 function ArchiveButton({ id }: Pick<JobSelectType, 'id'>) {
+  const qc = useQueryClient();
   return (
     <Button
-      onClick={() => {
-        db.update(jobTable).set({ archived: true }).where(eq(jobTable.id, id));
-        useQueryClient().invalidateQueries({ queryKey: ['savedJobs'] });
+      onClick={async () => {
+        await db
+          .update(jobTable)
+          .set({ archived: true })
+          .where(eq(jobTable.id, id));
+        qc.invalidateQueries({ queryKey: ['savedJobs'] });
       }}
     >
       Archive
