@@ -41,6 +41,7 @@ type Status = (typeof jobStatus)[keyof typeof jobStatus];
 
 export const jobTable = pgTable('jobs', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+  archived: boolean('archived').default(false).notNull(),
   datePosted: timestamp('date_posted'),
   closeOutDate: timestamp('close_out_date'),
   statusChangeDate: timestamp('status_change_date').notNull().defaultNow(),
