@@ -6,8 +6,14 @@ import { createTbleSqlRaw } from './createTbleSqlRaw';
 const databaseName = import.meta.env.DEV ? 'dev-db' : 'prod-db';
 const client = new PGlite(`idb://${databaseName}`);
 
-// reset the dev database every dev run
-if (import.meta.env.DEV) indexedDB.deleteDatabase(databaseName);
-
-client.exec(createTbleSqlRaw);
+// run each sql creation statement one by one ignore table already exists errors
+for (const sqlStm of createTbleSqlRaw.split(';')) {
+  try {
+    await client.exec(sqlStm + ';');
+  } catch (error: any) {
+    //only error if its not a recreation error
+    //we already know its hacky
+    if (!error.message.includes('already exists')) console.error(error);
+  }
+}
 export const db = drizzle({ client });
