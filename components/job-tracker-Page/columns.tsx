@@ -182,7 +182,7 @@ function DeleteButton({ id }: Pick<JobSelectType, 'id'>) {
   return (
     <Button
       onClick={async () => {
-        await db.delete(jobTable).where(eq(jobTable.id, data.id));
+        await db.delete(jobTable).where(eq(jobTable.id, id));
         qc.invalidateQueries({ queryKey: ['savedJobs'] });
       }}
       variant={'destructive'}
