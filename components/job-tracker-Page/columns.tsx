@@ -125,9 +125,9 @@ export const columns: ColumnDef<JobSelectType>[] = [
     cell: ({ row: { original } }) => (
       <ActionMenu
         items={[
-          <JobModal data={original} />,
-          <CommentsDrawer id={original.id} />,
-          <ArchiveButton id={original.id} />,
+          <JobModal key={'job'} data={original} />,
+          <CommentsDrawer key={'comment'} id={original.id} />,
+          <ArchiveButton key={'archive'} id={original.id} />,
         ]}
       />
     ),
@@ -163,6 +163,7 @@ function EditStatus({ id, status }: Pick<JobSelectType, 'id' | 'status'>) {
           .map((el) => {
             return (
               <Button
+                key={el}
                 onClick={() => updateStatus(el)}
                 className='capitalize cursor-pointer'
               >

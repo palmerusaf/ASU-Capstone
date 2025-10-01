@@ -46,7 +46,7 @@ export function JobTrackerPage() {
             All
           </TabsTrigger>
           {jobStatus.map((el) => (
-            <TabsTrigger className='cursor-pointer' value={el}>
+            <TabsTrigger key={el} className='cursor-pointer' value={el}>
               {jobStatusEmojis[el]}
             </TabsTrigger>
           ))}

@@ -38,7 +38,8 @@ export function CommentsDrawer({ id }: { id: number }) {
         <SheetHeader>
           <SheetTitle className='text-xl'>Comments</SheetTitle>
           <div className='grid gap-3'>
-            {(data?.length && data?.map((el) => <ShowComment data={el} />)) ||
+            {(data?.length &&
+              data?.map((el) => <ShowComment key={el.id} data={el} />)) ||
               'No Comments'}
             <NewComment />
           </div>
