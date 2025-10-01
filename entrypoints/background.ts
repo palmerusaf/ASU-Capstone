@@ -26,6 +26,20 @@ export default defineBackground(() => {
       })();
       return true;
     }
+    if (message.type === 'close-spa') {
+      (async () => {
+        const tabs = await chrome.tabs.query({
+          url: chrome.runtime.getURL('spa.html'),
+        });
+
+        for (const tab of tabs) {
+          if (tab.id !== undefined) {
+            await chrome.tabs.remove(tab.id);
+          }
+        }
+      })();
+      return true;
+    }
   });
 });
 
