@@ -9,7 +9,7 @@ const client = new PGlite(`idb://${databaseName}`);
 // run each sql creation statement one by one ignore table already exists errors
 for (const sqlStm of createTbleSqlRaw.split(';')) {
   try {
-    await client.exec(sqlStm + ';');
+    client.exec(sqlStm + ';');
   } catch (error: any) {
     //only error if its not a recreation error
     //we already know its hacky
