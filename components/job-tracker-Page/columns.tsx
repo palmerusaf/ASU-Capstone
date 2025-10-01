@@ -101,10 +101,10 @@ export const columns: ColumnDef<JobSelectType>[] = [
     }) =>
       payrate
         ? new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-            maximumFractionDigits: 0,
-          }).format(payrate / 100)
+          style: 'currency',
+          currency: 'USD',
+          maximumFractionDigits: 0,
+        }).format(payrate / 100)
         : 'n/a',
   },
   {
@@ -127,16 +127,14 @@ export const columns: ColumnDef<JobSelectType>[] = [
         items={[
           <JobModal data={original} />,
           <CommentsDrawer id={original.id} />,
+          <ArchiveButton id={original.id} />,
         ]}
       />
     ),
   },
 ];
 
-function EditStatus({
-  id,
-  status,
-}: Pick<typeof jobTable.$inferSelect, 'id' | 'status'>) {
+function EditStatus({ id, status }: Pick<JobSelectType, 'id' | 'status'>) {
   const queryClient = useQueryClient();
 
   async function updateStatus(newStatus: typeof status) {
@@ -174,6 +172,19 @@ function EditStatus({
           })}
       </PopoverContent>
     </Popover>
+  );
+}
+
+function ArchiveButton({ id }: Pick<JobSelectType, 'id'>) {
+  return (
+    <Button
+      onClick={() => {
+        db.update(jobTable).set({ archived: true }).where(eq(jobTable.id, id));
+        useQueryClient().invalidateQueries({ queryKey: ['savedJobs'] });
+      }}
+    >
+      Archive
+    </Button>
   );
 }
 
