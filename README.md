@@ -41,7 +41,7 @@ A centralized job application platform.
     <a href="https://github.com/palmerusaf/ASU-Capstone"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/palmerusaf/ASU-Capstone">View Demo</a>
+    <a href="./screen-shots/archive-demo.mp4">View Demo</a>
     &middot;
     <a href="https://github.com/palmerusaf/ASU-Capstone/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
     &middot;
@@ -57,10 +57,6 @@ A centralized job application platform.
       <a href="#about-the-project">About The Project</a>
       <ul>
         <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
       </ul>
@@ -84,23 +80,26 @@ Simplify the job/internship application process by automating search, applicatio
 
 ### Built With
 
-- [WXT](https://wxt.dev/guide/introduction.html)
 - [Drizzle](https://orm.drizzle.team/docs/overview)
+- [PGLite](https://pglite.dev/)
 - [React](https://react.dev/)
-- [TypeScript](https://www.typescriptlang.org/docs/)
+- [Shadcn](https://ui.shadcn.com/)
 - [TailwindCSS](https://tailwindcss.com/)
+- [TypeScript](https://www.typescriptlang.org/docs/)
+- [WXT](https://wxt.dev/guide/introduction.html)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Prerequisites
 
-- Latest version of Chrome.
+- Latest version of Chrome or Firefox.
+- Handshake account (optional)
 
 ### Installation
 
-Download from the Chrome Web Store [here](https://chromewebstore.google.com/detail/job-sourcerer/iilhhpgfemomamfecgiaaooobfbjjhpc).
+- Download from the Chrome Web Store [here](https://chromewebstore.google.com/detail/job-sourcerer/iilhhpgfemomamfecgiaaooobfbjjhpc).
 
-Download from the Firefox Add-on Store [here](https://addons.mozilla.org/en-US/firefox/addon/job-sourcerer/).
+- Download from the Firefox Add-on Store [here](https://addons.mozilla.org/en-US/firefox/addon/job-sourcerer/).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -108,9 +107,12 @@ Download from the Firefox Add-on Store [here](https://addons.mozilla.org/en-US/f
 
 ## Usage
 
-<!-- TODO: ADD USAGE DOCS -->
+1. Install the extension via Chrome or Firefox.
+2. Sign in to Handshake.
+3. Use the extension popup to add jobs from handshake.
+4. Use the extension popup to navigate to your job dashboard to track/manage your jobs/resumes.
 
-Coming Soon...
+See the roadmap below for a full list of current features and planned features.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -118,26 +120,28 @@ Coming Soon...
 
 ## Roadmap
 
-### Phase 1 - Semester 1 - Job Management
+- Job Management
+  - [x] Add job manually
+  - [x] Add user comments to jobs
+  - [x] Archive jobs
+  - [x] Change job status
+  - [x] Job tracker
+  - [x] View job details
+  - [x] View resume match score (beta)
+  - [ ] Link resume to job for stat tracking
+  - [ ] Display job stats
 
-- [x] Link with one job site
-- [ ] Upload/Extract Resume keywords
-- [ ] Search/Add functionality
-- [ ] Add job tagging system
-- [x] Job Tracker
-- [ ] Schedule interviews/Integrate with ICal
-- [ ] Auto apply bot
-- [ ] Link and integrate with 1-2 more job sites
+- Resume Management
+  - [x] Add resume manually
+  - [x] Import resume through raw text pasting
+  - [x] Extract resume keywords
+  - [ ] Display resume stats
 
-### Phase 2 - Semester 2 - Resume Management
-
-- [x] Resume builder
-- [x] Resume download
-- [ ] Add resume tagging system
-- [ ] Resume storage/management
-- [ ] Resume to job matcher
-- [ ] One click resume upload to job sites
-- [ ] Fully integrate with job management
+- Job site integration
+  - [x] Add Handshake job to dashboard through popup
+  - [ ] Display job tracked indicator overlaid in job site
+  - [ ] Search/Add jobs from app dashboard
+  - [ ] Integrate with LinkedIn
 
 See the [open issues](https://github.com/palmerusaf/ASU-Capstone/issues) for a full list of proposed features (and known issues).
 
@@ -182,4 +186,4 @@ Project Link: [https://github.com/palmerusaf/ASU-Capstone](https://github.com/pa
 [license-url]: https://github.com/palmerusaf/ASU-Capstone/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/linkedin_username
-[product-screenshot]: ./screen-shots/Prototype-Sceenshot.png
+[product-screenshot]: ./screen-shots/job-tracker.webp
