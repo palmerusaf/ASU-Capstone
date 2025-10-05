@@ -34,4 +34,5 @@ CREATE TABLE "job_comments" (
 --> statement-breakpoint
 ALTER TABLE "job_comments" ADD CONSTRAINT "job_comments_job_id_jobs_id_fk" FOREIGN KEY ("job_id") REFERENCES "public"."jobs"("id") ON DELETE cascade ON UPDATE no action;
 ALTER TABLE "jobs" ADD COLUMN "archived" boolean DEFAULT false NOT NULL;
+ALTER TABLE "jobs" ADD COLUMN "pay_type" text;
 `;

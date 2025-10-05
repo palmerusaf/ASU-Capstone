@@ -54,6 +54,9 @@ export const remoteData = {
     min: 8500000,
     max: 9500000,
     currency: 'USD',
+    paySchedule: {
+      name: 'Annual Salary'
+    }
   },
   jobType: {
     id: '9',
@@ -94,6 +97,9 @@ export const onsiteData = {
     min: 4600000,
     max: 6900000,
     currency: 'USD',
+    paySchedule: {
+      name: 'Annual Salary'
+    }
   },
   jobType: {
     id: '9',
@@ -129,6 +135,7 @@ describe('parse handshake fetch', () => {
         (el.salaryRange.max + el.salaryRange.min) / 2
       );
       expect(pd.payrate).toBe(testRate);
+      expect(pd.payType).toBe(el.salaryRange.paySchedule.name)
     });
   });
 

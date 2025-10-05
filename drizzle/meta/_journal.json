@@ -22,6 +22,13 @@
       "when": 1759288213802,
       "tag": "0002_glamorous_firebrand",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1759662239209,
+      "tag": "0003_secret_slayback",
+      "breakpoints": true
     }
   ]
 }

@@ -55,5 +55,7 @@ export function parseFetchedJob(
   else if (empType.includes('Sea')) res.employmentType = 'Seasonal';
   else res.employmentType = 'Full-Time';
 
+  res.payType = d.salaryRange.paySchedule.name ?? '';
+
   return res;
 }
