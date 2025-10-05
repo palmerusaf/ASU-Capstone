@@ -4,6 +4,7 @@ import {
   addJobFormSchema,
   employmentTypeList,
   jobStatus,
+  payTypeList
 } from '@/utils/db/schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -225,19 +226,19 @@ export function AddJobForm() {
             />
           </div>
         </div>
-        <div className='w-full grid grid-cols-2 gap-8'>
+        <div className='w-full grid grid-cols-4 gap-8'>
           <div className='w-full grid grid-cols-2 gap-8'>
             <FormField
               control={form.control}
               name='payrate'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Pay Rate (USD)</FormLabel>
+                  <FormLabel>Pay (USD)</FormLabel>
                   <FormControl>
                     <Input
                       type='number'
                       step='0.01'
-                      placeholder='e.g. 50.00'
+                      placeholder='50000'
                       value={
                         field.value != null
                           ? (field.value / 100).toString()
@@ -258,6 +259,35 @@ export function AddJobForm() {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name='payType'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Type</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value ?? ''}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder='' />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {payTypeList.map((type) =>   (
+                          <SelectItem key={type} value={type}>
+                            {type}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className='w-full grid grid-cols-1 gap-8'>
             <FormField
               control={form.control}
               name='status'
