@@ -73,6 +73,9 @@ async function fetchJobData(jobId: number, token: string) {
             min
             max
             currency
+            paySchedule {
+              name
+            }
           }
           jobType {
             id
