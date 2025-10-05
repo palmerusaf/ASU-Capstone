@@ -96,16 +96,31 @@ export const columns: ColumnDef<JobSelectType>[] = [
     header: 'Pay',
     cell: ({
       row: {
-        original: { payrate },
+        original: { payrate, payType },
       },
-    }) =>
-      payrate
-        ? new Intl.NumberFormat('en-US', {
-          style: 'currency',
-          currency: 'USD',
-          maximumFractionDigits: 0,
-        }).format(payrate / 100)
-        : 'n/a',
+    }) => {
+      if (!payrate) return 'n/a';
+
+      const pay = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        maximumFractionDigits: 0,
+      }).format(payrate / 100);
+
+      if (payType === 'Hourly Wage') {
+        return `${pay}/hr`;
+      }
+
+      if (payType === 'Monthly Stipend') {
+        return `${pay}/mo`;
+      }
+
+      if (payType === 'Annual Salary') {
+        return `${pay}/yr`;
+      }
+
+      return pay;
+    },
   },
   {
     accessorKey: 'status',
