@@ -37,6 +37,12 @@ export const employmentTypeList = [
   'Contractor',
 ] as const;
 
+export const payTypeList = [
+    'Hourly Wage',
+    'Annual Salary',
+    'Monthly Stipend', 
+] as const;
+
 type Status = (typeof jobStatus)[keyof typeof jobStatus];
 
 export const jobTable = pgTable('jobs', {
@@ -55,8 +61,8 @@ export const jobTable = pgTable('jobs', {
   jobIdFromSite: text('job_id').unique(),
   title: text('title').notNull(),
   location: text('location').notNull(),
-  //in USD cents
-  payrate: integer('pay_rate'),
+  payrate: integer('pay_rate'), //in USD cents
+  payType: text('pay_type').$type<(typeof payTypeList)[number]>(),
   link: text('link').notNull(),
   status: text('status')
     .$type<(typeof jobStatus)[number]>()
@@ -94,6 +100,7 @@ export const addJobFormSchema: z.ZodType<JobInsertType> = z.object({
   ) as z.ZodType<string | undefined>,
   employmentType: z.enum(employmentTypeList),
   payrate: z.number().int().optional(), // PayRate, in cents
+  payType: z.enum(payTypeList),
   status: z.enum(jobStatus), // Application status
 });
 
