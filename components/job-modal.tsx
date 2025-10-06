@@ -11,7 +11,6 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import DOMPurify from 'dompurify';
 import { jobStatusEmojis, jobTable } from '@/utils/db/schema';
-import { useQueryClient } from '@tanstack/react-query';
 
 function SafeHTML({ html }: { html: string }) {
   const clean = DOMPurify.sanitize(html);
@@ -24,7 +23,6 @@ function SafeHTML({ html }: { html: string }) {
 }
 
 export function JobModal({ data }: { data: typeof jobTable.$inferSelect }) {
-  const qclient = useQueryClient();
   return (
     <Dialog>
       <DialogTrigger className='cursor-pointer'>
@@ -64,16 +62,8 @@ export function JobModal({ data }: { data: typeof jobTable.$inferSelect }) {
           </div>
 
           <div>
-            <Label>Payrate</Label>
-            <p>
-              {data.payrate
-                ? new Intl.NumberFormat('en-US', {
-                  style: 'currency',
-                  currency: 'USD',
-                  maximumFractionDigits: 0,
-                }).format(data.payrate / 100)
-                : 'n/a'}
-            </p>
+            <Label>Pay Rate</Label>
+            <p>{<PayRate payrate={data.payrate} payType={data.payType} />}</p>
           </div>
 
           <div>
