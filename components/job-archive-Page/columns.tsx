@@ -1,14 +1,8 @@
 import logo from '/wxt.svg';
-import {
-  JobSelectType,
-  jobStatus,
-  jobStatusEmojis,
-  jobTable,
-} from '@/utils/db/schema';
+import { JobSelectType, jobStatusEmojis, jobTable } from '@/utils/db/schema';
 import { ColumnDef } from '@tanstack/react-table';
 import { Button } from '../ui/button';
-import { JobModal } from './job-modal';
-import { Pencil } from 'lucide-react';
+import { JobModal } from '../job-modal';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { db } from '@/utils/db/db';
 import { eq } from 'drizzle-orm';
@@ -76,16 +70,9 @@ export const columns: ColumnDef<JobSelectType>[] = [
     header: 'Pay',
     cell: ({
       row: {
-        original: { payrate },
+        original: { payrate, payType },
       },
-    }) =>
-      payrate
-        ? new Intl.NumberFormat('en-US', {
-          style: 'currency',
-          currency: 'USD',
-          maximumFractionDigits: 0,
-        }).format(payrate / 100)
-        : 'n/a',
+    }) => <PayRate payrate={payrate} payType={payType} />,
   },
   {
     accessorKey: 'status',

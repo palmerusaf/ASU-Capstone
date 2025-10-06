@@ -1,23 +1,5 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from '@/components/ui/form';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet';
 import logo from '/wxt.svg';
 import {
-  jobCommentsTable,
   JobSelectType,
   jobStatus,
   jobStatusEmojis,
@@ -25,14 +7,13 @@ import {
 } from '@/utils/db/schema';
 import { ColumnDef } from '@tanstack/react-table';
 import { Button } from '../ui/button';
-import { JobModal } from './job-modal';
+import { JobModal } from '../job-modal';
 import { Pencil } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { db } from '@/utils/db/db';
 import { eq } from 'drizzle-orm';
 import { useQueryClient } from '@tanstack/react-query';
 import { ResumeMatchesModal } from './resume-matches-modal';
-import { Textarea } from '../ui/textarea';
 import { CommentsDrawer } from './comments-drawer';
 
 export const columns: ColumnDef<JobSelectType>[] = [
@@ -98,29 +79,7 @@ export const columns: ColumnDef<JobSelectType>[] = [
       row: {
         original: { payrate, payType },
       },
-    }) => {
-      if (!payrate) return 'n/a';
-
-      const pay = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        maximumFractionDigits: 0,
-      }).format(payrate / 100);
-
-      if (payType === 'Hourly Wage') {
-        return `${pay}/hr`;
-      }
-
-      if (payType === 'Monthly Stipend') {
-        return `${pay}/mo`;
-      }
-
-      if (payType === 'Annual Salary') {
-        return `${pay}/yr`;
-      }
-
-      return pay;
-    },
+    }) => <PayRate payrate={payrate} payType={payType} />,
   },
   {
     accessorKey: 'status',
