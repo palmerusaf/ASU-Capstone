@@ -1,11 +1,12 @@
 import {
   boolean,
-  integer,
+  integer, jsonb,
   pgTable,
   text,
   timestamp,
 } from 'drizzle-orm/pg-core';
 import { z } from 'zod';
+import { relations } from 'drizzle-orm';
 
 export const jobStatus = [
   'search result',
@@ -108,51 +109,27 @@ export const addJobFormSchema: z.ZodType<JobInsertType> = z.object({
 const emptyToUndefined = (val: unknown) =>
   typeof val === 'string' && val.trim() === '' ? undefined : val; // Helper method to turn empty fields into undefined (to pass validation)
 
-export const ResumeSchema = z.object({
-  basics: z.object({
-    name: z.string().min(1, { message: 'Name is required' }),
-    label: z.string().min(1, { message: 'Professional title is required' }),
-    email: z.string().email({ message: 'Invalid email address' }),
-    phone: z.string().min(1, { message: 'Phone number is required' }),
-    website: z.string().url({ message: 'Invalid website URL' }).optional(),
-    summary: z.string().optional(),
-    profiles: z
-      .array(
-        z.object({
-          network: z.string(),
-          username: z.string(),
-          url: z.string().url(),
-        })
-      )
-      .optional(),
-  }),
-  education: z.array(
-    z.object({
-      institution: z.string().min(1, { message: 'Institution is required' }),
-      area: z.string().min(1, { message: 'Field of study is required' }),
-      startDate: z.string().min(1, { message: 'Start date is required' }),
-      endDate: z.string().optional().transform(emptyToUndefined),
-    })
-  ),
-  work: z.array(
-    z.object({
-      company: z.string().min(1, { message: 'Company name is required' }),
-      position: z.string().min(1, { message: 'Position is required' }),
-      startDate: z.string().min(1, { message: 'Start date is required' }),
-      endDate: z.string().optional().transform(emptyToUndefined),
-      summary: z.string().optional(),
-    })
-  ),
-  projects: z.array(
-    z.object({
-      name: z.string().min(1, { message: 'Project name is required' }),
-      startDate: z.string().optional().transform(emptyToUndefined),
-      endDate: z.string().optional().transform(emptyToUndefined),
-      description: z.string().min(1, { message: 'Description is required' }),
-      url: z.string().url({ message: 'Invalid website URL' }),
-    })
-  ),
+export const resumes = pgTable('resumes', {
+  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+  userId: text('user_id'),              // optional owner identifier
+  name: text('name').notNull(),         // user-chosen label for the saved resume
+  json: jsonb('json').notNull(),        // full JSON Resume payload
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
+
+export const rawResumes = pgTable('raw_resumes', {
+  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+  name: text('name').notNull(),
+  rawText: text('raw_text').notNull(),
+  source: text('source').notNull(),     // "builder" | "paste"
+  jsonId: integer('json_id').references(() => resumes.id, { onDelete: 'set null' }),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+export const resumesRelations = relations(resumes, ({ many }) => ({
+  rawResumes: many(rawResumes),
+}));
 
 export const testSchema = pgTable('testSchema', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
