@@ -1,5 +1,6 @@
 import logo from '/wxt.svg';
 import {
+  jobEventsTable,
   JobSelectType,
   jobStatus,
   jobStatusEmojis,
@@ -117,6 +118,7 @@ function EditStatus({ id, status }: Pick<JobSelectType, 'id' | 'status'>) {
       .update(jobTable)
       .set({ status: newStatus })
       .where(eq(jobTable.id, id));
+    await db.insert(jobEventsTable).values({ jobId: id, eventType: newStatus });
     queryClient.invalidateQueries({ queryKey: ['savedJobs'] });
   }
 
