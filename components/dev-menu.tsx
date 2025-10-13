@@ -17,7 +17,7 @@ export const devMenu = import.meta.env.DEV
   ? [
     {
       menu: 'Dev Menu',
-      icon: icon.Settings2,
+      icon: icon.LucideWrench,
       items: [
         {
           subMenu: 'Seed',
@@ -77,7 +77,7 @@ async function seed() {
       companyName,
       companyLogoUrl: faker.image.urlPicsumPhotos(),
       employmentType: faker.helpers.arrayElement(employmentTypeList),
-      description: faker.lorem.paragraph(),
+      description: faker.lorem.paragraph({ max: 60, min: 20 }),
       remote: faker.datatype.boolean(),
       title: faker.person.jobTitle(),
       location: faker.location.city(),
