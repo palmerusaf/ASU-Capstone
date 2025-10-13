@@ -153,7 +153,7 @@ function _NavMain({
     </SidebarGroup>
   );
 }
-type MenuData = {
+export type MenuData = {
   menu: string;
   icon: React.ForwardRefExoticComponent<
     Omit<icon.LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
