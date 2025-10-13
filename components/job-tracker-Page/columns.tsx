@@ -27,15 +27,7 @@ export const columns: ColumnDef<JobSelectType>[] = [
       },
     }) => {
       const imgUrl = !companyLogoUrl?.length ? logo : companyLogoUrl;
-      return (
-        <img
-          className='ml-2'
-          src={imgUrl}
-          alt={imgUrl}
-          width='25'
-          height='25'
-        />
-      );
+      return <img className='ml-2 w-7 h-7' src={imgUrl} alt={imgUrl} />;
     },
   },
   {
