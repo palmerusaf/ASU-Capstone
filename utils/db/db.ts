@@ -8,12 +8,8 @@ const client = new PGlite(`idb://${databaseName}`);
 
 // run each sql creation statement one by one ignore table already exists errors
 for (const sqlStm of createTbleSqlRaw.split(';')) {
-  try {
-    client.exec(sqlStm + ';');
-  } catch (error: any) {
-    //only error if its not a recreation error
-    //we already know its hacky
+  await client.exec(sqlStm + ';').catch((error) => {
     if (!error.message.includes('already exists')) console.error(error);
-  }
+  });
 }
 export const db = drizzle({ client });
