@@ -12,6 +12,8 @@ import { faker } from '@faker-js/faker';
 import * as icon from 'lucide-react';
 import { Button } from './ui/button';
 import { useQueryClient } from '@tanstack/react-query';
+import { PGlite } from '@electric-sql/pglite';
+import { Repl } from '@electric-sql/pglite-repl';
 
 export const devMenu = import.meta.env.DEV
   ? [
@@ -22,6 +24,10 @@ export const devMenu = import.meta.env.DEV
         {
           subMenu: 'Seed',
           content: <SeedPage />,
+        },
+        {
+          subMenu: 'PG Repl',
+          content: <PGRepl />,
         },
       ],
     },
@@ -125,4 +131,12 @@ function SeedPage() {
       `✅ Seeded ${insertedJobs.length} jobs with events and comments`
     );
   }
+}
+
+function PGRepl() {
+  return (
+    <>
+      <Repl pg={db.$client} />
+    </>
+  );
 }
