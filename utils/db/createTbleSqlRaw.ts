@@ -24,28 +24,33 @@ CREATE TABLE "testSchema" (
 	"test_field" text NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "resumes" (
-                           "id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "resumes_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
-                           "user_id" text,
-                           "name" text NOT NULL,
-                           "json" jsonb NOT NULL,
-                           "created_at" timestamp DEFAULT now() NOT NULL,
-                           "updated_at" timestamp DEFAULT now() NOT NULL
+CREATE TABLE "testSchema" (
+	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "testSchema_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"test_field" text NOT NULL
 );
---> statement-breakpoint
-CREATE TABLE "raw_resumes" (
-                               "id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "raw_resumes_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
-                               "name" text NOT NULL,
-                               "raw_text" text NOT NULL,
-                               "source" text NOT NULL,
-                               "json_id" integer,
-                               "created_at" timestamp DEFAULT now() NOT NULL
-);
---> statement-breakpoint
+
 CREATE TABLE "job_comments" (
 	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "job_comments_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
 	"job_id" integer NOT NULL,
 	"comment" text NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "raw_resumes" (
+	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "raw_resumes_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"name" text NOT NULL,
+	"raw_text" text NOT NULL,
+	"source" text NOT NULL,
+	"json_id" integer,
+	"created_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "resumes" (
+	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "resumes_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"user_id" text,
+	"name" text NOT NULL,
+	"json" jsonb NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL
 );
