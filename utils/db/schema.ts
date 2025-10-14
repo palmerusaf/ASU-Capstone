@@ -109,6 +109,67 @@ export const addJobFormSchema: z.ZodType<JobInsertType> = z.object({
 const emptyToUndefined = (val: unknown) =>
   typeof val === 'string' && val.trim() === '' ? undefined : val; // Helper method to turn empty fields into undefined (to pass validation)
 
+const ProfileSchema = z.object({
+  network: z.string().optional().default(""),
+  username: z.string().optional().default(""),
+  url: z.string().optional().default(""),
+});
+
+const EducationSchema = z.object({
+  institution: z.string().min(1, "Required"),
+  area: z.string().min(1, "Required"),
+  startDate: z.string().min(1, "Required"),
+  endDate: z.string().optional().default(""),
+});
+
+const WorkSchema = z.object({
+  company: z.string().min(1, "Required"),
+  position: z.string().min(1, "Required"),
+  startDate: z.string().min(1, "Required"),
+  endDate: z.string().optional().default(""),
+  summary: z.string().optional().default(""),
+});
+
+const ProjectSchema = z.object({
+  name: z.string().min(1, "Required"),
+  startDate: z.string().optional().default(""),
+  endDate: z.string().optional().default(""),
+  description: z.string().min(1, "Required"),
+  url: z.string().min(1, "Required"),
+});
+
+export const ResumeSchema = z.object({
+  basics: z.object({
+    name: z.string().min(1, "Required"),
+    label: z.string().min(1, "Required"),
+    email: z.string().min(1, "Required"),
+    phone: z.string().min(1, "Required"),
+    website: z.string().min(1, "Required"),
+    summary: z.string().optional().default(""),
+    profiles: z.array(ProfileSchema).default([{ network: "", username: "", url: "" }]),
+  }),
+  education: z.array(EducationSchema).min(1).default([{
+    institution: "",
+    area: "",
+    startDate: "",
+    endDate: "",
+  }]),
+  work: z.array(WorkSchema).min(1).default([{
+    company: "",
+    position: "",
+    startDate: "",
+    endDate: "",
+    summary: "",
+  }]),
+  projects: z.array(ProjectSchema).min(1).default([{
+    name: "",
+    startDate: "",
+    endDate: "",
+    description: "",
+    url: "",
+  }]),
+});
+
 export const resumes = pgTable('resumes', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
   userId: text('user_id'),              // optional owner identifier
