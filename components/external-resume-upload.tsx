@@ -1,14 +1,18 @@
 import React, { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { addResume } from "@/utils/db/localStorage";
 import { textToJsonResume } from "@/utils/textToJsonResume";
-import { addRawResume } from '@/utils/db/rawResumes.ts';
+import { createResume, addRawResume } from "@/utils/db/resumes";
 import { extractKeywords, getTopNKeywords } from "@/utils/extractKeywords";
 
 export default function ResumePasteForm() {
   const [text, setText] = useState("");
-  const keywords = useMemo(() => getTopNKeywords({ keywordMap: extractKeywords(text), numKeywords: 25 }), [text]);
+  const [recordName, setRecordName] = useState(""); // NEW
+
+  const keywords = useMemo(
+    () => getTopNKeywords({ keywordMap: extractKeywords(text), numKeywords: 25 }),
+    [text]
+  );
 
   async function handleSave() {
     if (text.trim().length < 30) {
@@ -17,11 +21,13 @@ export default function ResumePasteForm() {
     }
     try {
       const json = textToJsonResume(text);
-      await addResume(json);       // same localStorage method used by regular resume upload - for display
-      const name = json?.basics?.name || "Pasted Resume";
-      addRawResume({ name, rawText: text, source: "paste", jsonId: null }); // Raw resume save
+      const chosenName = recordName.trim() || json?.basics?.name?.trim() || "Pasted Resume";
+
+      const saved = await createResume({ name: chosenName, json });
+      await addRawResume({ name: chosenName, rawText: text, source: "paste", jsonId: saved.id });
+
       toast.success("Pasted resume saved!");
-      setText("");
+      setText(""); setRecordName("");
     } catch (e) {
       console.error(e);
       toast.error("Failed to save pasted resume.");
@@ -31,6 +37,12 @@ export default function ResumePasteForm() {
   return (
     <div className="space-y-3 p-4 rounded-2xl border">
       <h2 className="text-xl font-semibold">Paste external resume (plain text)</h2>
+      <input
+        className="w-full p-2 rounded border"
+        placeholder="Resume Name (optional)"
+        value={recordName}
+        onChange={(e) => setRecordName(e.target.value)}
+      />
       <textarea
         className="w-full h-48 p-3 rounded border"
         placeholder="Paste plain text from PDF/Word here…"
@@ -43,7 +55,7 @@ export default function ResumePasteForm() {
       </div>
       <div className="flex gap-2">
         <Button onClick={handleSave}>Save</Button>
-        <Button variant="outline" onClick={() => setText("")}>Clear</Button>
+        <Button variant="outline" onClick={() => { setText(""); setRecordName(""); }}>Clear</Button>
       </div>
     </div>
   );
