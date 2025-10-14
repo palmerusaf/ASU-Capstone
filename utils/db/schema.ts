@@ -38,9 +38,9 @@ export const employmentTypeList = [
 ] as const;
 
 export const payTypeList = [
-    'Hourly Wage',
-    'Annual Salary',
-    'Monthly Stipend', 
+  'Hourly Wage',
+  'Annual Salary',
+  'Monthly Stipend',
 ] as const;
 
 type Status = (typeof jobStatus)[keyof typeof jobStatus];
@@ -78,6 +78,15 @@ export const jobCommentsTable = pgTable('job_comments', {
   comment: text('comment').notNull(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
+});
+
+export const jobEventsTable = pgTable('job_events', {
+  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+  jobId: integer('job_id')
+    .notNull()
+    .references(() => jobTable.id, { onDelete: 'cascade' }),
+  eventType: text('event_type').$type<(typeof jobStatus)[number]>().notNull(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
 });
 
 export type JobSelectType = typeof jobTable.$inferSelect;
