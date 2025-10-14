@@ -4,6 +4,7 @@ import {
   pgTable,
   text,
   timestamp,
+  unique,
 } from 'drizzle-orm/pg-core';
 import { z } from 'zod';
 
@@ -80,14 +81,18 @@ export const jobCommentsTable = pgTable('job_comments', {
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });
 
-export const jobEventsTable = pgTable('job_events', {
-  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-  jobId: integer('job_id')
-    .notNull()
-    .references(() => jobTable.id, { onDelete: 'cascade' }),
-  eventType: text('event_type').$type<(typeof jobStatus)[number]>().notNull(),
-  createdAt: timestamp('created_at').notNull().defaultNow(),
-});
+export const jobEventsTable = pgTable(
+  'job_events',
+  {
+    id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+    jobId: integer('job_id')
+      .notNull()
+      .references(() => jobTable.id, { onDelete: 'cascade' }),
+    eventType: text('event_type').$type<(typeof jobStatus)[number]>().notNull(),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+  },
+  (t) => [unique().on(t.jobId, t.eventType)]
+);
 
 export type JobSelectType = typeof jobTable.$inferSelect;
 

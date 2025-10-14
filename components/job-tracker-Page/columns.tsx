@@ -110,7 +110,13 @@ function EditStatus({ id, status }: Pick<JobSelectType, 'id' | 'status'>) {
       .update(jobTable)
       .set({ status: newStatus })
       .where(eq(jobTable.id, id));
-    await db.insert(jobEventsTable).values({ jobId: id, eventType: newStatus });
+    await db
+      .insert(jobEventsTable)
+      .values({ jobId: id, eventType: newStatus })
+      .onConflictDoUpdate({
+        target: [jobEventsTable.jobId, jobEventsTable.eventType],
+        set: { createdAt: new Date() },
+      });
     queryClient.invalidateQueries({ queryKey: ['savedJobs'] });
   }
 

@@ -1,0 +1,1 @@
+ALTER TABLE "job_events" ADD CONSTRAINT "job_events_job_id_event_type_unique" UNIQUE("job_id","event_type");
