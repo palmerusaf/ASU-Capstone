@@ -22,11 +22,17 @@ function SafeHTML({ html }: { html: string }) {
   );
 }
 
-export function JobModal({ data }: { data: typeof jobTable.$inferSelect }) {
+export function JobModal({
+  data,
+  label = 'View Details',
+}: {
+  data: typeof jobTable.$inferSelect;
+  label?: string;
+}) {
   return (
     <Dialog>
       <DialogTrigger className='cursor-pointer'>
-        <Button>View Details</Button>
+        <Button>{label}</Button>
       </DialogTrigger>
       <DialogContent className='max-w-3xl'>
         <DialogHeader>
