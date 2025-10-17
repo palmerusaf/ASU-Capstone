@@ -128,7 +128,7 @@ See the roadmap below for a full list of current features and planned features.
   - [x] Job tracker
   - [x] View job details
   - [x] View resume match score (beta)
-  - [ ] View previous company apps
+  - [x] View previous company apps
   - [ ] Link resume to job for stat tracking
   - [ ] Display job stats
 
