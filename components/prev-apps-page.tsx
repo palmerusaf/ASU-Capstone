@@ -11,6 +11,7 @@ import {
 import { Card } from './ui/card';
 import { DataTable } from './job-archive-Page/data-table';
 import { ColumnDef } from '@tanstack/react-table';
+import { Input } from './ui/input';
 
 export function PrevAppsPage() {
   // 🧩 Include createdAt column
@@ -80,33 +81,45 @@ export function PrevAppsPage() {
 
   if (!data) return 'Loading...';
 
-  // group by company
-  const companies = [...new Set(data.map((d) => d.jobs.companyName))];
+  const [filterParam, setFilterParam] = useState('');
+  const companies = [...new Set(data.map((d) => d.jobs.companyName))].filter(
+    (el) => {
+      if (!filterParam.length) return true;
+      return el.toLowerCase().includes(filterParam.toLowerCase());
+    }
+  );
 
   return (
-    <Card className='m-12 p-6'>
-      {companies.length ? (
-        companies.map((company) => (
-          <Accordion key={company} type='single' collapsible>
-            <AccordionItem value={company}>
-              <AccordionTrigger>{company}</AccordionTrigger>
-              <AccordionContent>
-                <DataTable
-                  columns={columns as ColumnDef<any>[]}
-                  data={data
-                    .filter((el) => el.jobs.companyName === company)
-                    .map(({ jobs, job_events: { createdAt } }) => ({
-                      ...jobs,
-                      createdAt,
-                    }))}
-                />
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        ))
-      ) : (
-        <div className='text-center text-lg'>No Data</div>
-      )}
-    </Card>
+    <div className='p-12 grid gap-2'>
+      <Input
+        className='w-md'
+        onChange={({ target: { value } }) => setFilterParam(() => value)}
+        placeholder='🔍︎ Filter by company name.'
+      />
+      <Card className='p-6'>
+        {companies.length ? (
+          companies.map((company) => (
+            <Accordion key={company} type='single' collapsible>
+              <AccordionItem value={company}>
+                <AccordionTrigger>{company}</AccordionTrigger>
+                <AccordionContent>
+                  <DataTable
+                    columns={columns as ColumnDef<any>[]}
+                    data={data
+                      .filter((el) => el.jobs.companyName === company)
+                      .map(({ jobs, job_events: { createdAt } }) => ({
+                        ...jobs,
+                        createdAt,
+                      }))}
+                  />
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          ))
+        ) : (
+          <div className='text-center text-lg'>No Data</div>
+        )}
+      </Card>
+    </div>
   );
 }
