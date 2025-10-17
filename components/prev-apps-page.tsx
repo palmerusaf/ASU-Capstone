@@ -14,7 +14,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { Input } from './ui/input';
 
 export function PrevAppsPage() {
-  // 🧩 Include createdAt column
+  const [filterParam, setFilterParam] = useState('');
   const columns: ColumnDef<JobSelectType & { createdAt: Date }>[] = [
     {
       accessorKey: 'title',
@@ -81,7 +81,6 @@ export function PrevAppsPage() {
 
   if (!data) return 'Loading...';
 
-  const [filterParam, setFilterParam] = useState('');
   const companies = [...new Set(data.map((d) => d.jobs.companyName))].filter(
     (el) => {
       if (!filterParam.length) return true;
