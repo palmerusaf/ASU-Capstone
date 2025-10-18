@@ -54,11 +54,11 @@ export function PrevAppsPage() {
       ),
     },
     {
-      accessorKey: 'createdAt',
+      accessorKey: 'dateApplied',
       header: 'Applied On',
       cell: ({ row }) => {
-        const createdAt = new Date(row.getValue('createdAt') as string);
-        return <span>{createdAt.toLocaleDateString()}</span>;
+        const dateApplied = new Date(row.getValue('dateApplied') as string);
+        return <span>{dateApplied.toLocaleDateString()}</span>;
       },
     },
     {
