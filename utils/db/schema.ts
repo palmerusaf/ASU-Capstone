@@ -17,6 +17,7 @@ export const jobStatus = [
   'ghosted',
   'rejected',
   'not interested',
+  'recieved offer',
 ] as const;
 
 export const jobStatusEmojis = {
@@ -28,6 +29,7 @@ export const jobStatusEmojis = {
   'scheduled interview': '📅', // upcoming interview
   'search result': '🔍', // found in search
   'recently added': '🆕', // new job entry
+  'recieved offer': '🤝',
 } as const;
 
 export const employmentTypeList = [
