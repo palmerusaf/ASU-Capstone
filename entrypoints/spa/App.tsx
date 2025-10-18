@@ -9,6 +9,8 @@ import { ResumeUpload } from '@/components/resume-upload.tsx';
 // import useAuth from '@/utils/auth';
 import * as icon from 'lucide-react';
 import { Toaster } from 'sonner';
+import { devMenu } from '../../components/dev-menu';
+import { PrevAppsPage } from '@/components/prev-apps-page';
 
 export default function App() {
   // disable auth
@@ -50,6 +52,10 @@ function AuthenticatedUsersSPA() {
               subMenu: 'Archived Jobs',
               content: <JobArchivePage />,
             },
+            {
+              subMenu: 'Previous Apps',
+              content: <PrevAppsPage />,
+            },
           ],
         },
         {
@@ -76,6 +82,7 @@ function AuthenticatedUsersSPA() {
             },
           ],
         },
+        ...devMenu,
       ]}
     />
   );

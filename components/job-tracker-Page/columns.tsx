@@ -1,5 +1,6 @@
 import logo from '/wxt.svg';
 import {
+  jobEventsTable,
   JobSelectType,
   jobStatus,
   jobStatusEmojis,
@@ -26,15 +27,7 @@ export const columns: ColumnDef<JobSelectType>[] = [
       },
     }) => {
       const imgUrl = !companyLogoUrl?.length ? logo : companyLogoUrl;
-      return (
-        <img
-          className='ml-2'
-          src={imgUrl}
-          alt={imgUrl}
-          width='25'
-          height='25'
-        />
-      );
+      return <img className='ml-2 w-7 h-7' src={imgUrl} alt={imgUrl} />;
     },
   },
   {
@@ -117,6 +110,13 @@ function EditStatus({ id, status }: Pick<JobSelectType, 'id' | 'status'>) {
       .update(jobTable)
       .set({ status: newStatus })
       .where(eq(jobTable.id, id));
+    await db
+      .insert(jobEventsTable)
+      .values({ jobId: id, eventType: newStatus })
+      .onConflictDoUpdate({
+        target: [jobEventsTable.jobId, jobEventsTable.eventType],
+        set: { createdAt: new Date() },
+      });
     queryClient.invalidateQueries({ queryKey: ['savedJobs'] });
   }
 
