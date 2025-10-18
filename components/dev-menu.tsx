@@ -13,24 +13,25 @@ import * as icon from 'lucide-react';
 import { Button } from './ui/button';
 import { useQueryClient } from '@tanstack/react-query';
 import { Repl } from '@electric-sql/pglite-repl';
+import { updateStatus } from './job-tracker-Page/columns';
 
 export const devMenu = import.meta.env.DEV
   ? [
-      {
-        menu: 'Dev Menu',
-        icon: icon.LucideWrench,
-        items: [
-          {
-            subMenu: 'Seed',
-            content: <SeedPage />,
-          },
-          {
-            subMenu: 'PG Repl',
-            content: <PGRepl />,
-          },
-        ],
-      },
-    ]
+    {
+      menu: 'Dev Menu',
+      icon: icon.LucideWrench,
+      items: [
+        {
+          subMenu: 'Seed',
+          content: <SeedPage />,
+        },
+        {
+          subMenu: 'PG Repl',
+          content: <PGRepl />,
+        },
+      ],
+    },
+  ]
   : [];
 
 function SeedPage() {
@@ -84,7 +85,6 @@ function SeedPage() {
 
     for (let i = 0; i < numJobs; i++) {
       const companyName = faker.helpers.arrayElement(companyNames);
-      const status = faker.helpers.arrayElement(jobStatus);
       const job = {
         archived: false,
         intern: faker.datatype.boolean(),
@@ -96,7 +96,7 @@ function SeedPage() {
         title: faker.person.jobTitle(),
         location: faker.location.city(),
         link: faker.internet.url(),
-        status,
+        status: jobStatus[1],
         payrate: faker.number.int({ min: 40000, max: 150000 }),
         payType: faker.helpers.arrayElement(payTypeList),
         datePosted: faker.date.past({ years: 1 }),
@@ -111,6 +111,7 @@ function SeedPage() {
       .values(jobs)
       .returning({ id: jobTable.id });
 
+    // add comments
     for (const { id: jobId } of insertedJobs) {
       const comments = Array.from({
         length: faker.number.int({ min: 0, max: 3 }),
@@ -121,6 +122,10 @@ function SeedPage() {
       if (comments.length > 0)
         await db.insert(jobCommentsTable).values(comments);
     }
+
+    //set statuses
+    for (const { id } of insertedJobs)
+      updateStatus({ id, status: faker.helpers.arrayElement(jobStatus) });
 
     console.log(
       `✅ Seeded ${insertedJobs.length} jobs with events and comments`
