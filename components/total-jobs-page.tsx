@@ -68,6 +68,7 @@ export function TotalJobs() {
             source: links.map((l) => l.source),
             target: links.map((l) => l.target),
             value: links.map((l) => l.value),
+            color: 'darkgray',
           },
         },
       ]}
