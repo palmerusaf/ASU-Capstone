@@ -2,7 +2,7 @@ import { db } from '@/utils/db/db';
 import {
   employmentTypeList,
   jobCommentsTable,
-  jobEventsTable,
+  appliedJobsTable,
   jobStatus,
   jobTable,
   payTypeList,
@@ -12,26 +12,25 @@ import { faker } from '@faker-js/faker';
 import * as icon from 'lucide-react';
 import { Button } from './ui/button';
 import { useQueryClient } from '@tanstack/react-query';
-import { PGlite } from '@electric-sql/pglite';
 import { Repl } from '@electric-sql/pglite-repl';
 
 export const devMenu = import.meta.env.DEV
   ? [
-    {
-      menu: 'Dev Menu',
-      icon: icon.LucideWrench,
-      items: [
-        {
-          subMenu: 'Seed',
-          content: <SeedPage />,
-        },
-        {
-          subMenu: 'PG Repl',
-          content: <PGRepl />,
-        },
-      ],
-    },
-  ]
+      {
+        menu: 'Dev Menu',
+        icon: icon.LucideWrench,
+        items: [
+          {
+            subMenu: 'Seed',
+            content: <SeedPage />,
+          },
+          {
+            subMenu: 'PG Repl',
+            content: <PGRepl />,
+          },
+        ],
+      },
+    ]
   : [];
 
 function SeedPage() {
@@ -113,10 +112,6 @@ function SeedPage() {
       .returning({ id: jobTable.id });
 
     for (const { id: jobId } of insertedJobs) {
-      await db
-        .insert(jobEventsTable)
-        .values({ jobId, eventType: faker.helpers.arrayElement(jobStatus) });
-
       const comments = Array.from({
         length: faker.number.int({ min: 0, max: 3 }),
       }).map(() => ({

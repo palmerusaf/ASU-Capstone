@@ -1,5 +1,5 @@
 import { db } from '@/utils/db/db';
-import { jobEventsTable, JobSelectType, jobTable } from '@/utils/db/schema';
+import { appliedJobsTable, JobSelectType, jobTable } from '@/utils/db/schema';
 import { useQuery } from '@tanstack/react-query';
 import { eq } from 'drizzle-orm';
 import {
@@ -15,7 +15,7 @@ import { Input } from './ui/input';
 
 export function PrevAppsPage() {
   const [filterParam, setFilterParam] = useState('');
-  const columns: ColumnDef<JobSelectType & { createdAt: Date }>[] = [
+  const columns: ColumnDef<JobSelectType & { dateApplied: Date }>[] = [
     {
       accessorKey: 'title',
       header: 'Title',
@@ -74,9 +74,8 @@ export function PrevAppsPage() {
     queryFn: async () =>
       await db
         .select()
-        .from(jobEventsTable)
-        .where(eq(jobEventsTable.eventType, 'applied'))
-        .innerJoin(jobTable, eq(jobTable.id, jobEventsTable.jobId)),
+        .from(appliedJobsTable)
+        .innerJoin(jobTable, eq(jobTable.id, appliedJobsTable.jobId)),
   });
 
   if (!data) return 'Loading...';
@@ -106,9 +105,9 @@ export function PrevAppsPage() {
                     columns={columns as ColumnDef<any>[]}
                     data={data
                       .filter((el) => el.jobs.companyName === company)
-                      .map(({ jobs, job_events: { createdAt } }) => ({
+                      .map(({ jobs, applied_jobs: { dateApplied } }) => ({
                         ...jobs,
-                        createdAt,
+                        dateApplied,
                       }))}
                   />
                 </AccordionContent>

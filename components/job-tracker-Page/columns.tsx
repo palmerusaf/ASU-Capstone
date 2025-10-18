@@ -1,6 +1,6 @@
 import logo from '/wxt.svg';
 import {
-  jobEventsTable,
+  appliedJobsTable,
   JobSelectType,
   jobStatus,
   jobStatusEmojis,
@@ -110,13 +110,22 @@ function EditStatus({ id, status }: Pick<JobSelectType, 'id' | 'status'>) {
       .update(jobTable)
       .set({ status: newStatus })
       .where(eq(jobTable.id, id));
-    await db
-      .insert(jobEventsTable)
-      .values({ jobId: id, eventType: newStatus })
-      .onConflictDoUpdate({
-        target: [jobEventsTable.jobId, jobEventsTable.eventType],
-        set: { createdAt: new Date() },
-      });
+    const preAppStatuses: (typeof status)[] = [
+      'search result',
+      'interested',
+      'not interested',
+      'recently added',
+    ];
+    if (preAppStatuses.includes(newStatus))
+      await db.delete(appliedJobsTable).where(eq(appliedJobsTable.jobId, id));
+    else
+      await db
+        .insert(appliedJobsTable)
+        .values({ jobId: id })
+        .onConflictDoUpdate({
+          target: appliedJobsTable.jobId,
+          set: { dateApplied: new Date() },
+        });
     queryClient.invalidateQueries({ queryKey: ['savedJobs'] });
   }
 
