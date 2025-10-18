@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { getResumes } from "@/utils/db/localStorage";
+import { listResumes } from "@/utils/db/resumes";
 import { render } from "jsonresume-theme-even";
 import { Button } from "@/components/ui/button";
 
@@ -11,12 +11,12 @@ export function ResumeDisplay() {
 
   useEffect(() => {
     async function fetchResumes() {
-      const data = await getResumes();
-      if (Array.isArray(data) && data.length > 0) {
-        const reversed = data.reverse(); // Latest first
-        setResumes(reversed);
-        setSelectedIndex(0);
-      }
+        const rows = await listResumes(); // already newest-first
+        if (Array.isArray(rows) && rows.length > 0) {
+            const mapped = (rows as any[]).map(r => ({ ...r.json, __label: r.name }));
+            setResumes(mapped);
+            setSelectedIndex(0); // newest by default
+        }
     }
     fetchResumes();
   }, []);
@@ -35,10 +35,10 @@ export function ResumeDisplay() {
       .slice() // Clone array to preserve OG order
       .reverse() // Oldest to newest
       .map((resume, i, original) => {
-        const name = resume.basics?.name || `Resume ${original.length - i}`;
-        nameCounts[name] = (nameCounts[name] || 0) + 1;
-        const suffix = nameCounts[name] > 1 ? ` ${nameCounts[name]}` : ""; //
-        return { label: name + suffix, index: original.length - 1 - i }; // Adjust back to actual index
+          const base = resume.__label || resume.basics?.name || `Resume ${original.length - i}`;
+          nameCounts[base] = (nameCounts[base] || 0) + 1;
+          const suffix = nameCounts[base] > 1 ? ` ${nameCounts[base]}` : "";
+          return { label: base + suffix, index: original.length - 1 - i }; // Adjust back to actual index
       });
     return options;
   };
