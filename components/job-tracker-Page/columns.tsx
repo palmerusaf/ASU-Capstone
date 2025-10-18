@@ -1,6 +1,6 @@
 import logo from '/wxt.svg';
 import {
-  jobEventsTable,
+  appliedJobsTable,
   JobSelectType,
   jobStatus,
   jobStatusEmojis,
@@ -103,22 +103,7 @@ export const columns: ColumnDef<JobSelectType>[] = [
 ];
 
 function EditStatus({ id, status }: Pick<JobSelectType, 'id' | 'status'>) {
-  const queryClient = useQueryClient();
-
-  async function updateStatus(newStatus: typeof status) {
-    await db
-      .update(jobTable)
-      .set({ status: newStatus })
-      .where(eq(jobTable.id, id));
-    await db
-      .insert(jobEventsTable)
-      .values({ jobId: id, eventType: newStatus })
-      .onConflictDoUpdate({
-        target: [jobEventsTable.jobId, jobEventsTable.eventType],
-        set: { createdAt: new Date() },
-      });
-    queryClient.invalidateQueries({ queryKey: ['savedJobs'] });
-  }
+  const qc = useQueryClient();
 
   return (
     <Popover>
@@ -135,20 +120,43 @@ function EditStatus({ id, status }: Pick<JobSelectType, 'id' | 'status'>) {
             if (el === 'recently added') return false;
             return true;
           })
-          .map((el) => {
+          .map((status) => {
             return (
               <Button
-                key={el}
-                onClick={() => updateStatus(el)}
+                key={status}
+                onClick={async () => {
+                  await updateStatus({ id, status: status });
+                  qc.invalidateQueries({ queryKey: ['savedJobs'] });
+                }}
                 className='capitalize cursor-pointer'
               >
-                {jobStatusEmojis[el]} {el}
+                {jobStatusEmojis[status]} {status}
               </Button>
             );
           })}
       </PopoverContent>
     </Popover>
   );
+}
+
+export async function updateStatus({
+  id,
+  status,
+}: Pick<JobSelectType, 'id' | 'status'>) {
+  await db.update(jobTable).set({ status }).where(eq(jobTable.id, id));
+  const preAppStatuses: (typeof status)[] = [
+    'search result',
+    'interested',
+    'not interested',
+    'recently added',
+  ];
+  if (preAppStatuses.includes(status))
+    await db.delete(appliedJobsTable).where(eq(appliedJobsTable.jobId, id));
+  else
+    await db
+      .insert(appliedJobsTable)
+      .values({ jobId: id })
+      .onConflictDoNothing();
 }
 
 function DeleteButton({ id }: Pick<JobSelectType, 'id'>) {
