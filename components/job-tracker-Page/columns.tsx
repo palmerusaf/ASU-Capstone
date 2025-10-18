@@ -122,10 +122,7 @@ function EditStatus({ id, status }: Pick<JobSelectType, 'id' | 'status'>) {
       await db
         .insert(appliedJobsTable)
         .values({ jobId: id })
-        .onConflictDoUpdate({
-          target: appliedJobsTable.jobId,
-          set: { dateApplied: new Date() },
-        });
+        .onConflictDoNothing();
     queryClient.invalidateQueries({ queryKey: ['savedJobs'] });
   }
 
