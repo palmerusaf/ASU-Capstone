@@ -11,6 +11,7 @@ import * as icon from 'lucide-react';
 import { Toaster } from 'sonner';
 import { devMenu } from '../../components/dev-menu';
 import { PrevAppsPage } from '@/components/prev-apps-page';
+import { TotalJobs } from '@/components/total-jobs-page';
 
 export default function App() {
   // disable auth
@@ -69,6 +70,16 @@ function AuthenticatedUsersSPA() {
             {
               subMenu: 'Display Resume',
               content: <ResumeDisplay />,
+            },
+          ],
+        },
+        {
+          menu: 'Stats',
+          icon: icon.LineChart,
+          items: [
+            {
+              subMenu: 'Total Jobs',
+              content: <TotalJobs />,
             },
           ],
         },
