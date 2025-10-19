@@ -1,6 +1,4 @@
-'use client';
-
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { eq } from 'drizzle-orm';
@@ -14,7 +12,7 @@ import {
 import { db } from '@/utils/db/db';
 import { columns } from './columns';
 import { DataTable } from './data-table';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 async function getSavedJobs(): Promise<JobSelectType[]> {
   return await db.select().from(jobTable).where(eq(jobTable.archived, false));
@@ -29,20 +27,30 @@ export function JobTrackerPage() {
   const [tabValue, setTabValue] = useState<
     typeof jobTable.$inferInsert.status | 'all'
   >('all');
+  const [rowSelection, setRowSelection] = useState({});
+  const [selectedRows, setSelectedRows] = useState<JobSelectType[]>([]);
 
-  // Filtered data memoized for performance
   const filteredData = useMemo(() => {
     if (!data) return [];
     if (tabValue === 'all') return data;
     return data.filter((el) => el.status === tabValue);
   }, [data, tabValue]);
 
-  // Build table instance with filtered data
   const table = useReactTable({
     data: filteredData,
     columns,
+    state: { rowSelection },
+    onRowSelectionChange: setRowSelection,
     getCoreRowModel: getCoreRowModel(),
+    enableRowSelection: true,
   });
+
+  useEffect(() => {
+    const selectedData = table
+      .getSelectedRowModel()
+      .rows.map((r) => r.original);
+    setSelectedRows(selectedData);
+  }, [rowSelection, table]);
 
   if (!data) return <div>Loading...</div>;
 
