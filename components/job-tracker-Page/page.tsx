@@ -1,41 +1,75 @@
+import { useState, useMemo, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { eq } from 'drizzle-orm';
+
 import {
   JobSelectType,
   jobStatus,
   jobStatusEmojis,
   jobTable,
 } from '@/utils/db/schema';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useQuery } from '@tanstack/react-query';
-import { columns } from './columns';
-import { DataTable } from './data-table';
 import { db } from '@/utils/db/db';
-import { eq } from 'drizzle-orm';
+import { ArchiveButton, columns, DeleteButton, EditStatus } from './columns';
+import { DataTable } from './data-table';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '../ui/button';
 
 async function getSavedJobs(): Promise<JobSelectType[]> {
   return await db.select().from(jobTable).where(eq(jobTable.archived, false));
 }
 
 export function JobTrackerPage() {
-  const { isPending, error, data } = useQuery<JobSelectType[]>({
+  const { data } = useQuery<JobSelectType[]>({
     queryKey: ['savedJobs'],
     queryFn: getSavedJobs,
   });
+
   const [tabValue, setTabValue] = useState<
     typeof jobTable.$inferInsert.status | 'all'
   >('all');
+  const [selRowState, setSelRowState] = useState({});
+  const [selRowData, setSelRowData] = useState<JobSelectType[]>([]);
 
-  if (isPending) {
-    return <div className='p-24 text-center'>Loading saved jobs...</div>;
-  }
+  const filteredData = useMemo(() => {
+    if (!data) return [];
+    if (tabValue === 'all') return data;
+    return data.filter((el) => el.status === tabValue);
+  }, [data, tabValue]);
 
-  if (error) {
-    return (
-      <div className='p-24 text-center'>There was an error loading jobs.</div>
-    );
-  }
+  const table = useReactTable({
+    data: filteredData,
+    columns,
+    state: { rowSelection: selRowState },
+    onRowSelectionChange: setSelRowState,
+    getCoreRowModel: getCoreRowModel(),
+    enableRowSelection: true,
+  });
+
+  useEffect(() => {
+    const selectedData = table
+      .getSelectedRowModel()
+      .rows.map((r) => r.original);
+    setSelRowData(selectedData);
+  }, [selRowState, table]);
+
+  //clear checkboxes when data is updated
+  useEffect(() => {
+    setSelRowState({});
+  }, [data]);
+
+  if (!data) return <div>Loading...</div>;
 
   return (
-    <div className='grid gap-2 content-center px-12'>
+    <div className='grid gap-2 content-center pb-12 px-12'>
+      <StatusTabs />
+      <MultiSelectMenu rows={selRowData} />
+      <DataTable table={table} />
+    </div>
+  );
+
+  function StatusTabs() {
+    return (
       <Tabs
         value={tabValue}
         className='flex justify-center'
@@ -52,13 +86,18 @@ export function JobTrackerPage() {
           ))}
         </TabsList>
       </Tabs>
-      <DataTable
-        columns={columns}
-        data={data.filter((el) => {
-          if (tabValue === 'all') return true;
-          return el.status === tabValue;
-        })}
-      />
+    );
+  }
+}
+
+function MultiSelectMenu({ rows }: { rows: JobSelectType[] }) {
+  if (!rows.length) return <></>;
+  const ids = rows.map(({ id }) => id);
+  return (
+    <div className='flex justify-center gap-4 animate-in fade-in zoom-in duration-500'>
+      <EditStatus ids={ids} label={<Button>Update Status</Button>} />
+      <ArchiveButton ids={ids} />
+      <DeleteButton ids={ids} />
     </div>
   );
 }

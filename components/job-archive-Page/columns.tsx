@@ -8,8 +8,31 @@ import { db } from '@/utils/db/db';
 import { eq } from 'drizzle-orm';
 import { useQueryClient } from '@tanstack/react-query';
 import { CommentsDrawer } from './comments-drawer';
+import { Checkbox } from '../ui/checkbox';
 
 export const columns: ColumnDef<JobSelectType>[] = [
+  {
+    id: 'select',
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && 'indeterminate')
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label='Select all'
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label='Select row'
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
   {
     accessorKey: 'companyLogoUrl',
     header: '',
@@ -82,8 +105,8 @@ export const columns: ColumnDef<JobSelectType>[] = [
         items={[
           <JobModal key={'job'} data={original} />,
           <CommentsDrawer key={'comment'} id={original.id} />,
-          <ArchiveButton key={'archive'} id={original.id} />,
-          <DeleteButton key={'del'} id={original.id} />,
+          <ArchiveButton key={'archive'} ids={[original.id]} />,
+          <DeleteButton key={'del'} ids={[original.id]} />,
         ]}
       />
     ),
@@ -94,12 +117,13 @@ function Status({ id, status }: Pick<JobSelectType, 'id' | 'status'>) {
   return <div className='text-lg gap-2 flex'>{jobStatusEmojis[status]}</div>;
 }
 
-function DeleteButton({ id }: Pick<JobSelectType, 'id'>) {
+export function DeleteButton({ ids }: { ids: number[] }) {
   const qc = useQueryClient();
   return (
     <Button
       onClick={async () => {
-        await db.delete(jobTable).where(eq(jobTable.id, id));
+        for (const id of ids)
+          await db.delete(jobTable).where(eq(jobTable.id, id));
         qc.invalidateQueries({ queryKey: ['archivedJobs'] });
       }}
       variant={'destructive'}
@@ -109,16 +133,17 @@ function DeleteButton({ id }: Pick<JobSelectType, 'id'>) {
   );
 }
 
-function ArchiveButton({ id }: Pick<JobSelectType, 'id'>) {
+export function ArchiveButton({ ids }: { ids: number[] }) {
   const qc = useQueryClient();
   return (
     <Button
       variant={'secondary'}
       onClick={async () => {
-        await db
-          .update(jobTable)
-          .set({ archived: false })
-          .where(eq(jobTable.id, id));
+        for (const id of ids)
+          await db
+            .update(jobTable)
+            .set({ archived: false })
+            .where(eq(jobTable.id, id));
         qc.invalidateQueries({ queryKey: ['savedJobs'] });
         qc.invalidateQueries({ queryKey: ['archivedJobs'] });
       }}
