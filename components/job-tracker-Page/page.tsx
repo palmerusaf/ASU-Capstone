@@ -16,42 +16,19 @@ async function getSavedJobs(): Promise<JobSelectType[]> {
 }
 
 export function JobTrackerPage() {
-  const { isPending, error, data } = useQuery<JobSelectType[]>({
+  const { data } = useQuery<JobSelectType[]>({
     queryKey: ['savedJobs'],
     queryFn: getSavedJobs,
   });
   const [tabValue, setTabValue] = useState<
     typeof jobTable.$inferInsert.status | 'all'
   >('all');
+  const [rowSelection, setRowSelection] = useState({});
 
-  if (isPending) {
-    return <div className='p-24 text-center'>Loading saved jobs...</div>;
-  }
-
-  if (error) {
-    return (
-      <div className='p-24 text-center'>There was an error loading jobs.</div>
-    );
-  }
-
+  if (!data) return 'Loading...';
   return (
     <div className='grid gap-2 content-center px-12'>
-      <Tabs
-        value={tabValue}
-        className='flex justify-center'
-        onValueChange={(val) => setTabValue(val as typeof tabValue)}
-      >
-        <TabsList>
-          <TabsTrigger className='cursor-pointer' value='all'>
-            All
-          </TabsTrigger>
-          {jobStatus.map((el) => (
-            <TabsTrigger key={el} className='cursor-pointer' value={el}>
-              {jobStatusEmojis[el]}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-      </Tabs>
+      <StatusTabs setTabValue={setTabValue} tabValue={tabValue} />
       <DataTable
         columns={columns}
         data={data.filter((el) => {
@@ -60,5 +37,26 @@ export function JobTrackerPage() {
         })}
       />
     </div>
+  );
+}
+
+function StatusTabs({ setTabValue, tabValue }) {
+  return (
+    <Tabs
+      value={tabValue}
+      className='flex justify-center'
+      onValueChange={(val) => setTabValue(val as typeof tabValue)}
+    >
+      <TabsList>
+        <TabsTrigger className='cursor-pointer' value='all'>
+          All
+        </TabsTrigger>
+        {jobStatus.map((el) => (
+          <TabsTrigger key={el} className='cursor-pointer' value={el}>
+            {jobStatusEmojis[el]}
+          </TabsTrigger>
+        ))}
+      </TabsList>
+    </Tabs>
   );
 }
