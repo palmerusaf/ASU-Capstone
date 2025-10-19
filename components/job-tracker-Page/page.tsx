@@ -28,8 +28,8 @@ export function JobTrackerPage() {
   const [tabValue, setTabValue] = useState<
     typeof jobTable.$inferInsert.status | 'all'
   >('all');
-  const [rowSelection, setRowSelection] = useState({});
-  const [selectedRows, setSelectedRows] = useState<JobSelectType[]>([]);
+  const [selRowState, setSelRowState] = useState({});
+  const [selRowData, setSelRowData] = useState<JobSelectType[]>([]);
 
   const filteredData = useMemo(() => {
     if (!data) return [];
@@ -40,8 +40,8 @@ export function JobTrackerPage() {
   const table = useReactTable({
     data: filteredData,
     columns,
-    state: { rowSelection },
-    onRowSelectionChange: setRowSelection,
+    state: { rowSelection: selRowState },
+    onRowSelectionChange: setSelRowState,
     getCoreRowModel: getCoreRowModel(),
     enableRowSelection: true,
   });
@@ -50,15 +50,20 @@ export function JobTrackerPage() {
     const selectedData = table
       .getSelectedRowModel()
       .rows.map((r) => r.original);
-    setSelectedRows(selectedData);
-  }, [rowSelection, table]);
+    setSelRowData(selectedData);
+  }, [selRowState, table]);
+
+  //clear checkboxes when data is updated
+  useEffect(() => {
+    setSelRowState({});
+  }, [data]);
 
   if (!data) return <div>Loading...</div>;
 
   return (
     <div className='grid gap-2 content-center pb-12 px-12'>
       <StatusTabs />
-      <MultiSelectMenu rows={selectedRows} />
+      <MultiSelectMenu rows={selRowData} />
       <DataTable table={table} />
     </div>
   );
