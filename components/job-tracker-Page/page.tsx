@@ -10,7 +10,7 @@ import {
   jobTable,
 } from '@/utils/db/schema';
 import { db } from '@/utils/db/db';
-import { columns } from './columns';
+import { ArchiveButton, columns, DeleteButton, EditStatus } from './columns';
 import { DataTable } from './data-table';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '../ui/button';
@@ -87,9 +87,12 @@ export function JobTrackerPage() {
 
 function MultiSelectMenu({ rows }: { rows: JobSelectType[] }) {
   if (!rows.length) return <></>;
+  const ids = rows.map(({ id }) => id);
   return (
-    <div>
-      <Button></Button>
+    <div className='flex justify-center gap-4 animate-in fade-in zoom-in duration-500'>
+      <EditStatus ids={ids} label={<Button>Update Status</Button>} />
+      <ArchiveButton ids={ids} />
+      <DeleteButton ids={ids} />
     </div>
   );
 }
