@@ -13,6 +13,7 @@ import { db } from '@/utils/db/db';
 import { columns } from './columns';
 import { DataTable } from './data-table';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '../ui/button';
 
 async function getSavedJobs(): Promise<JobSelectType[]> {
   return await db.select().from(jobTable).where(eq(jobTable.archived, false));
@@ -55,8 +56,9 @@ export function JobTrackerPage() {
   if (!data) return <div>Loading...</div>;
 
   return (
-    <div className='grid gap-2 content-center px-12'>
+    <div className='grid gap-2 content-center pb-12 px-12'>
       <StatusTabs />
+      <MultiSelectMenu rows={selectedRows} />
       <DataTable table={table} />
     </div>
   );
@@ -81,4 +83,13 @@ export function JobTrackerPage() {
       </Tabs>
     );
   }
+}
+
+function MultiSelectMenu({ rows }: { rows: JobSelectType[] }) {
+  if (!rows.length) return <></>;
+  return (
+    <div>
+      <Button></Button>
+    </div>
+  );
 }

@@ -104,7 +104,17 @@ export const columns: ColumnDef<JobSelectType>[] = [
       row: {
         original: { status, id },
       },
-    }) => <EditStatus id={id} status={status} />,
+    }) => (
+      <EditStatus
+        ids={[id]}
+        label={
+          <>
+            {jobStatusEmojis[status]}
+            <Pencil className='size-4 my-auto ' />
+          </>
+        }
+      />
+    ),
   },
   {
     header: 'Resume',
@@ -117,24 +127,27 @@ export const columns: ColumnDef<JobSelectType>[] = [
         items={[
           <JobModal key={'job'} data={original} />,
           <CommentsDrawer key={'comment'} id={original.id} />,
-          <ArchiveButton key={'archive'} id={original.id} />,
-          <DeleteButton key={'del'} id={original.id} />,
+          <ArchiveButton key={'archive'} ids={[original.id]} />,
+          <DeleteButton key={'del'} ids={[original.id]} />,
         ]}
       />
     ),
   },
 ];
 
-function EditStatus({ id, status }: Pick<JobSelectType, 'id' | 'status'>) {
+export function EditStatus({
+  label,
+  ids,
+}: {
+  ids: number[];
+  label?: React.ReactNode;
+}) {
   const qc = useQueryClient();
 
   return (
     <Popover>
       <PopoverTrigger className='cursor-pointer'>
-        <div className='text-lg gap-2 flex'>
-          {jobStatusEmojis[status]}
-          <Pencil className='size-4 my-auto ' />
-        </div>
+        <div className='text-lg gap-2 flex'>{label}</div>
       </PopoverTrigger>
       <PopoverContent className='grid gap-4'>
         {jobStatus
@@ -148,7 +161,8 @@ function EditStatus({ id, status }: Pick<JobSelectType, 'id' | 'status'>) {
               <Button
                 key={status}
                 onClick={async () => {
-                  await updateStatus({ id, status: status });
+                  for (const id of ids)
+                    await updateStatus({ id, status: status });
                   qc.invalidateQueries({ queryKey: ['savedJobs'] });
                 }}
                 className='capitalize cursor-pointer'
@@ -182,12 +196,13 @@ export async function updateStatus({
       .onConflictDoNothing();
 }
 
-function DeleteButton({ id }: Pick<JobSelectType, 'id'>) {
+export function DeleteButton({ ids }: { ids: number[] }) {
   const qc = useQueryClient();
   return (
     <Button
       onClick={async () => {
-        await db.delete(jobTable).where(eq(jobTable.id, id));
+        for (const id of ids)
+          await db.delete(jobTable).where(eq(jobTable.id, id));
         qc.invalidateQueries({ queryKey: ['savedJobs'] });
       }}
       variant={'destructive'}
@@ -197,16 +212,17 @@ function DeleteButton({ id }: Pick<JobSelectType, 'id'>) {
   );
 }
 
-function ArchiveButton({ id }: Pick<JobSelectType, 'id'>) {
+export function ArchiveButton({ ids }: { ids: number[] }) {
   const qc = useQueryClient();
   return (
     <Button
       variant={'secondary'}
       onClick={async () => {
-        await db
-          .update(jobTable)
-          .set({ archived: true })
-          .where(eq(jobTable.id, id));
+        for (const id of ids)
+          await db
+            .update(jobTable)
+            .set({ archived: true })
+            .where(eq(jobTable.id, id));
         qc.invalidateQueries({ queryKey: ['savedJobs'] });
       }}
     >
@@ -215,7 +231,7 @@ function ArchiveButton({ id }: Pick<JobSelectType, 'id'>) {
   );
 }
 
-function ActionMenu({ items }: { items: React.ReactNode[] }) {
+export function ActionMenu({ items }: { items: React.ReactNode[] }) {
   return (
     <Popover>
       <PopoverTrigger className='cursor-pointer'>
