@@ -131,7 +131,6 @@ export function UnarchiveButton({ ids }: { ids: number[] }) {
           .update(jobTable)
           .set({ archived: false })
           .where(inArray(jobTable.id, ids));
-          await removeTrackedJob(`handshake-${jobTable.jobIdFromSite}`);
         qc.invalidateQueries({ queryKey: ['savedJobs'] });
         qc.invalidateQueries({ queryKey: ['archivedJobs'] });
       }}
