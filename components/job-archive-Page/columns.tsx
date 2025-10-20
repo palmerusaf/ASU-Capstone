@@ -11,6 +11,7 @@ import { CommentsDrawer } from './comments-drawer';
 import { Checkbox } from '../ui/checkbox';
 import { DeleteButton } from '../job-tracker-Page/columns';
 import { AsyncButton } from '../async-button';
+import { removeTrackedJob } from '@/utils/storage/trackedJobs';
 
 export const columns: ColumnDef<JobSelectType>[] = [
   {
