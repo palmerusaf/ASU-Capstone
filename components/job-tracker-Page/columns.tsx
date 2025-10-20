@@ -1,6 +1,6 @@
 import logo from '/wxt.svg';
 import {
-  jobEventsTable,
+  appliedJobsTable,
   JobSelectType,
   jobStatus,
   jobStatusEmojis,
@@ -12,12 +12,37 @@ import { JobModal } from '../job-modal';
 import { Pencil } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { db } from '@/utils/db/db';
-import { eq } from 'drizzle-orm';
+import { eq, inArray } from 'drizzle-orm';
 import { useQueryClient } from '@tanstack/react-query';
 import { ResumeMatchesModal } from './resume-matches-modal';
 import { CommentsDrawer } from './comments-drawer';
+import { Checkbox } from '../ui/checkbox';
+import { AsyncButton } from '../async-button';
+import { removeTrackedJob } from '@/utils/storage/trackedJobs';
 
 export const columns: ColumnDef<JobSelectType>[] = [
+  {
+    id: 'select',
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && 'indeterminate')
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label='Select all'
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label='Select row'
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
   {
     accessorKey: 'companyLogoUrl',
     header: '',
@@ -81,7 +106,17 @@ export const columns: ColumnDef<JobSelectType>[] = [
       row: {
         original: { status, id },
       },
-    }) => <EditStatus id={id} status={status} />,
+    }) => (
+      <EditStatus
+        ids={[id]}
+        label={
+          <>
+            {jobStatusEmojis[status]}
+            <Pencil className='size-4 my-auto ' />
+          </>
+        }
+      />
+    ),
   },
   {
     header: 'Resume',
@@ -94,39 +129,27 @@ export const columns: ColumnDef<JobSelectType>[] = [
         items={[
           <JobModal key={'job'} data={original} />,
           <CommentsDrawer key={'comment'} id={original.id} />,
-          <ArchiveButton key={'archive'} id={original.id} />,
-          <DeleteButton key={'del'} id={original.id} />,
+          <ArchiveButton key={'archive'} ids={[original.id]} />,
+          <DeleteButton key={'del'} ids={[original.id]} />,
         ]}
       />
     ),
   },
 ];
 
-function EditStatus({ id, status }: Pick<JobSelectType, 'id' | 'status'>) {
-  const queryClient = useQueryClient();
-
-  async function updateStatus(newStatus: typeof status) {
-    await db
-      .update(jobTable)
-      .set({ status: newStatus })
-      .where(eq(jobTable.id, id));
-    await db
-      .insert(jobEventsTable)
-      .values({ jobId: id, eventType: newStatus })
-      .onConflictDoUpdate({
-        target: [jobEventsTable.jobId, jobEventsTable.eventType],
-        set: { createdAt: new Date() },
-      });
-    queryClient.invalidateQueries({ queryKey: ['savedJobs'] });
-  }
+export function EditStatus({
+  label,
+  ids,
+}: {
+  ids: number[];
+  label?: React.ReactNode;
+}) {
+  const qc = useQueryClient();
 
   return (
     <Popover>
       <PopoverTrigger className='cursor-pointer'>
-        <div className='text-lg gap-2 flex'>
-          {jobStatusEmojis[status]}
-          <Pencil className='size-4 my-auto ' />
-        </div>
+        <div className='text-lg gap-2 flex'>{label}</div>
       </PopoverTrigger>
       <PopoverContent className='grid gap-4'>
         {jobStatus
@@ -135,15 +158,21 @@ function EditStatus({ id, status }: Pick<JobSelectType, 'id' | 'status'>) {
             if (el === 'recently added') return false;
             return true;
           })
-          .map((el) => {
+          .map((status) => {
             return (
-              <Button
-                key={el}
-                onClick={() => updateStatus(el)}
+              <AsyncButton
+                loadingText={`Updating ${ids.length} Job${
+                  ids.length > 1 ? 's' : ''
+                }...`}
+                key={status}
+                onClickAsync={async () => {
+                  updateStatus({ ids, status: status });
+                  qc.invalidateQueries({ queryKey: ['savedJobs'] });
+                }}
                 className='capitalize cursor-pointer'
               >
-                {jobStatusEmojis[el]} {el}
-              </Button>
+                {jobStatusEmojis[status]} {status}
+              </AsyncButton>
             );
           })}
       </PopoverContent>
@@ -151,40 +180,78 @@ function EditStatus({ id, status }: Pick<JobSelectType, 'id' | 'status'>) {
   );
 }
 
-function DeleteButton({ id }: Pick<JobSelectType, 'id'>) {
+export async function updateStatus({
+  ids,
+  status,
+}: Pick<JobSelectType, 'status'> & { ids: number[] }) {
+  await db.update(jobTable).set({ status }).where(inArray(jobTable.id, ids));
+  const preAppStatuses: (typeof status)[] = [
+    'search result',
+    'interested',
+    'not interested',
+    'recently added',
+  ];
+  if (preAppStatuses.includes(status)) {
+    await db
+      .delete(appliedJobsTable)
+      .where(inArray(appliedJobsTable.jobId, ids));
+  } else {
+    await db
+      .insert(appliedJobsTable)
+      .values(ids.map((jobId) => ({ jobId })))
+      .onConflictDoNothing();
+  }
+}
+
+export function DeleteButton({ ids }: { ids: number[] }) {
   const qc = useQueryClient();
   return (
-    <Button
-      onClick={async () => {
-        await db.delete(jobTable).where(eq(jobTable.id, id));
+    <AsyncButton
+      loadingText={`Deleting ${ids.length} Job${ids.length > 1 ? 's' : ''}...`}
+      onClickAsync={async () => {
+        console.log("Deleting job")
+        // Get jobs to be deleted (Local storage)
+        const jobs = await db
+          .select({ jobIdFromSite: jobTable.jobIdFromSite })
+          .from(jobTable)
+          .where(inArray(jobTable.id, ids));
+
+        // Remove each from tracked storage
+        for (const job of jobs) {
+          if (job.jobIdFromSite) {
+            await removeTrackedJob(job.jobIdFromSite);
+          }
+        }
+                await db.delete(jobTable).where(inArray(jobTable.id, ids));
         qc.invalidateQueries({ queryKey: ['savedJobs'] });
       }}
       variant={'destructive'}
     >
       Delete
-    </Button>
+    </AsyncButton>
   );
 }
 
-function ArchiveButton({ id }: Pick<JobSelectType, 'id'>) {
+export function ArchiveButton({ ids }: { ids: number[] }) {
   const qc = useQueryClient();
   return (
-    <Button
+    <AsyncButton
       variant={'secondary'}
-      onClick={async () => {
+      loadingText={`Archiving ${ids.length} Job${ids.length > 1 ? 's' : ''}...`}
+      onClickAsync={async () => {
         await db
           .update(jobTable)
           .set({ archived: true })
-          .where(eq(jobTable.id, id));
+          .where(inArray(jobTable.id, ids));
         qc.invalidateQueries({ queryKey: ['savedJobs'] });
       }}
     >
       Archive
-    </Button>
+    </AsyncButton>
   );
 }
 
-function ActionMenu({ items }: { items: React.ReactNode[] }) {
+export function ActionMenu({ items }: { items: React.ReactNode[] }) {
   return (
     <Popover>
       <PopoverTrigger className='cursor-pointer'>

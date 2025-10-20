@@ -2,7 +2,7 @@ import { db } from '@/utils/db/db';
 import {
   employmentTypeList,
   jobCommentsTable,
-  jobEventsTable,
+  appliedJobsTable,
   jobStatus,
   jobTable,
   payTypeList,
@@ -12,8 +12,9 @@ import { faker } from '@faker-js/faker';
 import * as icon from 'lucide-react';
 import { Button } from './ui/button';
 import { useQueryClient } from '@tanstack/react-query';
-import { PGlite } from '@electric-sql/pglite';
 import { Repl } from '@electric-sql/pglite-repl';
+import { updateStatus } from './job-tracker-Page/columns';
+import { AsyncButton } from './async-button';
 
 export const devMenu = import.meta.env.DEV
   ? [
@@ -50,42 +51,42 @@ function SeedPage() {
   const qc = useQueryClient();
   return (
     <div className='grid grid-cols-2 w-lg mx-auto mt-4 gap-2 justify-center'>
-      <Button
+      <AsyncButton
         variant={'secondary'}
         className='cursor-pointer'
-        onClick={() => seedJobs(1)}
+        loadingText='Seeding Job...'
+        onClickAsync={() => seedJobs(1)}
       >
         Seed Job
-      </Button>
-      <Button
+      </AsyncButton>
+      <AsyncButton
         variant={'secondary'}
         className='cursor-pointer'
-        onClick={() => seedJobs(25)}
+        loadingText='Seeding 25 Jobs...'
+        onClickAsync={() => seedJobs(25)}
       >
         Seed 25 Jobs
-      </Button>
-      <Button
+      </AsyncButton>
+      <AsyncButton
         variant={'destructive'}
         className='cursor-pointer'
-        onClick={async () => {
+        loadingText='Nuking Jobs'
+        onClickAsync={async () => {
           await db.delete(jobTable);
           await qc.invalidateQueries({ queryKey: ['savedJobs'] });
           await qc.invalidateQueries({ queryKey: ['archivedJobs'] });
         }}
       >
         Nuke Jobs
-      </Button>
+      </AsyncButton>
     </div>
   );
 
   async function seedJobs(numJobs: number) {
-    console.log('🌱 Seeding database...');
-
     const jobs: (typeof jobTable.$inferInsert)[] = [];
 
     for (let i = 0; i < numJobs; i++) {
       const companyName = faker.helpers.arrayElement(companyNames);
-      const status = faker.helpers.arrayElement(jobStatus);
       const job = {
         archived: false,
         intern: faker.datatype.boolean(),
@@ -97,7 +98,7 @@ function SeedPage() {
         title: faker.person.jobTitle(),
         location: faker.location.city(),
         link: faker.internet.url(),
-        status,
+        status: jobStatus[1],
         payrate: faker.number.int({ min: 40000, max: 150000 }),
         payType: faker.helpers.arrayElement(payTypeList),
         datePosted: faker.date.past({ years: 1 }),
@@ -112,11 +113,8 @@ function SeedPage() {
       .values(jobs)
       .returning({ id: jobTable.id });
 
+    // add comments
     for (const { id: jobId } of insertedJobs) {
-      await db
-        .insert(jobEventsTable)
-        .values({ jobId, eventType: faker.helpers.arrayElement(jobStatus) });
-
       const comments = Array.from({
         length: faker.number.int({ min: 0, max: 3 }),
       }).map(() => ({
@@ -127,8 +125,14 @@ function SeedPage() {
         await db.insert(jobCommentsTable).values(comments);
     }
 
-    console.log(
-      `✅ Seeded ${insertedJobs.length} jobs with events and comments`
+    //set statuses we have to do it one at a time so they get random statuses
+    await Promise.all(
+      insertedJobs.map(({ id }) => {
+        updateStatus({
+          ids: [id],
+          status: faker.helpers.arrayElement(jobStatus),
+        });
+      })
     );
   }
 }

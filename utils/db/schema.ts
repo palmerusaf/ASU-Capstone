@@ -18,6 +18,7 @@ export const jobStatus = [
   'ghosted',
   'rejected',
   'not interested',
+  'recieved offer',
 ] as const;
 
 export const jobStatusEmojis = {
@@ -29,6 +30,7 @@ export const jobStatusEmojis = {
   'scheduled interview': '📅', // upcoming interview
   'search result': '🔍', // found in search
   'recently added': '🆕', // new job entry
+  'recieved offer': '🤝',
 } as const;
 
 export const employmentTypeList = [
@@ -82,18 +84,14 @@ export const jobCommentsTable = pgTable('job_comments', {
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });
 
-export const jobEventsTable = pgTable(
-  'job_events',
-  {
-    id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-    jobId: integer('job_id')
-      .notNull()
-      .references(() => jobTable.id, { onDelete: 'cascade' }),
-    eventType: text('event_type').$type<(typeof jobStatus)[number]>().notNull(),
-    createdAt: timestamp('created_at').notNull().defaultNow(),
-  },
-  (t) => [unique().on(t.jobId, t.eventType)]
-);
+export const appliedJobsTable = pgTable('applied_jobs', {
+  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+  jobId: integer('job_id')
+    .notNull()
+    .references(() => jobTable.id, { onDelete: 'cascade' })
+    .unique(),
+  dateApplied: timestamp('date_applied').notNull().defaultNow(),
+});
 
 export type JobSelectType = typeof jobTable.$inferSelect;
 

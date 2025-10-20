@@ -5,11 +5,37 @@ import { Button } from '../ui/button';
 import { JobModal } from '../job-modal';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { db } from '@/utils/db/db';
-import { eq } from 'drizzle-orm';
+import { eq, inArray } from 'drizzle-orm';
 import { useQueryClient } from '@tanstack/react-query';
 import { CommentsDrawer } from './comments-drawer';
+import { Checkbox } from '../ui/checkbox';
+import { DeleteButton } from '../job-tracker-Page/columns';
+import { AsyncButton } from '../async-button';
+import { removeTrackedJob } from '@/utils/storage/trackedJobs';
 
 export const columns: ColumnDef<JobSelectType>[] = [
+  {
+    id: 'select',
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && 'indeterminate')
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label='Select all'
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label='Select row'
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
   {
     accessorKey: 'companyLogoUrl',
     header: '',
@@ -82,8 +108,8 @@ export const columns: ColumnDef<JobSelectType>[] = [
         items={[
           <JobModal key={'job'} data={original} />,
           <CommentsDrawer key={'comment'} id={original.id} />,
-          <ArchiveButton key={'archive'} id={original.id} />,
-          <DeleteButton key={'del'} id={original.id} />,
+          <UnarchiveButton key={'archive'} ids={[original.id]} />,
+          <DeleteButton key={'del'} ids={[original.id]} />,
         ]}
       />
     ),
@@ -94,37 +120,23 @@ function Status({ id, status }: Pick<JobSelectType, 'id' | 'status'>) {
   return <div className='text-lg gap-2 flex'>{jobStatusEmojis[status]}</div>;
 }
 
-function DeleteButton({ id }: Pick<JobSelectType, 'id'>) {
+export function UnarchiveButton({ ids }: { ids: number[] }) {
   const qc = useQueryClient();
   return (
-    <Button
-      onClick={async () => {
-        await db.delete(jobTable).where(eq(jobTable.id, id));
-        qc.invalidateQueries({ queryKey: ['archivedJobs'] });
-      }}
-      variant={'destructive'}
-    >
-      Delete
-    </Button>
-  );
-}
-
-function ArchiveButton({ id }: Pick<JobSelectType, 'id'>) {
-  const qc = useQueryClient();
-  return (
-    <Button
+    <AsyncButton
+      loadingText={`Unarchiving ${ids.length} Job${ids.length > 1 ? 's' : ''}...`}
       variant={'secondary'}
-      onClick={async () => {
+      onClickAsync={async () => {
         await db
           .update(jobTable)
           .set({ archived: false })
-          .where(eq(jobTable.id, id));
+          .where(inArray(jobTable.id, ids));
         qc.invalidateQueries({ queryKey: ['savedJobs'] });
         qc.invalidateQueries({ queryKey: ['archivedJobs'] });
       }}
     >
       Unarchive
-    </Button>
+    </AsyncButton>
   );
 }
 
