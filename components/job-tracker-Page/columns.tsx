@@ -161,7 +161,9 @@ export function EditStatus({
           .map((status) => {
             return (
               <AsyncButton
-                loadingText={`Updating ${ids.length} Job${ids.length > 1 ? 's' : ''}...`}
+                loadingText={`Updating ${ids.length} Job${
+                  ids.length > 1 ? 's' : ''
+                }...`}
                 key={status}
                 onClickAsync={async () => {
                   updateStatus({ ids, status: status });
@@ -207,8 +209,20 @@ export function DeleteButton({ ids }: { ids: number[] }) {
     <AsyncButton
       loadingText={`Deleting ${ids.length} Job${ids.length > 1 ? 's' : ''}...`}
       onClickAsync={async () => {
-        await db.delete(jobTable).where(inArray(jobTable.id, ids));
-        await removeTrackedJob(`handshake-${jobTable.jobIdFromSite}`);
+        console.log("Deleting job")
+        // Get jobs to be deleted (Local storage)
+        const jobs = await db
+          .select({ jobIdFromSite: jobTable.jobIdFromSite })
+          .from(jobTable)
+          .where(inArray(jobTable.id, ids));
+
+        // Remove each from tracked storage
+        for (const job of jobs) {
+          if (job.jobIdFromSite) {
+            await removeTrackedJob(job.jobIdFromSite);
+          }
+        }
+                await db.delete(jobTable).where(inArray(jobTable.id, ids));
         qc.invalidateQueries({ queryKey: ['savedJobs'] });
       }}
       variant={'destructive'}
