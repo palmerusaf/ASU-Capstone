@@ -14,6 +14,7 @@ import { Button } from './ui/button';
 import { useQueryClient } from '@tanstack/react-query';
 import { Repl } from '@electric-sql/pglite-repl';
 import { updateStatus } from './job-tracker-Page/columns';
+import { AsyncButton } from './async-button';
 
 export const devMenu = import.meta.env.DEV
   ? [
@@ -50,37 +51,38 @@ function SeedPage() {
   const qc = useQueryClient();
   return (
     <div className='grid grid-cols-2 w-lg mx-auto mt-4 gap-2 justify-center'>
-      <Button
+      <AsyncButton
         variant={'secondary'}
         className='cursor-pointer'
-        onClick={() => seedJobs(1)}
+        loadingText='Seeding Job...'
+        onClickAsync={() => seedJobs(1)}
       >
         Seed Job
-      </Button>
-      <Button
+      </AsyncButton>
+      <AsyncButton
         variant={'secondary'}
         className='cursor-pointer'
-        onClick={() => seedJobs(25)}
+        loadingText='Seeding 25 Jobs...'
+        onClickAsync={() => seedJobs(25)}
       >
         Seed 25 Jobs
-      </Button>
-      <Button
+      </AsyncButton>
+      <AsyncButton
         variant={'destructive'}
         className='cursor-pointer'
-        onClick={async () => {
+        loadingText='Nuking Jobs'
+        onClickAsync={async () => {
           await db.delete(jobTable);
           await qc.invalidateQueries({ queryKey: ['savedJobs'] });
           await qc.invalidateQueries({ queryKey: ['archivedJobs'] });
         }}
       >
         Nuke Jobs
-      </Button>
+      </AsyncButton>
     </div>
   );
 
   async function seedJobs(numJobs: number) {
-    console.log('🌱 Seeding database...');
-
     const jobs: (typeof jobTable.$inferInsert)[] = [];
 
     for (let i = 0; i < numJobs; i++) {
@@ -123,12 +125,14 @@ function SeedPage() {
         await db.insert(jobCommentsTable).values(comments);
     }
 
-    //set statuses
-    for (const { id } of insertedJobs)
-      updateStatus({ id, status: faker.helpers.arrayElement(jobStatus) });
-
-    console.log(
-      `✅ Seeded ${insertedJobs.length} jobs with events and comments`
+    //set statuses we have to do it one at a time so they get random statuses
+    await Promise.all(
+      insertedJobs.map(({ id }) => {
+        updateStatus({
+          ids: [id],
+          status: faker.helpers.arrayElement(jobStatus),
+        });
+      })
     );
   }
 }
