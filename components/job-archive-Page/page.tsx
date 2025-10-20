@@ -1,10 +1,11 @@
 import { JobSelectType, jobTable } from '@/utils/db/schema';
 import { useQuery } from '@tanstack/react-query';
-import { ArchiveButton, columns, DeleteButton } from './columns';
+import { UnarchiveButton, columns } from './columns';
 import { DataTable } from './data-table';
 import { db } from '@/utils/db/db';
 import { eq } from 'drizzle-orm';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { DeleteButton } from '../job-tracker-Page/columns';
 
 async function getSavedJobs(): Promise<JobSelectType[]> {
   return await db.select().from(jobTable).where(eq(jobTable.archived, true));
@@ -53,7 +54,7 @@ function MultiSelectMenu({ rows }: { rows: JobSelectType[] }) {
   const ids = rows.map(({ id }) => id);
   return (
     <div className='flex justify-center gap-4 animate-in fade-in zoom-in duration-500'>
-      <ArchiveButton ids={ids} />
+      <UnarchiveButton ids={ids} />
       <DeleteButton ids={ids} />
     </div>
   );

@@ -17,6 +17,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { ResumeMatchesModal } from './resume-matches-modal';
 import { CommentsDrawer } from './comments-drawer';
 import { Checkbox } from '../ui/checkbox';
+import { AsyncButton } from '../async-button';
 
 export const columns: ColumnDef<JobSelectType>[] = [
   {
@@ -158,9 +159,10 @@ export function EditStatus({
           })
           .map((status) => {
             return (
-              <Button
+              <AsyncButton
+                loadingText={`Updating ${ids.length} Job${ids.length > 1 ? 's' : ''}...`}
                 key={status}
-                onClick={async () => {
+                onClickAsync={async () => {
                   for (const id of ids)
                     await updateStatus({ id, status: status });
                   qc.invalidateQueries({ queryKey: ['savedJobs'] });
@@ -168,7 +170,7 @@ export function EditStatus({
                 className='capitalize cursor-pointer'
               >
                 {jobStatusEmojis[status]} {status}
-              </Button>
+              </AsyncButton>
             );
           })}
       </PopoverContent>
@@ -199,8 +201,9 @@ export async function updateStatus({
 export function DeleteButton({ ids }: { ids: number[] }) {
   const qc = useQueryClient();
   return (
-    <Button
-      onClick={async () => {
+    <AsyncButton
+      loadingText={`Deleting ${ids.length} Job${ids.length > 1 ? 's' : ''}...`}
+      onClickAsync={async () => {
         for (const id of ids)
           await db.delete(jobTable).where(eq(jobTable.id, id));
         qc.invalidateQueries({ queryKey: ['savedJobs'] });
@@ -208,16 +211,17 @@ export function DeleteButton({ ids }: { ids: number[] }) {
       variant={'destructive'}
     >
       Delete
-    </Button>
+    </AsyncButton>
   );
 }
 
 export function ArchiveButton({ ids }: { ids: number[] }) {
   const qc = useQueryClient();
   return (
-    <Button
+    <AsyncButton
       variant={'secondary'}
-      onClick={async () => {
+      loadingText={`Archiving ${ids.length} Job${ids.length > 1 ? 's' : ''}...`}
+      onClickAsync={async () => {
         for (const id of ids)
           await db
             .update(jobTable)
@@ -227,7 +231,7 @@ export function ArchiveButton({ ids }: { ids: number[] }) {
       }}
     >
       Archive
-    </Button>
+    </AsyncButton>
   );
 }
 

@@ -9,6 +9,8 @@ import { eq } from 'drizzle-orm';
 import { useQueryClient } from '@tanstack/react-query';
 import { CommentsDrawer } from './comments-drawer';
 import { Checkbox } from '../ui/checkbox';
+import { DeleteButton } from '../job-tracker-Page/columns';
+import { AsyncButton } from '../async-button';
 
 export const columns: ColumnDef<JobSelectType>[] = [
   {
@@ -105,7 +107,7 @@ export const columns: ColumnDef<JobSelectType>[] = [
         items={[
           <JobModal key={'job'} data={original} />,
           <CommentsDrawer key={'comment'} id={original.id} />,
-          <ArchiveButton key={'archive'} ids={[original.id]} />,
+          <UnarchiveButton key={'archive'} ids={[original.id]} />,
           <DeleteButton key={'del'} ids={[original.id]} />,
         ]}
       />
@@ -117,28 +119,13 @@ function Status({ id, status }: Pick<JobSelectType, 'id' | 'status'>) {
   return <div className='text-lg gap-2 flex'>{jobStatusEmojis[status]}</div>;
 }
 
-export function DeleteButton({ ids }: { ids: number[] }) {
+export function UnarchiveButton({ ids }: { ids: number[] }) {
   const qc = useQueryClient();
   return (
-    <Button
-      onClick={async () => {
-        for (const id of ids)
-          await db.delete(jobTable).where(eq(jobTable.id, id));
-        qc.invalidateQueries({ queryKey: ['archivedJobs'] });
-      }}
-      variant={'destructive'}
-    >
-      Delete
-    </Button>
-  );
-}
-
-export function ArchiveButton({ ids }: { ids: number[] }) {
-  const qc = useQueryClient();
-  return (
-    <Button
+    <AsyncButton
+      loadingText={`Unarchiving ${ids.length} Job${ids.length > 1 ? 's' : ''}...`}
       variant={'secondary'}
-      onClick={async () => {
+      onClickAsync={async () => {
         for (const id of ids)
           await db
             .update(jobTable)
@@ -149,7 +136,7 @@ export function ArchiveButton({ ids }: { ids: number[] }) {
       }}
     >
       Unarchive
-    </Button>
+    </AsyncButton>
   );
 }
 

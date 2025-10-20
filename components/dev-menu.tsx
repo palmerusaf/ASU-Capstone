@@ -14,6 +14,7 @@ import { Button } from './ui/button';
 import { useQueryClient } from '@tanstack/react-query';
 import { Repl } from '@electric-sql/pglite-repl';
 import { updateStatus } from './job-tracker-Page/columns';
+import { AsyncButton } from './async-button';
 
 export const devMenu = import.meta.env.DEV
   ? [
@@ -50,31 +51,34 @@ function SeedPage() {
   const qc = useQueryClient();
   return (
     <div className='grid grid-cols-2 w-lg mx-auto mt-4 gap-2 justify-center'>
-      <Button
+      <AsyncButton
         variant={'secondary'}
         className='cursor-pointer'
-        onClick={() => seedJobs(1)}
+        loadingText='Seeding Job...'
+        onClickAsync={() => seedJobs(1)}
       >
         Seed Job
-      </Button>
-      <Button
+      </AsyncButton>
+      <AsyncButton
         variant={'secondary'}
         className='cursor-pointer'
-        onClick={() => seedJobs(25)}
+        loadingText='Seeding 25 Jobs...'
+        onClickAsync={() => seedJobs(25)}
       >
         Seed 25 Jobs
-      </Button>
-      <Button
+      </AsyncButton>
+      <AsyncButton
         variant={'destructive'}
         className='cursor-pointer'
-        onClick={async () => {
+        loadingText='Nuking Jobs'
+        onClickAsync={async () => {
           await db.delete(jobTable);
           await qc.invalidateQueries({ queryKey: ['savedJobs'] });
           await qc.invalidateQueries({ queryKey: ['archivedJobs'] });
         }}
       >
         Nuke Jobs
-      </Button>
+      </AsyncButton>
     </div>
   );
 
