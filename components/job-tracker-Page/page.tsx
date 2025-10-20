@@ -14,10 +14,7 @@ import { ArchiveButton, columns, DeleteButton, EditStatus } from './columns';
 import { DataTable } from './data-table';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '../ui/button';
-
-async function getSavedJobs(): Promise<JobSelectType[]> {
-  return await db.select().from(jobTable).where(eq(jobTable.archived, false));
-}
+import { getSavedJobs } from '@/utils/db/getSavedJobs';
 
 export function JobTrackerPage() {
   const { data } = useQuery<JobSelectType[]>({
