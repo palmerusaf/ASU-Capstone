@@ -9,6 +9,7 @@ import { eq } from 'drizzle-orm';
 import { useQueryClient } from '@tanstack/react-query';
 import { CommentsDrawer } from './comments-drawer';
 import { Checkbox } from '../ui/checkbox';
+import { removeTrackedJob } from '@/utils/storage/trackedJobs';
 
 export const columns: ColumnDef<JobSelectType>[] = [
   {
@@ -124,6 +125,7 @@ export function DeleteButton({ ids }: { ids: number[] }) {
       onClick={async () => {
         for (const id of ids)
           await db.delete(jobTable).where(eq(jobTable.id, id));
+        await removeTrackedJob(`handshake-${jobTable.jobIdFromSite}`);
         qc.invalidateQueries({ queryKey: ['archivedJobs'] });
       }}
       variant={'destructive'}
