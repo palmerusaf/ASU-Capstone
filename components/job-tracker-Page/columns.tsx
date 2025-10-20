@@ -12,7 +12,7 @@ import { JobModal } from '../job-modal';
 import { Pencil } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { db } from '@/utils/db/db';
-import { eq } from 'drizzle-orm';
+import { eq, inArray } from 'drizzle-orm';
 import { useQueryClient } from '@tanstack/react-query';
 import { ResumeMatchesModal } from './resume-matches-modal';
 import { CommentsDrawer } from './comments-drawer';
@@ -163,8 +163,9 @@ export function EditStatus({
                 loadingText={`Updating ${ids.length} Job${ids.length > 1 ? 's' : ''}...`}
                 key={status}
                 onClickAsync={async () => {
-                  for (const id of ids)
-                    await updateStatus({ id, status: status });
+                  await Promise.all(
+                    ids.map((id) => updateStatus({ id, status: status }))
+                  );
                   qc.invalidateQueries({ queryKey: ['savedJobs'] });
                 }}
                 className='capitalize cursor-pointer'
@@ -204,8 +205,7 @@ export function DeleteButton({ ids }: { ids: number[] }) {
     <AsyncButton
       loadingText={`Deleting ${ids.length} Job${ids.length > 1 ? 's' : ''}...`}
       onClickAsync={async () => {
-        for (const id of ids)
-          await db.delete(jobTable).where(eq(jobTable.id, id));
+        await db.delete(jobTable).where(inArray(jobTable.id, ids));
         qc.invalidateQueries({ queryKey: ['savedJobs'] });
       }}
       variant={'destructive'}
@@ -222,11 +222,10 @@ export function ArchiveButton({ ids }: { ids: number[] }) {
       variant={'secondary'}
       loadingText={`Archiving ${ids.length} Job${ids.length > 1 ? 's' : ''}...`}
       onClickAsync={async () => {
-        for (const id of ids)
-          await db
-            .update(jobTable)
-            .set({ archived: true })
-            .where(eq(jobTable.id, id));
+        await db
+          .update(jobTable)
+          .set({ archived: true })
+          .where(inArray(jobTable.id, ids));
         qc.invalidateQueries({ queryKey: ['savedJobs'] });
       }}
     >

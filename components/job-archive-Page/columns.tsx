@@ -5,7 +5,7 @@ import { Button } from '../ui/button';
 import { JobModal } from '../job-modal';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { db } from '@/utils/db/db';
-import { eq } from 'drizzle-orm';
+import { eq, inArray } from 'drizzle-orm';
 import { useQueryClient } from '@tanstack/react-query';
 import { CommentsDrawer } from './comments-drawer';
 import { Checkbox } from '../ui/checkbox';
@@ -126,11 +126,10 @@ export function UnarchiveButton({ ids }: { ids: number[] }) {
       loadingText={`Unarchiving ${ids.length} Job${ids.length > 1 ? 's' : ''}...`}
       variant={'secondary'}
       onClickAsync={async () => {
-        for (const id of ids)
-          await db
-            .update(jobTable)
-            .set({ archived: false })
-            .where(eq(jobTable.id, id));
+        await db
+          .update(jobTable)
+          .set({ archived: false })
+          .where(inArray(jobTable.id, ids));
         qc.invalidateQueries({ queryKey: ['savedJobs'] });
         qc.invalidateQueries({ queryKey: ['archivedJobs'] });
       }}

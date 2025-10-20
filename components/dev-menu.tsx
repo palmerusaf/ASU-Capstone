@@ -83,8 +83,6 @@ function SeedPage() {
   );
 
   async function seedJobs(numJobs: number) {
-    console.log('🌱 Seeding database...');
-
     const jobs: (typeof jobTable.$inferInsert)[] = [];
 
     for (let i = 0; i < numJobs; i++) {
@@ -128,11 +126,10 @@ function SeedPage() {
     }
 
     //set statuses
-    for (const { id } of insertedJobs)
-      updateStatus({ id, status: faker.helpers.arrayElement(jobStatus) });
-
-    console.log(
-      `✅ Seeded ${insertedJobs.length} jobs with events and comments`
+    await Promise.all(
+      insertedJobs.map(({ id }) => {
+        updateStatus({ id, status: faker.helpers.arrayElement(jobStatus) });
+      })
     );
   }
 }
