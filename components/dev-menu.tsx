@@ -125,10 +125,13 @@ function SeedPage() {
         await db.insert(jobCommentsTable).values(comments);
     }
 
-    //set statuses
+    //set statuses we have to do it one at a time so they get random statuses
     await Promise.all(
       insertedJobs.map(({ id }) => {
-        updateStatus({ id, status: faker.helpers.arrayElement(jobStatus) });
+        updateStatus({
+          ids: [id],
+          status: faker.helpers.arrayElement(jobStatus),
+        });
       })
     );
   }

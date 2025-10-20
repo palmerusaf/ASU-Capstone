@@ -163,9 +163,7 @@ export function EditStatus({
                 loadingText={`Updating ${ids.length} Job${ids.length > 1 ? 's' : ''}...`}
                 key={status}
                 onClickAsync={async () => {
-                  await Promise.all(
-                    ids.map((id) => updateStatus({ id, status: status }))
-                  );
+                  updateStatus({ ids, status: status });
                   qc.invalidateQueries({ queryKey: ['savedJobs'] });
                 }}
                 className='capitalize cursor-pointer'
@@ -180,23 +178,26 @@ export function EditStatus({
 }
 
 export async function updateStatus({
-  id,
+  ids,
   status,
-}: Pick<JobSelectType, 'id' | 'status'>) {
-  await db.update(jobTable).set({ status }).where(eq(jobTable.id, id));
+}: Pick<JobSelectType, 'status'> & { ids: number[] }) {
+  await db.update(jobTable).set({ status }).where(inArray(jobTable.id, ids));
   const preAppStatuses: (typeof status)[] = [
     'search result',
     'interested',
     'not interested',
     'recently added',
   ];
-  if (preAppStatuses.includes(status))
-    await db.delete(appliedJobsTable).where(eq(appliedJobsTable.jobId, id));
-  else
+  if (preAppStatuses.includes(status)) {
+    await db
+      .delete(appliedJobsTable)
+      .where(inArray(appliedJobsTable.jobId, ids));
+  } else {
     await db
       .insert(appliedJobsTable)
-      .values({ jobId: id })
+      .values(ids.map((jobId) => ({ jobId })))
       .onConflictDoNothing();
+  }
 }
 
 export function DeleteButton({ ids }: { ids: number[] }) {
