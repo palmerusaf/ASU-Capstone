@@ -1,86 +1,88 @@
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-  DialogClose,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { jobTable } from '@/utils/db/schema';
-import { getResumes } from '@/utils/db/localStorage';
-import { useState, useEffect } from 'react';
-import { jsonToText } from '@/utils/jsonToText';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '../ui/table';
+import { useEffect, useMemo, useState } from "react";
+import { listResumes } from "@/utils/db/resumes";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-export function ResumeMatchesModal({
-  data,
-}: {
-  data: typeof jobTable.$inferSelect;
-}) {
-  const [resumes, setResumes] = useState<{ text: string; score: number }[]>([]);
+type Props = {
+    open: boolean;
+    onOpenChange: (v: boolean) => void;
+    userId?: string | null;
+    onRunMatches?: (params: { resumeId: number; name: string; json: any }) => void;
+};
 
-  useEffect(() => {
-    async function loadResumes() {
-      const storedResumes = (await getResumes()) as any[];
-      const scored = storedResumes.map((resume: any) => {
-        const text = jsonToText(resume);
-        return {
-          ...resume,
-          score: calculateCosineSimilarity(data.description, text),
+export function ResumeMatchesModal({ open, onOpenChange, userId = null, onRunMatches }: Props) {
+    const [rows, setRows] = useState<Array<{ id: number; name: string; json: any }>>([]);
+    const [selectedId, setSelectedId] = useState<string>(""); // keep string for <Select>
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (!open) return;
+        let cancelled = false;
+
+        (async () => {
+            try {
+                setError(null);
+                const data = await listResumes(userId);
+                if (!cancelled) {
+                    setRows(data as any);
+                    setSelectedId(data?.[0]?.id?.toString?.() ?? "");
+                }
+            } catch (e: any) {
+                if (!cancelled) setError(e?.message || "Failed to load resumes.");
+            }
+        })();
+
+        return () => {
+            cancelled = true;
         };
-      });
-      //  Following code sorts resumes based on similairy score. It can be used once resumes have a unique identifier.
-      //   scored.sort((a, b) => b.score - a.score);
-      setResumes(scored);
+    }, [open, userId]);
+
+    const selected = useMemo(
+        () => rows.find(r => r.id.toString() === selectedId) ?? null,
+        [rows, selectedId]
+    );
+
+    function handleRun() {
+        if (!selected) return;
+        onRunMatches?.({ resumeId: selected.id, name: selected.name, json: selected.json });
+        onOpenChange(false);
     }
-    loadResumes();
-  }, [data.description]);
 
-  return (
-    <Dialog>
-      <DialogTrigger>
-        <div className="p-3 cursor-pointer inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 py-1">
-          Matches
-        </div>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Resume Matches</DialogTitle>
-        </DialogHeader>
+    return (
+        <Dialog open={open} onOpenChange={onOpenChange}>
+            <DialogContent className="max-w-lg">
+                <DialogHeader>
+                    <DialogTitle>Match jobs using a saved resume</DialogTitle>
+                </DialogHeader>
 
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Resume</TableHead>
-              <TableHead>Similarity</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {resumes.map((resume, i) => (
-              <TableRow key={i}>
-                {/* TODO: Replace Resume{i+1} with actual resume identifier when we make one*/}
-                <TableCell>Resume {i + 1}</TableCell>
-                <TableCell>{resume.score.toFixed(3)}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+                {error ? (
+                    <div className="p-2 text-sm text-red-600">{error}</div>
+                ) : rows.length === 0 ? (
+                    <div className="p-2 text-sm opacity-70">No resumes saved yet.</div>
+                ) : (
+                    <div className="space-y-3">
+                        <label className="block text-sm font-medium">Choose resume</label>
+                        <Select value={selectedId} onValueChange={setSelectedId}>
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Select a resume" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {rows.map(r => (
+                                    <SelectItem key={r.id} value={r.id.toString()}>
+                                        {r.name} <span className="opacity-60">#{r.id}</span>
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                )}
 
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button variant='outline'>Close</Button>
-          </DialogClose>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
+                <DialogFooter>
+                    <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
+                    <Button onClick={handleRun} disabled={!selected}>Run matches</Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+    );
 }
