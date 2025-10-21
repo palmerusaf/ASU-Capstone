@@ -50,6 +50,13 @@
       "when": 1760790446956,
       "tag": "0006_lonely_major_mapleleaf",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1761018229724,
+      "tag": "0007_salty_terrax",
+      "breakpoints": true
     }
   ]
 }
