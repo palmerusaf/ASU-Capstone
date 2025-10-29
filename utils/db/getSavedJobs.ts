@@ -7,8 +7,5 @@ export async function getSavedJobs(): Promise<JobSelectType[]> {
     .select()
     .from(jobTable)
     .where(eq(jobTable.archived, false));
-  console.log('1-');
-  console.log(jobs);
-  console.log('2-');
   return jobs;
 }
