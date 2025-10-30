@@ -73,6 +73,9 @@ export const jobTable = pgTable('jobs', {
     .$type<(typeof jobStatus)[number]>()
     .notNull()
     .default('recently added'),
+  resumeId: integer('resume_id').references(() => resumes.id, {
+    onDelete: 'set null',
+  }),
 });
 
 export const jobCommentsTable = pgTable('job_comments', {

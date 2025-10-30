@@ -72,4 +72,6 @@ CREATE TABLE "resumes" (
 );
 --> statement-breakpoint
 ALTER TABLE "raw_resumes" ADD CONSTRAINT "raw_resumes_json_id_resumes_id_fk" FOREIGN KEY ("json_id") REFERENCES "public"."resumes"("id") ON DELETE set null ON UPDATE no action;
+ALTER TABLE "jobs" ADD COLUMN "resume_id" integer;--> statement-breakpoint
+ALTER TABLE "jobs" ADD CONSTRAINT "jobs_resume_id_resumes_id_fk" FOREIGN KEY ("resume_id") REFERENCES "public"."resumes"("id") ON DELETE set null ON UPDATE no action;
 `;
