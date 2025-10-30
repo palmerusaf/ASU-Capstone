@@ -1,88 +1,83 @@
-import { useEffect, useMemo, useState } from "react";
-import { listResumes } from "@/utils/db/resumes";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from '@/components/ui/dialog';
+import { db } from '@/utils/db/db';
+import { JobSelectType, jobTable, rawResumes } from '@/utils/db/schema';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { eq } from 'drizzle-orm';
+import { Loader2 } from 'lucide-react';
+import { Button } from '../ui/button';
 
-type Props = {
-    open: boolean;
-    onOpenChange: (v: boolean) => void;
-    userId?: string | null;
-    onRunMatches?: (params: { resumeId: number; name: string; json: any }) => void;
-};
-
-export function ResumeMatchesModal({ open, onOpenChange, userId = null, onRunMatches }: Props) {
-    const [rows, setRows] = useState<Array<{ id: number; name: string; json: any }>>([]);
-    const [selectedId, setSelectedId] = useState<string>(""); // keep string for <Select>
-    const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        if (!open) return;
-        let cancelled = false;
-
-        (async () => {
-            try {
-                setError(null);
-                const data = await listResumes(userId);
-                if (!cancelled) {
-                    setRows(data as any);
-                    setSelectedId(data?.[0]?.id?.toString?.() ?? "");
-                }
-            } catch (e: any) {
-                if (!cancelled) setError(e?.message || "Failed to load resumes.");
-            }
-        })();
-
-        return () => {
-            cancelled = true;
-        };
-    }, [open, userId]);
-
-    const selected = useMemo(
-        () => rows.find(r => r.id.toString() === selectedId) ?? null,
-        [rows, selectedId]
-    );
-
-    function handleRun() {
-        if (!selected) return;
-        onRunMatches?.({ resumeId: selected.id, name: selected.name, json: selected.json });
-        onOpenChange(false);
-    }
+export function ResumeMatchesModal({ jobData }: { jobData: JobSelectType }) {
+    const { resumeId, description } = jobData;
+    const qc = useQueryClient();
+    const { data, isPending } = useQuery({
+        queryKey: ['savedJobs', { resumeId, description }],
+        queryFn: getData,
+    });
+    if (isPending) return <Loader2 className='mr-2 h-4 w-4 animate-spin' />;
 
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-lg">
+        <Dialog key={jobData.id}>
+            <DialogTrigger>
+                <div className="p-3 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 py-1">
+                    Link
+                </div>
+            </DialogTrigger>
+            <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Match jobs using a saved resume</DialogTitle>
+                    <DialogTitle>Link Resume to Job</DialogTitle>
+                    <DialogDescription>
+                        {!data?.length ? 'No uploaded Resumes' : <List />}
+                    </DialogDescription>
                 </DialogHeader>
-
-                {error ? (
-                    <div className="p-2 text-sm text-red-600">{error}</div>
-                ) : rows.length === 0 ? (
-                    <div className="p-2 text-sm opacity-70">No resumes saved yet.</div>
-                ) : (
-                    <div className="space-y-3">
-                        <label className="block text-sm font-medium">Choose resume</label>
-                        <Select value={selectedId} onValueChange={setSelectedId}>
-                            <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Select a resume" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {rows.map(r => (
-                                    <SelectItem key={r.id} value={r.id.toString()}>
-                                        {r.name} <span className="opacity-60">#{r.id}</span>
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    </div>
-                )}
-
-                <DialogFooter>
-                    <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-                    <Button onClick={handleRun} disabled={!selected}>Run matches</Button>
-                </DialogFooter>
             </DialogContent>
         </Dialog>
     );
+
+    function List() {
+        return (
+            <>
+                <div className='grid grid-cols-3 gap-2'>
+                    <span className='font-bold text-xl'>Resume</span>
+                    <span className='font-bold text-xl'>Match Rate</span>
+                    <span></span>
+                </div>
+                <div className='grid grid-cols-3 gap-2  overflow-y-auto max-h-72'>
+                    {data?.map(({ name, jsonId }) => {
+                        return (
+                            <>
+                                <span className=''>{name}</span>
+                                <span className=''>89</span>
+                                {jsonId === resumeId ? (
+                                    <Button disabled>Linked</Button>
+                                ) : (
+                                    <AsyncButton
+                                        loadingText='Linking...'
+                                        onClickAsync={async () => {
+                                            await db
+                                                .update(jobTable)
+                                                .set({ resumeId: jsonId })
+                                                .where(eq(jobTable.id, jobData.id));
+                                            await qc.invalidateQueries({ queryKey: ['savedJobs'] });
+                                        }}
+                                    >
+                                        Link
+                                    </AsyncButton>
+                                )}
+                            </>
+                        );
+                    })}
+                </div>
+            </>
+        );
+    }
+    async function getData() {
+        return await db.select().from(rawResumes);
+    }
 }
