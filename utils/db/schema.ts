@@ -1,6 +1,7 @@
 import {
   boolean,
-  integer, jsonb,
+  integer,
+  jsonb,
   pgTable,
   text,
   timestamp,
@@ -122,71 +123,88 @@ const emptyToUndefined = (val: unknown) =>
   typeof val === 'string' && val.trim() === '' ? undefined : val; // Helper method to turn empty fields into undefined (to pass validation)
 
 const ProfileSchema = z.object({
-  network: z.string().optional().default(""),
-  username: z.string().optional().default(""),
-  url: z.string().optional().default(""),
+  network: z.string().optional().default(''),
+  username: z.string().optional().default(''),
+  url: z.string().optional().default(''),
 });
 
 const EducationSchema = z.object({
-  institution: z.string().min(1, "Required"),
-  area: z.string().min(1, "Required"),
-  startDate: z.string().min(1, "Required"),
-  endDate: z.string().optional().default(""),
+  institution: z.string().min(1, 'Required'),
+  area: z.string().min(1, 'Required'),
+  startDate: z.string().min(1, 'Required'),
+  endDate: z.string().optional().default(''),
 });
 
 const WorkSchema = z.object({
-  company: z.string().min(1, "Required"),
-  position: z.string().min(1, "Required"),
-  startDate: z.string().min(1, "Required"),
-  endDate: z.string().optional().default(""),
-  summary: z.string().optional().default(""),
+  company: z.string().min(1, 'Required'),
+  position: z.string().min(1, 'Required'),
+  startDate: z.string().min(1, 'Required'),
+  endDate: z.string().optional().default(''),
+  summary: z.string().optional().default(''),
 });
 
 const ProjectSchema = z.object({
-  name: z.string().min(1, "Required"),
-  startDate: z.string().optional().default(""),
-  endDate: z.string().optional().default(""),
-  description: z.string().min(1, "Required"),
-  url: z.string().min(1, "Required"),
+  name: z.string().min(1, 'Required'),
+  startDate: z.string().optional().default(''),
+  endDate: z.string().optional().default(''),
+  description: z.string().min(1, 'Required'),
+  url: z.string().min(1, 'Required'),
 });
 
 export const ResumeSchema = z.object({
   basics: z.object({
-    name: z.string().min(1, "Required"),
-    label: z.string().min(1, "Required"),
-    email: z.string().min(1, "Required"),
-    phone: z.string().min(1, "Required"),
-    website: z.string().min(1, "Required"),
-    summary: z.string().optional().default(""),
-    profiles: z.array(ProfileSchema).default([{ network: "", username: "", url: "" }]),
+    name: z.string().min(1, 'Required'),
+    label: z.string().min(1, 'Required'),
+    email: z.string().min(1, 'Required'),
+    phone: z.string().min(1, 'Required'),
+    website: z.string().min(1, 'Required'),
+    summary: z.string().optional().default(''),
+    profiles: z
+      .array(ProfileSchema)
+      .default([{ network: '', username: '', url: '' }]),
   }),
-  education: z.array(EducationSchema).min(1).default([{
-    institution: "",
-    area: "",
-    startDate: "",
-    endDate: "",
-  }]),
-  work: z.array(WorkSchema).min(1).default([{
-    company: "",
-    position: "",
-    startDate: "",
-    endDate: "",
-    summary: "",
-  }]),
-  projects: z.array(ProjectSchema).min(1).default([{
-    name: "",
-    startDate: "",
-    endDate: "",
-    description: "",
-    url: "",
-  }]),
+  education: z
+    .array(EducationSchema)
+    .min(1)
+    .default([
+      {
+        institution: '',
+        area: '',
+        startDate: '',
+        endDate: '',
+      },
+    ]),
+  work: z
+    .array(WorkSchema)
+    .min(1)
+    .default([
+      {
+        company: '',
+        position: '',
+        startDate: '',
+        endDate: '',
+        summary: '',
+      },
+    ]),
+  projects: z
+    .array(ProjectSchema)
+    .min(1)
+    .default([
+      {
+        name: '',
+        startDate: '',
+        endDate: '',
+        description: '',
+        url: '',
+      },
+    ]),
 });
 
 export const resumes = pgTable('resumes', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-  userId: text('user_id'),              // optional owner identifier
-  name: text('name').notNull(),         // user-chosen label for the saved resume
-  json: jsonb('json').notNull(),        // full JSON Resume payload
+  userId: text('user_id'), // optional owner identifier
+  name: text('name').notNull(), // user-chosen label for the saved resume
+  json: jsonb('json').notNull(), // full JSON Resume payload
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
@@ -195,8 +213,10 @@ export const rawResumes = pgTable('raw_resumes', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
   name: text('name').notNull(),
   rawText: text('raw_text').notNull(),
-  source: text('source').notNull(),     // "builder" | "paste"
-  jsonId: integer('json_id').references(() => resumes.id, { onDelete: 'set null' }),
+  source: text('source').notNull(), // "builder" | "paste"
+  jsonId: integer('json_id').references(() => resumes.id, {
+    onDelete: 'set null',
+  }),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
