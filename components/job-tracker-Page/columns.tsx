@@ -120,7 +120,7 @@ export const columns: ColumnDef<JobSelectType>[] = [
   },
   {
     header: 'Resume',
-    cell: ({ row: { original } }) => <ResumeMatchesModal data={original} />,
+    cell: ({ row: { original } }) => <ResumeMatchesModal jobData={original} />,
   },
   {
     header: 'Actions',
@@ -161,9 +161,8 @@ export function EditStatus({
           .map((status) => {
             return (
               <AsyncButton
-                loadingText={`Updating ${ids.length} Job${
-                  ids.length > 1 ? 's' : ''
-                }...`}
+                loadingText={`Updating ${ids.length} Job${ids.length > 1 ? 's' : ''
+                  }...`}
                 key={status}
                 onClickAsync={async () => {
                   updateStatus({ ids, status: status });
@@ -209,7 +208,7 @@ export function DeleteButton({ ids }: { ids: number[] }) {
     <AsyncButton
       loadingText={`Deleting ${ids.length} Job${ids.length > 1 ? 's' : ''}...`}
       onClickAsync={async () => {
-        console.log("Deleting job")
+        console.log('Deleting job');
         // Get jobs to be deleted (Local storage)
         const jobs = await db
           .select({ jobIdFromSite: jobTable.jobIdFromSite })
@@ -222,7 +221,7 @@ export function DeleteButton({ ids }: { ids: number[] }) {
             await removeTrackedJob(job.jobIdFromSite);
           }
         }
-                await db.delete(jobTable).where(inArray(jobTable.id, ids));
+        await db.delete(jobTable).where(inArray(jobTable.id, ids));
         qc.invalidateQueries({ queryKey: ['savedJobs'] });
       }}
       variant={'destructive'}
