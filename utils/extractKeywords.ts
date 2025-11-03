@@ -1,15 +1,16 @@
 import Similarity from 'compute-cosine-similarity';
 import { removeStopwords } from 'stopword';
 
+const importantKeyWords = new Set(['node', 'js']);
 export function extractKeywords(text: string): Map<string, number> {
   const counts = new Map<string, number>();
-  for (const raw of removeStopwords(
-    text.toLowerCase().split(/[^a-z0-9+#.]+/g)
-  )) {
-    const w = raw.trim();
+  for (const w of removeStopwords(text.toLowerCase().split(/\W/g))) {
     if (!w || w.length < 2) continue;
     counts.set(w, (counts.get(w) ?? 0) + 1);
   }
+  // scale count for important keywords
+  for (const [word, count] of counts)
+    if (importantKeyWords.has(word)) counts.set(word, count * 1.5);
   return counts;
 }
 
@@ -32,6 +33,8 @@ export function calculateCosineSimilarity(
 ) {
   // Extract keywords
   const jobKeywords = extractKeywords(jobDescription);
+  // __AUTO_GENERATED_PRINT_VAR_START__
+  console.log('calculateCosineSimilarity jobKeywords:', jobKeywords); // __AUTO_GENERATED_PRINT_VAR_END__
   const resumeKeywords = extractKeywords(resumeText);
 
   // Combine all keywords
