@@ -22,6 +22,18 @@ export const jobStatus = [
   'recieved offer',
 ] as const;
 
+export const statusColors: Record<(typeof jobStatus)[number], string> = {
+  'search result': '#94a3b8',
+  'recently added': '#60a5fa',
+  interested: '#fbbf24',
+  applied: '#a78bfa',
+  'scheduled interview': '#34d399',
+  ghosted: '#6b7280',
+  rejected: '#ef4444',
+  'not interested': '#f87171',
+  'recieved offer': '#10b981',
+};  
+
 export const jobStatusEmojis = {
   applied: '📨', // sent application
   ghosted: '👻', // no reply
@@ -77,6 +89,17 @@ export const jobTable = pgTable('jobs', {
     onDelete: 'set null',
   }),
 });
+
+export const jobStatusHistoryTable = pgTable('job_status_history', {
+  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+  jobId: integer('job_id')
+    .references(() => jobTable.id, { onDelete: 'cascade' })
+    .notNull(),
+  status: text('status').$type<(typeof jobStatus)[number]>().notNull(),
+  changedAt: timestamp('changed_at').defaultNow().notNull(),
+});
+
+export type JobHistoryType = typeof jobStatusHistoryTable.$inferSelect;
 
 export const jobCommentsTable = pgTable('job_comments', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),

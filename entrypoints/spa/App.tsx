@@ -12,6 +12,7 @@ import { Toaster } from 'sonner';
 import { devMenu } from '../../components/dev-menu';
 import { PrevAppsPage } from '@/components/prev-apps-page';
 import { TotalJobs } from '@/components/total-jobs-page';
+import StreamgraphPage from '@/components/streamGraphPage';
 
 export default function App() {
   // disable auth
@@ -80,6 +81,10 @@ function AuthenticatedUsersSPA() {
             {
               subMenu: 'Total Jobs',
               content: <TotalJobs />,
+            },
+            {
+              subMenu: 'Job Status',
+              content: <StreamgraphPage />,
             },
           ],
         },
