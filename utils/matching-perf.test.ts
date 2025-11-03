@@ -155,11 +155,11 @@ describe('keywordMatcher accuracy performance tests', () => {
     expect(score).toBeGreaterThanOrEqual(0);
     expect(score).toBeLessThanOrEqual(100);
   });
-  test.skip('score within ±20', () => {
+  test('score within ±20', () => {
     expectWithinRange({ received: score, tolerance: 20 });
   });
 
-  test.skip('score within ±10', () => {
+  test('score within ±10', () => {
     expectWithinRange({ received: score, tolerance: 10 });
   });
 });

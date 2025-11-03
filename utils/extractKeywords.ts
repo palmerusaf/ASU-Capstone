@@ -1,38 +1,13 @@
 import Similarity from 'compute-cosine-similarity';
+import { removeStopwords } from 'stopword';
 
-const STOP = new Set([
-  'a',
-  'an',
-  'and',
-  'are',
-  'as',
-  'at',
-  'be',
-  'by',
-  'for',
-  'from',
-  'i',
-  'in',
-  'is',
-  'it',
-  'me',
-  'my',
-  'of',
-  'on',
-  'or',
-  'that',
-  'the',
-  'this',
-  'to',
-  'was',
-  'were',
-  'with',
-]);
 export function extractKeywords(text: string): Map<string, number> {
   const counts = new Map<string, number>();
-  for (const raw of text.toLowerCase().split(/[^a-z0-9+#.]+/g)) {
+  for (const raw of removeStopwords(
+    text.toLowerCase().split(/[^a-z0-9+#.]+/g)
+  )) {
     const w = raw.trim();
-    if (!w || STOP.has(w) || w.length < 2) continue;
+    if (!w || w.length < 2) continue;
     counts.set(w, (counts.get(w) ?? 0) + 1);
   }
   return counts;
