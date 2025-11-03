@@ -4,6 +4,7 @@ import {
   JobSelectType,
   jobStatus,
   jobStatusEmojis,
+  jobStatusHistoryTable,
   jobTable,
 } from '@/utils/db/schema';
 import { ColumnDef } from '@tanstack/react-table';
@@ -201,6 +202,15 @@ export async function updateStatus({
       .values(ids.map((jobId) => ({ jobId })))
       .onConflictDoNothing();
   }
+
+  // Track changes in job history.
+  const historyEntries = ids.map((jobId) => ({
+    jobId,
+    status,
+    changedAt: new Date(),
+  }));
+
+  await db.insert(jobStatusHistoryTable).values(historyEntries);
 }
 
 export function DeleteButton({ ids }: { ids: number[] }) {
@@ -209,7 +219,6 @@ export function DeleteButton({ ids }: { ids: number[] }) {
     <AsyncButton
       loadingText={`Deleting ${ids.length} Job${ids.length > 1 ? 's' : ''}...`}
       onClickAsync={async () => {
-        console.log("Deleting job")
         // Get jobs to be deleted (Local storage)
         const jobs = await db
           .select({ jobIdFromSite: jobTable.jobIdFromSite })
