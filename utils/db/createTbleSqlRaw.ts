@@ -72,6 +72,8 @@ CREATE TABLE "resumes" (
 );
 --> statement-breakpoint
 ALTER TABLE "raw_resumes" ADD CONSTRAINT "raw_resumes_json_id_resumes_id_fk" FOREIGN KEY ("json_id") REFERENCES "public"."resumes"("id") ON DELETE set null ON UPDATE no action;
+ALTER TABLE "jobs" ADD COLUMN "resume_id" integer;--> statement-breakpoint
+ALTER TABLE "jobs" ADD CONSTRAINT "jobs_resume_id_resumes_id_fk" FOREIGN KEY ("resume_id") REFERENCES "public"."resumes"("id") ON DELETE set null ON UPDATE no action;
 CREATE TABLE "job_status_history" (
 	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "job_status_history_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
 	"job_id" integer NOT NULL,
@@ -80,6 +82,4 @@ CREATE TABLE "job_status_history" (
 );
 --> statement-breakpoint
 ALTER TABLE "job_status_history" ADD CONSTRAINT "job_status_history_job_id_jobs_id_fk" FOREIGN KEY ("job_id") REFERENCES "public"."jobs"("id") ON DELETE cascade ON UPDATE no action;
-ALTER TABLE "jobs" ADD COLUMN "resume_id" integer;--> statement-breakpoint
-ALTER TABLE "jobs" ADD CONSTRAINT "jobs_resume_id_resumes_id_fk" FOREIGN KEY ("resume_id") REFERENCES "public"."resumes"("id") ON DELETE set null ON UPDATE no action;
 `;
