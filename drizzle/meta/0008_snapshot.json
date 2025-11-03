@@ -1,5 +1,5 @@
 {
-  "id": "bd94333c-3490-401c-a405-4aa28b092fc9",
+  "id": "a9d7b690-65d0-4291-b687-e02b26ddf773",
   "prevId": "1f3015b7-b798-496a-a909-3e5d8d86aa19",
   "version": "7",
   "dialect": "postgresql",
@@ -122,69 +122,6 @@
         "job_comments_job_id_jobs_id_fk": {
           "name": "job_comments_job_id_jobs_id_fk",
           "tableFrom": "job_comments",
-          "tableTo": "jobs",
-          "columnsFrom": [
-            "job_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.job_status_history": {
-      "name": "job_status_history",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "identity": {
-            "type": "always",
-            "name": "job_status_history_id_seq",
-            "schema": "public",
-            "increment": "1",
-            "startWith": "1",
-            "minValue": "1",
-            "maxValue": "2147483647",
-            "cache": "1",
-            "cycle": false
-          }
-        },
-        "job_id": {
-          "name": "job_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "status": {
-          "name": "status",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "changed_at": {
-          "name": "changed_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "job_status_history_job_id_jobs_id_fk": {
-          "name": "job_status_history_job_id_jobs_id_fk",
-          "tableFrom": "job_status_history",
           "tableTo": "jobs",
           "columnsFrom": [
             "job_id"
@@ -328,10 +265,30 @@
           "primaryKey": false,
           "notNull": true,
           "default": "'recently added'"
+        },
+        "resume_id": {
+          "name": "resume_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "jobs_resume_id_resumes_id_fk": {
+          "name": "jobs_resume_id_resumes_id_fk",
+          "tableFrom": "jobs",
+          "tableTo": "resumes",
+          "columnsFrom": [
+            "resume_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "jobs_job_id_unique": {

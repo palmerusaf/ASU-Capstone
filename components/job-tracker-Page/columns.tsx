@@ -121,7 +121,7 @@ export const columns: ColumnDef<JobSelectType>[] = [
   },
   {
     header: 'Resume',
-    cell: ({ row: { original } }) => <ResumeMatchesModal data={original} />,
+    cell: ({ row: { original } }) => <ResumeMatchesModal jobData={original} />,
   },
   {
     header: 'Actions',
@@ -162,9 +162,8 @@ export function EditStatus({
           .map((status) => {
             return (
               <AsyncButton
-                loadingText={`Updating ${ids.length} Job${
-                  ids.length > 1 ? 's' : ''
-                }...`}
+                loadingText={`Updating ${ids.length} Job${ids.length > 1 ? 's' : ''
+                  }...`}
                 key={status}
                 onClickAsync={async () => {
                   updateStatus({ ids, status: status });
@@ -231,7 +230,7 @@ export function DeleteButton({ ids }: { ids: number[] }) {
             await removeTrackedJob(job.jobIdFromSite);
           }
         }
-                await db.delete(jobTable).where(inArray(jobTable.id, ids));
+        await db.delete(jobTable).where(inArray(jobTable.id, ids));
         qc.invalidateQueries({ queryKey: ['savedJobs'] });
       }}
       variant={'destructive'}

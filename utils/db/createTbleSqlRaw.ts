@@ -80,4 +80,6 @@ CREATE TABLE "job_status_history" (
 );
 --> statement-breakpoint
 ALTER TABLE "job_status_history" ADD CONSTRAINT "job_status_history_job_id_jobs_id_fk" FOREIGN KEY ("job_id") REFERENCES "public"."jobs"("id") ON DELETE cascade ON UPDATE no action;
+ALTER TABLE "jobs" ADD COLUMN "resume_id" integer;--> statement-breakpoint
+ALTER TABLE "jobs" ADD CONSTRAINT "jobs_resume_id_resumes_id_fk" FOREIGN KEY ("resume_id") REFERENCES "public"."resumes"("id") ON DELETE set null ON UPDATE no action;
 `;
