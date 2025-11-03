@@ -162,4 +162,7 @@ describe('keywordMatcher accuracy performance tests', () => {
   test('score within ±10', () => {
     expectWithinRange({ received: score, tolerance: 10 });
   });
+  test('score within ±5', () => {
+    expectWithinRange({ received: score, tolerance: 5 });
+  });
 });

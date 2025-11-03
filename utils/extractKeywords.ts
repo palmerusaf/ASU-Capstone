@@ -1,16 +1,97 @@
 import Similarity from 'compute-cosine-similarity';
 import { removeStopwords } from 'stopword';
 
-const importantKeyWords = new Set(['node', 'js']);
+const importantKeyWords = new Set([
+  'net',
+  'ai',
+  'algorithm',
+  'analytics',
+  'angular',
+  'ansible',
+  'api',
+  'architecture',
+  'aspnet',
+  'automation',
+  'aws',
+  'azure',
+  'c#',
+  'c',
+  'c++',
+  'cd',
+  'ci',
+  'css',
+  'cybersecurity',
+  'data',
+  'distributed',
+  'django',
+  'docker',
+  'express',
+  'fastapi',
+  'flask',
+  'gcp',
+  'git',
+  'go',
+  'graphql',
+  'html',
+  'java',
+  'javascript',
+  'jenkins',
+  'jwt',
+  'kotlin',
+  'kubernetes',
+  'laravel',
+  'learning',
+  'machine',
+  'microservices',
+  'ml',
+  'mongodb',
+  'mysql',
+  'next',
+  'node',
+  'numpy',
+  'nuxt',
+  'oauth',
+  'pandas',
+  'performance',
+  'php',
+  'pipeline',
+  'postgresql',
+  'python',
+  'pytorch',
+  'rails',
+  'react',
+  'redis',
+  'ruby',
+  'rust',
+  'scalability',
+  'serverless',
+  'spring',
+  'sql',
+  'sqlite',
+  'svelte',
+  'swift',
+  'system',
+  'tailwind',
+  'tensorflow',
+  'terraform',
+  'testing',
+  'typescript',
+  'ui',
+  'ux',
+  'vue',
+]);
 export function extractKeywords(text: string): Map<string, number> {
   const counts = new Map<string, number>();
-  for (const w of removeStopwords(text.toLowerCase().split(/\W/g))) {
-    if (!w || w.length < 2) continue;
-    counts.set(w, (counts.get(w) ?? 0) + 1);
+
+  for (const word of removeStopwords(text.toLowerCase().split(/[^a-z0-9+]+/))) {
+    if (!word || word.length < 2) continue;
+    counts.set(word, (counts.get(word) ?? 0) + 1);
   }
+
   // scale count for important keywords
-  for (const [word, count] of counts)
-    if (importantKeyWords.has(word)) counts.set(word, count * 1.5);
+  for (const [word, count] of counts) {
+    if (importantKeyWords.has(word)) counts.set(word, count * 6);
+  }
   return counts;
 }
 
@@ -33,8 +114,6 @@ export function calculateCosineSimilarity(
 ) {
   // Extract keywords
   const jobKeywords = extractKeywords(jobDescription);
-  // __AUTO_GENERATED_PRINT_VAR_START__
-  console.log('calculateCosineSimilarity jobKeywords:', jobKeywords); // __AUTO_GENERATED_PRINT_VAR_END__
   const resumeKeywords = extractKeywords(resumeText);
 
   // Combine all keywords
@@ -61,5 +140,5 @@ export function calculateCosineSimilarity(
 
   // Calculate similarity score
   const similarity = Similarity(jobArray, resumeArray) || 0;
-  return Math.floor(similarity * 100);
+  return Math.round(similarity * 100);
 }
