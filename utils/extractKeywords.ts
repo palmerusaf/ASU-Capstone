@@ -82,6 +82,6 @@ export function calculateCosineSimilarity(
   }
 
   // Calculate similarity score
-  const similarity = Similarity(jobArray, resumeArray);
-  return similarity as number;
+  const similarity = Similarity(jobArray, resumeArray) || 0;
+  return Math.floor(similarity * 100);
 }
