@@ -73,12 +73,15 @@ export function calculateCosineSimilarity(
     resumeArray.push(resumeKeywords.get(word) ?? 0);
   }
 
-  // If an array is empty due to STOP words, return 0 instead. 
-  if (jobArray.every((occurance) => occurance === 0) || resumeArray.every((occurance) => occurance === 0)) {
+  // If an array is empty due to STOP words, return 0 instead.
+  if (
+    jobArray.every((occurance) => occurance === 0) ||
+    resumeArray.every((occurance) => occurance === 0)
+  ) {
     return 0;
   }
 
   // Calculate similarity score
   const similarity = Similarity(jobArray, resumeArray);
-  return similarity;
+  return similarity as number;
 }
