@@ -1,6 +1,6 @@
 import { db } from './db';
-import { resumes, rawResumes } from './schema';
-import { eq, desc } from 'drizzle-orm';
+import {resumes, rawResumes, jobTable} from './schema';
+import {eq, desc, sql} from 'drizzle-orm';
 
 export type JsonResume = Record<string, any>;
 
@@ -45,4 +45,15 @@ export async function addRawResume(params: {
     jsonId: params.jsonId,
   }).returning();
   return row;
+}
+
+export async function listResumeStatusCounts() {
+    return db
+        .select({
+            resumeId: jobTable.resumeId,
+            status: jobTable.status,
+            count: sql<number>`count(*)`,
+        })
+        .from(jobTable)
+        .groupBy(jobTable.resumeId, jobTable.status);
 }
