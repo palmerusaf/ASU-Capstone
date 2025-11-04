@@ -19,7 +19,7 @@ interface JobStatusStreamGraphProps {
   data: StreamGraphData[];
 }
 
-const JobStatusStreamgraph: React.FC<JobStatusStreamGraphProps> = ({
+const JobStatusStreamGraph: React.FC<JobStatusStreamGraphProps> = ({
   data,
 }) => {
   return (

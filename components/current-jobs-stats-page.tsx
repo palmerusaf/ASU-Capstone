@@ -9,7 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import { eq } from 'drizzle-orm';
 import Plot from 'react-plotly.js';
 
-export function TotalJobs() {
+export function CurrentJobsStatsPage() {
   const { data } = useQuery({
     queryKey: ['totJobs'],
     queryFn: getSanKeyJobData,
