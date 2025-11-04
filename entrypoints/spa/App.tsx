@@ -11,8 +11,8 @@ import * as icon from 'lucide-react';
 import { Toaster } from 'sonner';
 import { devMenu } from '../../components/dev-menu';
 import { PrevAppsPage } from '@/components/prev-apps-page';
-import { TotalJobs } from '@/components/total-jobs-page';
-import StreamgraphPage from '@/components/streamGraphPage';
+import { CurrentJobsStatsPage } from '@/components/current-jobs-stats-page';
+import JobsTimelinePage from '@/components/jobs-timeline-page';
 import { ResumeStatusGraph } from '@/components/ResumeStatusGraph.tsx';
 import { resumes } from '@/utils/db/schema.ts';
 
@@ -82,11 +82,11 @@ function AuthenticatedUsersSPA() {
           items: [
             {
               subMenu: 'Current Jobs',
-              content: <TotalJobs />,
+              content: <CurrentJobsStatsPage />,
             },
             {
               subMenu: 'Jobs Timeline',
-              content: <StreamgraphPage />,
+              content: <JobsTimelinePage />,
             },
             {
               subMenu: 'Resume Status',
