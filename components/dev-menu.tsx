@@ -2,10 +2,11 @@ import { db } from '@/utils/db/db';
 import {
   employmentTypeList,
   jobCommentsTable,
-  appliedJobsTable,
   jobStatus,
   jobTable,
   payTypeList,
+  resumes,
+  rawResumes,
 } from '@/utils/db/schema';
 import { faker } from '@faker-js/faker';
 
@@ -66,6 +67,14 @@ function SeedPage() {
         onClickAsync={() => seedJobs(25)}
       >
         Seed 25 Jobs
+      </AsyncButton>
+      <AsyncButton
+        variant='secondary'
+        className='cursor-pointer'
+        loadingText='Seeding Resume...'
+        onClickAsync={() => seedResume()}
+      >
+        Seed Resume
       </AsyncButton>
       <AsyncButton
         variant={'destructive'}
@@ -134,6 +143,63 @@ function SeedPage() {
         });
       })
     );
+  }
+  async function seedResume() {
+    // Insert resume JSON
+    const resume = {
+      userId: faker.string.uuid(),
+      name: faker.person.fullName() + "'s Resume",
+      json: {
+        basics: {
+          name: faker.person.fullName(),
+          label: faker.person.jobTitle(),
+          email: faker.internet.email(),
+          phone: faker.phone.number(),
+          summary: faker.lorem.sentences(3),
+          location: {
+            city: faker.location.city(),
+            region: faker.location.state(),
+          },
+        },
+        work: Array.from({ length: 2 }).map(() => ({
+          company: faker.company.name(),
+          position: faker.person.jobTitle(),
+          startDate: faker.date.past({ years: 5 }),
+          endDate: faker.date.past({ years: 1 }),
+          summary: faker.lorem.sentences(2),
+        })),
+        education: [
+          {
+            institution: faker.company.name() + ' University',
+            area: faker.person.jobArea(),
+            studyType: 'Bachelor',
+            startDate: faker.date.past({ years: 8 }),
+            endDate: faker.date.past({ years: 4 }),
+          },
+        ],
+        skills: Array.from({ length: 5 }).map(() => ({
+          name: faker.hacker.noun(),
+          level: faker.helpers.arrayElement([
+            'beginner',
+            'intermediate',
+            'advanced',
+          ]),
+        })),
+      },
+    };
+
+    const [insertedResume] = await db
+      .insert(resumes)
+      .values(resume)
+      .returning({ id: resumes.id });
+
+    // Insert raw resume text
+    await db.insert(rawResumes).values({
+      name: resume.name,
+      rawText: faker.lorem.paragraphs(4),
+      source: 'builder',
+      jsonId: insertedResume.id,
+    });
   }
 }
 
