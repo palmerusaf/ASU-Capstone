@@ -15,6 +15,7 @@ import { CurrentJobsStatsPage } from '@/components/current-jobs-stats-page';
 import JobsTimelinePage from '@/components/jobs-timeline-page';
 import { ResumeStatusGraph } from '@/components/ResumeStatusGraph.tsx';
 import { resumes } from '@/utils/db/schema.ts';
+import { DeleteResumePage } from '@/components/delete-resume-page';
 
 export default function App() {
   // disable auth
@@ -73,6 +74,10 @@ function AuthenticatedUsersSPA() {
             {
               subMenu: 'Display Resume',
               content: <ResumeDisplay />,
+            },
+            {
+              subMenu: 'Delete Resumes',
+              content: <DeleteResumePage />,
             },
           ],
         },

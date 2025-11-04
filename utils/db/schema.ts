@@ -241,7 +241,7 @@ export const rawResumes = pgTable('raw_resumes', {
   rawText: text('raw_text').notNull(),
   source: text('source').notNull(), // "builder" | "paste"
   jsonId: integer('json_id').references(() => resumes.id, {
-    onDelete: 'set null',
+    onDelete: 'cascade',
   }),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
