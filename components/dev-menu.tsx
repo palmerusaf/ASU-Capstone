@@ -16,6 +16,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Repl } from '@electric-sql/pglite-repl';
 import { updateStatus } from './job-tracker-Page/columns';
 import { AsyncButton } from './async-button';
+import { linkResume } from './job-tracker-Page/resume-matches-modal';
 
 export const devMenu = import.meta.env.DEV
   ? [
@@ -75,6 +76,14 @@ function SeedPage() {
         onClickAsync={() => seedResume()}
       >
         Seed Resume
+      </AsyncButton>
+      <AsyncButton
+        variant='secondary'
+        className='cursor-pointer'
+        loadingText='Linking Resumes/Jobs...'
+        onClickAsync={() => linkAllResumes()}
+      >
+        Link Resumes/Jobs
       </AsyncButton>
       <AsyncButton
         variant={'destructive'}
@@ -200,6 +209,21 @@ function SeedPage() {
       source: 'builder',
       jsonId: insertedResume.id,
     });
+  }
+  async function linkAllResumes() {
+    const resumeData = await db
+      .select({
+        id: resumes.id,
+      })
+      .from(resumes);
+    const resumeIds = resumeData.map((el) => el.id);
+    const jobData = await db.select({ id: jobTable.id }).from(jobTable);
+    const jobIds = jobData.map((el) => el.id);
+    await Promise.all(
+      jobIds.map((id) => {
+        linkResume(faker.helpers.arrayElement(resumeIds), id, qc);
+      })
+    );
   }
 }
 
