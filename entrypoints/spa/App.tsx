@@ -13,6 +13,8 @@ import { devMenu } from '../../components/dev-menu';
 import { PrevAppsPage } from '@/components/prev-apps-page';
 import { TotalJobs } from '@/components/total-jobs-page';
 import StreamgraphPage from '@/components/streamGraphPage';
+import {ResumeStatusGraph} from "@/components/ResumeStatusGraph.tsx";
+import {resumes} from "@/utils/db/schema.ts";
 
 export default function App() {
   // disable auth
@@ -85,7 +87,11 @@ function AuthenticatedUsersSPA() {
             {
               subMenu: 'Job Status',
               content: <StreamgraphPage />,
-            },
+            }, 
+              {
+              subMenu: 'Resume Status',
+              content: <ResumeStatusGraph />
+              }
           ],
         },
         {
