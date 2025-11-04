@@ -1,5 +1,10 @@
 import { db } from '@/utils/db/db';
-import { appliedJobsTable, jobTable } from '@/utils/db/schema';
+import {
+  appliedJobsTable,
+  JobStatusType,
+  jobTable,
+  statusColors,
+} from '@/utils/db/schema';
 import { useQuery } from '@tanstack/react-query';
 import { eq } from 'drizzle-orm';
 import Plot from 'react-plotly.js';
@@ -14,27 +19,36 @@ export function TotalJobs() {
 
   const { numJobs, numApps, numUnApps, appBreakout, unAppBreakout } = data;
 
-  // Build Sankey data dynamically
+  // Build Sankey nodes
   const nodes: string[] = ['Total Jobs', 'Applied Jobs', 'Unapplied Jobs'];
-  const links: { source: number; target: number; value: number }[] = [];
+  const links: {
+    source: number;
+    target: number;
+    value: number;
+    color?: string;
+  }[] = [];
 
   // Applied Jobs breakdown
-  for (const [status, count] of Object.entries(appBreakout)) {
-    nodes.push(status);
+  for (const [s, count] of Object.entries(appBreakout)) {
+    const status = s as JobStatusType;
+    if (!nodes.includes(status)) nodes.push(status);
     links.push({
       source: nodes.indexOf('Applied Jobs'),
       target: nodes.indexOf(status),
       value: count,
+      color: statusColors[status] ?? '#9ca3af',
     });
   }
 
   // Unapplied Jobs breakdown
-  for (const [status, count] of Object.entries(unAppBreakout)) {
-    nodes.push(status);
+  for (const [s, count] of Object.entries(unAppBreakout)) {
+    const status = s as JobStatusType;
+    if (!nodes.includes(status)) nodes.push(status);
     links.push({
       source: nodes.indexOf('Unapplied Jobs'),
       target: nodes.indexOf(status),
       value: count,
+      color: statusColors[status] ?? '#9ca3af',
     });
   }
 
@@ -44,13 +58,28 @@ export function TotalJobs() {
       source: nodes.indexOf('Total Jobs'),
       target: nodes.indexOf('Applied Jobs'),
       value: numApps,
+      color: '#a78bfa', // applied purple
     },
     {
       source: nodes.indexOf('Total Jobs'),
       target: nodes.indexOf('Unapplied Jobs'),
       value: numUnApps,
+      color: '#94a3b8', // neutral gray for unapplied
     }
   );
+
+  // Assign node colors based on status or category
+  const nodeColors = nodes.map((s) => {
+    const status = s as
+      | JobStatusType
+      | 'Total Jobs'
+      | 'Applied Jobs'
+      | 'Unapplied Jobs';
+    if (status === 'Total Jobs') return '#0ea5e9';
+    if (status === 'Applied Jobs') return '#a78bfa';
+    if (status === 'Unapplied Jobs') return '#94a3b8';
+    return statusColors[status] ?? '#9ca3af';
+  });
 
   return (
     <Plot
@@ -63,12 +92,13 @@ export function TotalJobs() {
             thickness: 20,
             line: { color: 'gray', width: 0.5 },
             label: nodes,
+            color: nodeColors,
           },
           link: {
             source: links.map((l) => l.source),
             target: links.map((l) => l.target),
             value: links.map((l) => l.value),
-            color: 'darkgray',
+            color: links.map((l) => l.color ?? '#9ca3af'),
           },
         },
       ]}
