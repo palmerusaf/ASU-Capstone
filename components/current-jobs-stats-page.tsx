@@ -83,7 +83,7 @@ export function CurrentJobsStatsPage() {
 
   return (
     <>
-      <h1 className='text-4xl text-center font-bold text-slate-500 mb-2'>
+      <h1 className='text-4xl text-center font-bold text-slate-500'>
         Current Status for All Jobs
       </h1>
       <Plot
@@ -114,6 +114,7 @@ export function CurrentJobsStatsPage() {
           autosize: true,
         }}
         config={{ displayModeBar: false, responsive: true }}
+        className='h-full'
       />
     </>
   );

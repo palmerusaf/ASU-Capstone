@@ -53,20 +53,13 @@ export function ResumeStatusGraph() {
     const { data, statuses } = pivot(rows);
 
     return (
-        <div className='w-full p-8'>
-            <h1 className='text-4xl text-center w-full font-bold text-slate-500 mb-2'>
+        <div className='w-full h-full p-8 pb-20'>
+            <h1 className='text-4xl text-center w-full font-bold text-slate-500'>
                 Resume Status Breakdown
             </h1>
-
-            <ResponsiveContainer width='100%' height={320}>
+            <ResponsiveContainer width='100%' height='100%'>
                 <BarChart data={data}>
-                    <XAxis
-                        dataKey='x'
-                        tickLine={false}
-                        tickFormatter={(t: string) =>
-                            t?.length > 22 ? `${t.slice(0, 21)}…` : t
-                        }
-                    />
+                    <XAxis dataKey='x' tickLine={false} />
                     <YAxis allowDecimals={false} />
                     <Tooltip />
                     <Legend />
