@@ -39,7 +39,7 @@ export async function getStreamgraphData() {
         ON jsh.job_id = aj.job_id 
         AND jsh.changed_at <= act.bucket_date
       WHERE jsh.status IS NOT NULL
-      ORDER BY act.bucket_date, aj.job_id, jsh.changed_at DESC
+      ORDER BY act.bucket_date, aj.job_id, jsh.changed_at DESC, jsh.id DESC
     )
     SELECT 
       bucket_date as date,
