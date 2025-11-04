@@ -1,6 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { extractKeywords } from './extractKeywords.ts';
-import { keywordMatcher } from './keywordMatcher.ts';
+import { calculateCosineSimilarity } from './extractKeywords.ts';
 
 const sampleJobPost = `
 🚀 Hey there! We’re OrderIQ, a restaurant tech startup redefining the point-of-sale experience. Fresh off our pre-seed round, we’re building a modern, offline-first iPad POS system using React Native, and we’re looking for our next engineers to help bring it to life. If you're passionate about crafting high-performance apps for real-world use in a modern tech-stack, we’d love to talk.
@@ -147,20 +146,23 @@ function expectWithinRange({
   expect(received).toBeLessThanOrEqual(sampleMatchRate + tolerance);
 }
 
-describe.skip('keywordMatcher accuracy performance tests', () => {
+describe('keywordMatcher accuracy performance tests', () => {
+  const score = calculateCosineSimilarity(sampleJobPost, sampeResume);
+  test('score is integer', () => {
+    expect(Number.isInteger(score)).toBe(true);
+  });
+  test('score is 0-100', () => {
+    expect(score).toBeGreaterThanOrEqual(0);
+    expect(score).toBeLessThanOrEqual(100);
+  });
   test('score within ±20', () => {
-    const score = keywordMatcher({
-      map1: extractKeywords(sampleJobPost),
-      map2: extractKeywords(sampeResume),
-    });
     expectWithinRange({ received: score, tolerance: 20 });
   });
 
   test('score within ±10', () => {
-    const score = keywordMatcher({
-      map1: extractKeywords(sampleJobPost),
-      map2: extractKeywords(sampeResume),
-    });
     expectWithinRange({ received: score, tolerance: 10 });
+  });
+  test('score within ±5', () => {
+    expectWithinRange({ received: score, tolerance: 5 });
   });
 });

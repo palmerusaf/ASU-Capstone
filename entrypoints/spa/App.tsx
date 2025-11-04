@@ -11,10 +11,11 @@ import * as icon from 'lucide-react';
 import { Toaster } from 'sonner';
 import { devMenu } from '../../components/dev-menu';
 import { PrevAppsPage } from '@/components/prev-apps-page';
-import { TotalJobs } from '@/components/total-jobs-page';
-import StreamgraphPage from '@/components/streamGraphPage';
-import {ResumeStatusGraph} from "@/components/ResumeStatusGraph.tsx";
-import {resumes} from "@/utils/db/schema.ts";
+import { CurrentJobsStatsPage } from '@/components/current-jobs-stats-page';
+import JobsTimelinePage from '@/components/jobs-timeline-page';
+import { ResumeStatusGraph } from '@/components/ResumeStatusGraph.tsx';
+import { resumes } from '@/utils/db/schema.ts';
+import { DeleteResumePage } from '@/components/delete-resume-page';
 
 export default function App() {
   // disable auth
@@ -74,6 +75,10 @@ function AuthenticatedUsersSPA() {
               subMenu: 'Display Resume',
               content: <ResumeDisplay />,
             },
+            {
+              subMenu: 'Delete Resumes',
+              content: <DeleteResumePage />,
+            },
           ],
         },
         {
@@ -81,17 +86,17 @@ function AuthenticatedUsersSPA() {
           icon: icon.LineChart,
           items: [
             {
-              subMenu: 'Total Jobs',
-              content: <TotalJobs />,
+              subMenu: 'Current Jobs',
+              content: <CurrentJobsStatsPage />,
             },
             {
-              subMenu: 'Job Status',
-              content: <StreamgraphPage />,
-            }, 
-              {
+              subMenu: 'Jobs Timeline',
+              content: <JobsTimelinePage />,
+            },
+            {
               subMenu: 'Resume Status',
-              content: <ResumeStatusGraph />
-              }
+              content: <ResumeStatusGraph />,
+            },
           ],
         },
         {

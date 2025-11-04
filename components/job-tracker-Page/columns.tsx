@@ -109,6 +109,7 @@ export const columns: ColumnDef<JobSelectType>[] = [
       },
     }) => (
       <EditStatus
+        key={id}
         ids={[id]}
         label={
           <>
@@ -127,6 +128,7 @@ export const columns: ColumnDef<JobSelectType>[] = [
     header: 'Actions',
     cell: ({ row: { original } }) => (
       <ActionMenu
+        key={original.id}
         items={[
           <JobModal key={'job'} data={original} />,
           <CommentsDrawer key={'comment'} id={original.id} />,

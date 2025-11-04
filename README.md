@@ -129,18 +129,18 @@ See the roadmap below for a full list of current features and planned features.
   - [x] View job details
   - [x] View resume match score (beta)
   - [x] View previous company apps
-  - [ ] Link resume to job for stat tracking
-  - [ ] Display job stats
+  - [x] Link resume to job for stat tracking
+  - [x] Display job stats
 
 - Resume Management
   - [x] Add resume manually
   - [x] Import resume through raw text pasting
   - [x] Extract resume keywords
-  - [ ] Display resume stats
+  - [x] Display resume stats
 
 - Job site integration
   - [x] Add Handshake job to dashboard through popup
-  - [ ] Display job tracked indicator overlaid in job site
+  - [x] Display job tracked indicator overlaid in job site
   - [ ] Search/Add jobs from app dashboard
   - [ ] Integrate with LinkedIn
 

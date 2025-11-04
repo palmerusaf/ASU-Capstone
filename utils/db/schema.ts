@@ -22,7 +22,9 @@ export const jobStatus = [
   'recieved offer',
 ] as const;
 
-export const statusColors: Record<(typeof jobStatus)[number], string> = {
+export type JobStatusType = (typeof jobStatus)[number];
+
+export const statusColors: Record<JobStatusType, string> = {
   'search result': '#94a3b8',
   'recently added': '#60a5fa',
   interested: '#fbbf24',
@@ -32,7 +34,7 @@ export const statusColors: Record<(typeof jobStatus)[number], string> = {
   rejected: '#ef4444',
   'not interested': '#f87171',
   'recieved offer': '#10b981',
-};  
+};
 
 export const jobStatusEmojis = {
   applied: '📨', // sent application
@@ -59,8 +61,6 @@ export const payTypeList = [
   'Annual Salary',
   'Monthly Stipend',
 ] as const;
-
-type Status = (typeof jobStatus)[keyof typeof jobStatus];
 
 export const jobTable = pgTable('jobs', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
@@ -241,7 +241,7 @@ export const rawResumes = pgTable('raw_resumes', {
   rawText: text('raw_text').notNull(),
   source: text('source').notNull(), // "builder" | "paste"
   jsonId: integer('json_id').references(() => resumes.id, {
-    onDelete: 'set null',
+    onDelete: 'cascade',
   }),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });

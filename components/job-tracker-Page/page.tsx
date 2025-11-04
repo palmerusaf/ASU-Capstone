@@ -55,7 +55,10 @@ export function JobTrackerPage() {
     setSelRowState({});
   }, [data]);
 
-  if (!data) return <div>Loading...</div>;
+  if (!data) return;
+  <div className='flex items-center justify-center h-full'>
+    <div className='text-xl text-slate-500 animate-pulse'>Loading...</div>
+  </div>;
 
   return (
     <div className='grid gap-2 content-center pb-12 px-12'>

@@ -1,39 +1,96 @@
 import Similarity from 'compute-cosine-similarity';
+import { removeStopwords } from 'stopword';
 
-const STOP = new Set([
-  'a',
-  'an',
-  'and',
-  'are',
-  'as',
-  'at',
-  'be',
-  'by',
-  'for',
-  'from',
-  'i',
-  'in',
-  'is',
-  'it',
-  'me',
-  'my',
-  'of',
-  'on',
-  'or',
-  'that',
-  'the',
-  'this',
-  'to',
-  'was',
-  'were',
-  'with',
+const importantKeyWords = new Set([
+  'net',
+  'ai',
+  'algorithm',
+  'analytics',
+  'angular',
+  'ansible',
+  'api',
+  'architecture',
+  'aspnet',
+  'automation',
+  'aws',
+  'azure',
+  'c#',
+  'c',
+  'c++',
+  'cd',
+  'ci',
+  'css',
+  'cybersecurity',
+  'data',
+  'distributed',
+  'django',
+  'docker',
+  'express',
+  'fastapi',
+  'flask',
+  'gcp',
+  'git',
+  'go',
+  'graphql',
+  'html',
+  'java',
+  'javascript',
+  'jenkins',
+  'jwt',
+  'kotlin',
+  'kubernetes',
+  'laravel',
+  'learning',
+  'machine',
+  'microservices',
+  'ml',
+  'mongodb',
+  'mysql',
+  'next',
+  'node',
+  'numpy',
+  'nuxt',
+  'oauth',
+  'pandas',
+  'performance',
+  'php',
+  'pipeline',
+  'postgresql',
+  'python',
+  'pytorch',
+  'rails',
+  'react',
+  'redis',
+  'ruby',
+  'rust',
+  'scalability',
+  'serverless',
+  'spring',
+  'sql',
+  'sqlite',
+  'svelte',
+  'swift',
+  'system',
+  'tailwind',
+  'tensorflow',
+  'terraform',
+  'testing',
+  'typescript',
+  'ui',
+  'ux',
+  'vue',
 ]);
 export function extractKeywords(text: string): Map<string, number> {
   const counts = new Map<string, number>();
-  for (const raw of text.toLowerCase().split(/[^a-z0-9+#.]+/g)) {
-    const w = raw.trim();
-    if (!w || STOP.has(w) || w.length < 2) continue;
-    counts.set(w, (counts.get(w) ?? 0) + 1);
+
+  for (const word of removeStopwords(text.toLowerCase().split(/[^a-z0-9+]+/))) {
+    if (!word || word.length < 2) continue;
+    counts.set(word, (counts.get(word) ?? 0) + 1);
+  }
+
+  // scale count for important keywords
+  for (const [word, count] of counts) {
+    if (importantKeyWords.has(word)) counts.set(word, count * 6);
   }
   return counts;
 }
@@ -73,12 +130,15 @@ export function calculateCosineSimilarity(
     resumeArray.push(resumeKeywords.get(word) ?? 0);
   }
 
-  // If an array is empty due to STOP words, return 0 instead. 
-  if (jobArray.every((occurance) => occurance === 0) || resumeArray.every((occurance) => occurance === 0)) {
+  // If an array is empty due to STOP words, return 0 instead.
+  if (
+    jobArray.every((occurance) => occurance === 0) ||
+    resumeArray.every((occurance) => occurance === 0)
+  ) {
     return 0;
   }
 
   // Calculate similarity score
-  const similarity = Similarity(jobArray, resumeArray);
-  return similarity;
+  const similarity = Similarity(jobArray, resumeArray) || 0;
+  return Math.round(similarity * 100);
 }
