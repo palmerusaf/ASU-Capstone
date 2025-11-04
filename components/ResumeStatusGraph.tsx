@@ -12,14 +12,12 @@ import {
 import { statusColors } from '@/utils/db/schema';
 
 // rows: [{ resumeId, status, count, label? }, ...]
-function pivot(rows: any[]) {
+function pivot(rows: Awaited<ReturnType<typeof listResumeStatusCounts>>) {
     const byKey: Record<string, Record<string, number>> = {};
     const statuses = new Set<string>();
 
     for (const r of rows) {
-        const x =
-            r.label ??
-            (r.resumeId == null ? 'Unassigned' : `Resume ${String(r.resumeId)}`);
+        const x = r.name == null ? 'Unassigned' : `${String(r.name)}`;
 
         if (!byKey[x]) byKey[x] = {};
         byKey[x][r.status] = r.count;
@@ -31,14 +29,16 @@ function pivot(rows: any[]) {
 }
 
 export function ResumeStatusGraph() {
-    const [rows, setRows] = React.useState<any[] | null>(null);
+    const [rows, setRows] = React.useState<Awaited<
+        ReturnType<typeof listResumeStatusCounts>
+    > | null>(null);
     const [err, setErr] = React.useState<string | null>(null);
 
     React.useEffect(() => {
         (async () => {
             try {
                 const data = await listResumeStatusCounts();
-                setRows(data ?? []);
+                setRows(data);
             } catch (e: any) {
                 setErr(e?.message || 'Failed to load resume stats');
                 setRows([]);
