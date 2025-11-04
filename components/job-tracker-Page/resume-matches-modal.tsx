@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dialog';
 import { db } from '@/utils/db/db';
 import { JobSelectType, jobTable, rawResumes } from '@/utils/db/schema';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query';
 import { eq } from 'drizzle-orm';
 import { Loader2, Pencil } from 'lucide-react';
 import { Button } from '../ui/button';
@@ -74,11 +74,7 @@ export function ResumeMatchesModal({ jobData }: { jobData: JobSelectType }) {
                                     <AsyncButton
                                         loadingText='Linking...'
                                         onClickAsync={async () => {
-                                            await db
-                                                .update(jobTable)
-                                                .set({ resumeId: jsonId })
-                                                .where(eq(jobTable.id, jobData.id));
-                                            await qc.invalidateQueries({ queryKey: ['savedJobs'] });
+                                            await linkResume(jsonId, jobData.id, qc);
                                         }}
                                     >
                                         Link
@@ -94,6 +90,18 @@ export function ResumeMatchesModal({ jobData }: { jobData: JobSelectType }) {
     async function getData() {
         return await db.select().from(rawResumes);
     }
+}
+
+export async function linkResume(
+    jsonId: number | null,
+    jobId: number,
+    qc: QueryClient
+) {
+    await db
+        .update(jobTable)
+        .set({ resumeId: jsonId })
+        .where(eq(jobTable.id, jobId));
+    await qc.invalidateQueries({ queryKey: ['savedJobs'] });
 }
 
 function ResumeScore({
