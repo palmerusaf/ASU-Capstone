@@ -82,35 +82,40 @@ export function CurrentJobsStatsPage() {
   });
 
   return (
-    <Plot
-      data={[
-        {
-          type: 'sankey',
-          orientation: 'h',
-          node: {
-            pad: 15,
-            thickness: 20,
-            line: { color: 'gray', width: 0.5 },
-            label: nodes,
-            color: nodeColors,
+    <>
+      <h1 className='text-4xl text-center font-bold text-slate-500 mb-2'>
+        Current Status for All Jobs
+      </h1>
+      <Plot
+        data={[
+          {
+            type: 'sankey',
+            orientation: 'h',
+            node: {
+              pad: 15,
+              thickness: 20,
+              line: { color: 'gray', width: 0.5 },
+              label: nodes,
+              color: nodeColors,
+            },
+            link: {
+              source: links.map((l) => l.source),
+              target: links.map((l) => l.target),
+              value: links.map((l) => l.value),
+              color: links.map((l) => l.color ?? '#9ca3af'),
+            },
           },
-          link: {
-            source: links.map((l) => l.source),
-            target: links.map((l) => l.target),
-            value: links.map((l) => l.value),
-            color: links.map((l) => l.color ?? '#9ca3af'),
-          },
-        },
-      ]}
-      layout={{
-        title: `Job Tracker Overview (${numJobs} total jobs)`,
-        font: { size: 14 },
-        paper_bgcolor: 'transparent',
-        plot_bgcolor: 'transparent',
-        autosize: true,
-      }}
-      config={{ displayModeBar: false, responsive: true }}
-    />
+        ]}
+        layout={{
+          title: `Job Tracker Overview (${numJobs} total jobs)`,
+          font: { size: 14 },
+          paper_bgcolor: 'transparent',
+          plot_bgcolor: 'transparent',
+          autosize: true,
+        }}
+        config={{ displayModeBar: false, responsive: true }}
+      />
+    </>
   );
 }
 

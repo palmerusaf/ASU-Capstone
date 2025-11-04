@@ -53,10 +53,10 @@ export function ResumeStatusGraph() {
     const { data, statuses } = pivot(rows);
 
     return (
-        <div className='w-full'>
-            <h3 style={{ marginBottom: 8, fontWeight: 600 }}>
+        <div className='w-full p-8'>
+            <h1 className='text-4xl text-center w-full font-bold text-slate-500 mb-2'>
                 Resume Status Breakdown
-            </h3>
+            </h1>
 
             <ResponsiveContainer width='100%' height={320}>
                 <BarChart data={data}>

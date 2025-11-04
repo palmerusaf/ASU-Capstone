@@ -26,7 +26,7 @@ const JobStatusStreamGraph: React.FC<JobStatusStreamGraphProps> = ({
     <div className='w-full h-screen p-8'>
       <div className='max-w-7xl mx-auto'>
         <div className='mb-8'>
-          <h1 className='text-4xl font-bold text-slate-500 mb-2'>
+          <h1 className='text-4xl text-center font-bold text-slate-500 mb-2'>
             Job Application Status Timeline
           </h1>
           <p className='text-slate-500'></p>
