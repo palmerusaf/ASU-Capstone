@@ -38,6 +38,14 @@ export default defineConfig({
       extension_pages:
         "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'",
     },
+    browser_specific_settings: {
+      gecko: {
+        // required as of nov 3 2025
+        data_collection_permissions: {
+          required: ['none'],
+        },
+      },
+    },
   },
   extensionApi: 'chrome',
   modules: ['@wxt-dev/module-react'],
