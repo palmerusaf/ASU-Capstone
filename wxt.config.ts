@@ -40,6 +40,7 @@ export default defineConfig({
     },
     browser_specific_settings: {
       gecko: {
+        id: '{9ae23dfb-cd27-4d50-8186-58806a97f84f}',
         // required as of nov 3 2025
         data_collection_permissions: {
           required: ['none'],
