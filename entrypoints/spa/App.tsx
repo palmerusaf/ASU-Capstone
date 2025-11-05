@@ -11,11 +11,16 @@ import * as icon from 'lucide-react';
 import { Toaster } from 'sonner';
 import { devMenu } from '../../components/dev-menu';
 import { PrevAppsPage } from '@/components/prev-apps-page';
-import { CurrentJobsStatsPage } from '@/components/current-jobs-stats-page';
 import JobsTimelinePage from '@/components/jobs-timeline-page';
 import { ResumeStatusGraph } from '@/components/ResumeStatusGraph.tsx';
 import { resumes } from '@/utils/db/schema.ts';
 import { DeleteResumePage } from '@/components/delete-resume-page';
+import { lazy, Suspense } from 'react';
+
+// lazy loaded comp that are big
+const CurrentJobsStatsPage = lazy(
+  () => import('@/components/current-jobs-stats-page')
+);
 
 export default function App() {
   // disable auth
@@ -87,7 +92,11 @@ function AuthenticatedUsersSPA() {
           items: [
             {
               subMenu: 'Current Jobs',
-              content: <CurrentJobsStatsPage />,
+              content: (
+                <Suspense fallback={<Loading />}>
+                  <CurrentJobsStatsPage />
+                </Suspense>
+              ),
             },
             {
               subMenu: 'Jobs Timeline',
@@ -119,6 +128,14 @@ function NotImplemented() {
   return (
     <div className='flex justify-center items-center w-full h-full'>
       Not Implemented
+    </div>
+  );
+}
+
+function Loading() {
+  return (
+    <div className='flex items-center justify-center h-full'>
+      <div className='text-xl text-slate-500 animate-pulse'>Loading...</div>
     </div>
   );
 }
