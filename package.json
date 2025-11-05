@@ -16,7 +16,8 @@
     "storybook": "storybook dev -p 6006",
     "test": "pnpm gendb && vitest",
     "zip": "pnpm gendb && wxt zip",
-    "zip:firefox": "pnpm gendb && wxt zip -b firefox"
+    "zip:firefox": "pnpm gendb && wxt zip -b firefox",
+    "lint-firefox-zip": "pnpm zip:firefox && pnpm addons-linter .output/*firefox.zip"
   },
   "engines": {
     "pnpm": "10"
@@ -96,6 +97,7 @@
     "@vitest/browser": "^3.0.9",
     "@vitest/coverage-v8": "^3.0.9",
     "@wxt-dev/module-react": "^1.1.2",
+    "addons-linter": "^8.4.0",
     "drizzle-kit": "^0.31.0",
     "fake-indexeddb": "^6.2.0",
     "playwright": "^1.51.1",

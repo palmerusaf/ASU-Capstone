@@ -36,13 +36,6 @@ jobs:
       - name: Build the Project
         run: pnpm build
 
-      - name: Zip Extensions
+      - name: Lint Firefox Zip
         run: |
-          pnpm zip
-          pnpm zip:firefox
-
-      - name: Upload Build Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: wxt-extension
-          path: .output/chrome-mv3/
+          pnpm lint-firefox-zip
