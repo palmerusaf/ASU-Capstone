@@ -41,7 +41,7 @@ A centralized job application platform.
     <a href="https://github.com/palmerusaf/ASU-Capstone"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="./screen-shots/archive-demo.mp4">View Demo</a>
+    <a href="#demo">View Demo</a>
     &middot;
     <a href="https://github.com/palmerusaf/ASU-Capstone/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
     &middot;
@@ -76,6 +76,15 @@ A centralized job application platform.
 
 Simplify the job/internship application process by automating search, application and tracking of jobs.
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Demo
+
+<div align='center'>
+
+[![Job Sourcerer – Streamline Your Job Search | Chrome & Firefox Extension Demo](https://img.youtube.com/vi/gpi1XxVAMRw/0.jpg)](https://www.youtube.com/watch?v=gpi1XxVAMRw)
+
+</div>
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Built With
@@ -127,7 +136,7 @@ See the roadmap below for a full list of current features and planned features.
   - [x] Change job status
   - [x] Job tracker
   - [x] View job details
-  - [x] View resume match score (beta)
+  - [x] View resume match score
   - [x] View previous company apps
   - [x] Link resume to job for stat tracking
   - [x] Display job stats
